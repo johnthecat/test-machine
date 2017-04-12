@@ -4,11 +4,11 @@
 <br/>
 Quick links:
 <br/>
-<a>Core</a>
+<a href="https://github.com/johnthecat/test-machine/tree/master/packages/test-machine-core">Core</a>
 |
-<a>Webpack plugin</a>
+<a href="https://github.com/johnthecat/test-machine/tree/master/packages/test-machine-webpack">Webpack plugin</a>
 |
-<a>Engines and compilers</a>
+<a href="https://github.com/johnthecat/test-machine/tree/master/packages/test-machine-plugins">Engines and compilers</a>
 <hr/>
 </div>
 
