@@ -95,6 +95,7 @@ describe('TestExtractor', () => {
         const router: TRouter = (resource: path.ParsedPath): any => {
             return [
                 `**/${resource.name}.js`,
+                '',
                 {fail: true}
             ];
         };

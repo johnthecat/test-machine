@@ -43,7 +43,7 @@ class TestExtractor {
 
             if (typeof pattern === 'string') {
 
-                if (pattern.length) {
+                if (pattern.length !== 0) {
                     globParseResult = glob.sync(pattern, this.globParserConfig);
                 } else {
                     globParseResult = [];
@@ -57,7 +57,7 @@ class TestExtractor {
                 for (let index = 0, count = pattern.length; index < count; index++) {
                     item = pattern[index];
 
-                    if (typeof item === 'string') {
+                    if (typeof item === 'string' && item.length !== 0) {
                         globParseResult = globParseResult.concat(glob.sync(item, this.globParserConfig));
                     }
                 }
