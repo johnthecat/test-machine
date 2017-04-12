@@ -1,0 +1,55 @@
+{
+  "name": "test-machine-build",
+  "private": true,
+  "version": "0.2.0",
+  "license": "MIT",
+  "homepage": "https://github.com/johnthecat/test-machine",
+  "author": "Sergey Zhuravlev <zhuravlev1337@gmail.com> (https://github.com/johnthecat)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/johnthecat/test-machine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/johnthecat/test-machine/issues"
+  },
+  "keywords": [
+    "test",
+    "unit",
+    "plugin",
+    "mocha",
+    "jasmine"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "lerna bootstrap && lerna exec --no-sort --concurrency 1 -- node ../../bin/link",
+    "clean": "lerna exec -- rm -rf dist/",
+    "lint": "lerna exec -- ../../node_modules/.bin/tslint --config='../../tslint.json' --project='../../tsconfig.json' src/**/*.ts",
+    "test": "lerna exec -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
+    "test:watch": "lerna exec -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
+    "build": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc",
+    "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch"
+  },
+  "pre-commit": [
+    "test",
+    "build"
+  ],
+  "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/mocha": "^2.2.40",
+    "@types/node": "^7.0.12",
+    "@types/webpack": "^2.2.14",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "chai": "^3.5.0",
+    "fs-extra": "^2.1.2",
+    "jasmine": "^2.5.3",
+    "lerna": "^2.0.0-rc.1",
+    "mocha": "^3.2.0",
+    "pre-commit": "^1.2.2",
+    "ts-node": "^3.0.2",
+    "tslint": "^5.1.0",
+    "typescript": "^2.2.2",
+    "webpack": "^2.3.2"
+  }
+}

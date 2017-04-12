@@ -1,0 +1,26 @@
+{
+    "version": "2.2.1",
+    "compilerOptions": {
+        "target": "es3",
+        "module": "commonjs",
+        "allowJs": false,
+        "moduleResolution": "node",
+        "preserveConstEnums": true,
+        "declaration": true,
+        "outDir": "dist",
+        "sourceMap": false,
+        "lib": [
+            "es6",
+            "es7"
+        ],
+        "noUnusedLocals": true,
+        "strictNullChecks": true,
+        "removeComments": false
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

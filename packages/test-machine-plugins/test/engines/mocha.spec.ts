@@ -1,0 +1,46 @@
+/// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
+
+import {resolve} from '../utils/fs';
+import {mochaEngine} from '../../src/engines/mocha';
+
+describe('Mocha engine', () => {
+    it('should pass without tests', (done) => {
+        const runner = mochaEngine();
+
+        runner([])
+            .then(() => done());
+    });
+
+    it('should reject, when mocha can\'t run tests', (done) => {
+        const runner = mochaEngine();
+
+        runner(['fake-test.js'])
+            .catch((e) => done());
+    });
+
+    it('should complete, when mocha test passed', (done) => {
+        const runner = mochaEngine({
+            reporter() {
+                //avoid logs
+            }
+        });
+
+        runner([
+            resolve('./engines/fixtures/correct-test-set.js')
+        ])
+            .then(() => done())
+    });
+
+    it('should fail, when mocha test not passed', (done) => {
+        const runner = mochaEngine({
+            reporter() {
+                //avoid logs
+            }
+        });
+
+        runner([
+            resolve('./engines/fixtures/incorrect-test-set.js')
+        ])
+            .catch(() => done())
+    });
+});

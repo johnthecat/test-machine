@@ -1,0 +1,11 @@
+.idea
+.DS_Store
+
+npm-debug.log
+lerna-debug.log
+
+node_modules
+
+packages/*/tsconfig.*
+packages/*/.npmignore
+packages/*/dist
