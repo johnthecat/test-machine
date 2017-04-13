@@ -26,11 +26,11 @@
     "test": "lerna exec -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
     "test:watch": "lerna exec -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
     "build": "npm run lint && lerna exec -- ../../node_modules/.bin/tsc",
-    "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch"
+    "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch",
+    "build:ci": "npm run test && npm run build"
   },
   "pre-commit": [
-    "test",
-    "build"
+    "build:ci"
   ],
   "devDependencies": {
     "@types/chai": "^3.4.35",
