@@ -1,5 +1,6 @@
 /// <reference path="../../../node_modules/@types/mocha/index.d.ts" />
 
+import * as path from 'path';
 import * as chai from 'chai';
 import {readFile} from './utils/fs';
 import {compiler} from '../../test-machine-plugins/src';
@@ -55,7 +56,7 @@ describe('Sandbox', () => {
         });
     });
 
-    it('should handle mock dependencies (static)', (done) => {
+    it('should handle sandbox dependencies (as static)', (done) => {
         const moduleExport = 'ama come from module!';
 
         readFile('./fixtures/sandbox/pass-dependency.js').then((source) => {
@@ -73,7 +74,7 @@ describe('Sandbox', () => {
         });
     });
 
-    it('should handle mock dependencies (sandbox)', (done) => {
+    it('should handle sandbox dependencies (as sandbox)', (done) => {
         const moduleExport = 'ama come from module!';
         const moduleContent = createExport(moduleExport);
 
@@ -89,6 +90,25 @@ describe('Sandbox', () => {
             const module = sandbox.getExports();
 
             chai.expect(module).to.be.equal(moduleExport);
+
+            done();
+        });
+    });
+
+    it('should handle mock dependencies', (done) => {
+        const pathToMock = require.resolve('./fixtures/sandbox/mock.js');
+
+        readFile('./fixtures/sandbox/pass-dependency.js').then((source) => {
+            const sandbox = new Sandbox(source, path.resolve('./test/fixtures/sandbox/pass-dependency.js'), {
+                mocks: {
+                    [path.resolve('./test/fixtures/sandbox/insertedDependency')]: pathToMock
+                }
+            });
+
+            const module = sandbox.getExports();
+            const mock = require(pathToMock);
+
+            chai.expect(module).to.be.equal(mock);
 
             done();
         });
@@ -187,21 +207,40 @@ describe('Sandbox', () => {
         });
     });
 
-    it('should read global variables from current process context', (done) => {
+    it('should read global variables from current process context', () => {
         const key = '__$test$__';
+        const sandbox = new Sandbox(createExportFromGlobal(key), 'global.js');
 
         global[key] = {};
 
-        readFile('./fixtures/sandbox/global-variable.js').then((source) => {
-            const sandbox = new Sandbox(createExportFromGlobal(key), 'global.js');
+        sandbox.getExports();
+
+        const context = sandbox.getContext();
+
+        chai.expect(context[key]).to.be.equal(global[key]);
+
+        delete global[key];
+    });
+
+    it('should correctly handle function declarations', (done) => {
+        readFile('./fixtures/sandbox/function-declaration.js').then((source) => {
+            const sandbox = new Sandbox(source, 'function-declaration.js');
 
             sandbox.getExports();
 
-            const context = sandbox.getContext();
+            chai.expect(sandbox.getExports()).to.be.equal(1);
 
-            chai.expect(context[key]).to.be.equal(global[key]);
+            done();
+        });
+    });
 
-            delete global[key];
+    it('should correctly provide commonjs exports object', (done) => {
+        readFile('./fixtures/sandbox/commonjs-export.js').then((source) => {
+            const sandbox = new Sandbox(source, 'commonjs-export.js');
+
+            const exports = sandbox.getExports();
+
+            chai.expect(exports.equals).to.be.equal(true);
 
             done();
         });

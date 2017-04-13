@@ -38,15 +38,43 @@ class Sandbox {
             paths: Module._nodeModulePaths(filename),
         };
 
+        const moduleObject = {
+            exports: {},
+            filename: filename,
+            id: filename
+        };
+
+        const module = new Proxy(moduleObject, {
+            get: (target, key): any => {
+                switch(key) {
+                    case 'exports': {
+                        return this.exports;
+                    }
+
+                    default: {
+                        return target[key];
+                    }
+                }
+            },
+
+            set: (target, key, value): any => {
+                switch (key) {
+                    case 'exports': {
+                        return this.exports = value;
+                    }
+
+                    default: {
+                        return value;
+                    }
+                }
+            }
+        });
+
         const ownContext = {
             __dirname: path.dirname(filename),
             __filename: filename,
             exports: {},
-            module: {
-                exports: {},
-                filename: filename,
-                id: filename
-            },
+            module: module,
             require: Sandbox.getResolver(
                 config.dependencies || DEFAULT_DEPENDENCIES,
                 config.mocks || DEFAULT_MOCKS,
@@ -54,19 +82,41 @@ class Sandbox {
             )
         };
 
-        this.context = new Proxy(ownContext, {
-            get(target, key): any {
-                if (key in target) {
-                    return target[key];
-                } else if (key in global) {
-                    return global[key];
-                }
+        ownContext['global'] = ownContext;
 
-                return void 0;
+        this.context = new Proxy(ownContext, {
+            get: (target, key): any => {
+                switch(key) {
+                    case 'global': {
+                        return this.context;
+                    }
+
+                    case 'exports': {
+                        return this.exports;
+                    }
+
+                    default: {
+                        if (key in target) {
+                            return target[key];
+                        } else if (key in global) {
+                            return global[key];
+                        }
+
+                        return void 0;
+                    }
+                }
             },
 
-            set(target, key, value): any {
-                return target[key] = value;
+            set: (target, key, value): any => {
+                switch (key) {
+                    case 'exports': {
+                        return this.exports = value;
+                    }
+
+                    default: {
+                        return target[key] = value;
+                    }
+                }
             },
 
             has(target, key): boolean {
@@ -151,6 +201,7 @@ class Sandbox {
             try {
                 filename = Module._resolveFilename(request, parent);
             } catch (error) {
+                filename = path.resolve(path.dirname(parent.filename), request);
                 catchedError = new ReferenceError(error);
             }
 
