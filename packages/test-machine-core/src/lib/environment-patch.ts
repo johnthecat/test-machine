@@ -1,6 +1,4 @@
-import {IMocks} from '../interface';
-
-import * as process from 'process';
+import {IMocks, IModulesMap, ITestModule} from '../interface';
 import {SandboxController} from './sandbox-controller';
 
 type TLoadFunction = (request: string, parent: NodeModule, isMain: boolean) => any;
@@ -9,28 +7,17 @@ const Module: any = module.constructor;
 
 class EnvironmentPatch {
 
-    private root: string;
-
-    private temporaryCache: object;
-
-    private modulesDefinition: object;
+    private modulesDefinition: IModulesMap<ITestModule>;
 
     private originLoad: TLoadFunction;
 
     private fakeLoad: TLoadFunction;
 
-    /**
-     * Removing one record from require.cache
-     */
     public static removeFromCache(name: string): void {
         delete require.cache[name];
     }
 
-    constructor(sandboxes: SandboxController, private dependencies: Array<string>, private mocks: IMocks) {
-
-        this.root = process.cwd();
-
-        this.temporaryCache = Object.create(null);
+    constructor(private sandboxes: SandboxController, private dependencies: Array<string>, private mocks: IMocks) {
 
         this.originLoad = Module._load;
 
@@ -38,14 +25,14 @@ class EnvironmentPatch {
             const filename = Module._resolveFilename(request, parent, isMain);
 
             if (this.modulesDefinition[filename]) {
-                return sandboxes.getModule(this.modulesDefinition[filename], this.mocks);
+                return this.sandboxes.getModule(this.modulesDefinition[filename], this.mocks);
             }
 
             return this.originLoad(request, parent, isMain);
         };
     }
 
-    setup(modulesDefinition): void {
+    setup(modulesDefinition: IModulesMap<ITestModule>): void {
         this.modulesDefinition = modulesDefinition;
 
         this.patch();
@@ -56,7 +43,6 @@ class EnvironmentPatch {
     }
 
     clean(tests: Array<string>, mocks: IMocks): void {
-        this.temporaryCache = Object.create(null);
         this.modulesDefinition = {};
 
         this.restore();
@@ -76,16 +62,10 @@ class EnvironmentPatch {
         }
     }
 
-    /**
-     * Patching default filename resolver
-     */
     private patch(): void {
         Module._load = this.fakeLoad;
     }
 
-    /**
-     * Removing path from filename resolver
-     */
     private restore(): void {
         Module._load = this.originLoad;
     }

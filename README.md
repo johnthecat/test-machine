@@ -24,7 +24,7 @@ Features:
 
 ## Features
 
-### Simple API
+### Simple and flexible API
 
 #### Install
 
@@ -32,8 +32,9 @@ Features:
 
 #### Usage
 
+This is webpack plugin API example
+
 ```javascript
-//webpack
 const path = require('path');
 const {TestMachineWebpack} = require('test-machine-webpack');
 const {compiler, engine} = require('test-machine-plugins');
@@ -41,27 +42,43 @@ const {compiler, engine} = require('test-machine-plugins');
 module.exports = {
     plugins: [
         new TestMachineWebpack({
+        
+            // Required
+            
             testRoot: './tests',
-            router(resource) {
-                return `**/*${resource.name}.spec.js`
-            },
+            
             engine: engine.mocha({
                 reporter: 'tap',
                 timeout: 3000
             }),
+            
+            // Not required
+            
+            router(resource) {
+                return `**/*${resource.name}.spec.js`
+            },
+            
             compiler: compiler.babel({
                 presets: ['es2015']
             }),
+            
             include: [/src/],
+            
             exclude: [/node_modules/],
-            dependencies: [
-                './tests/setup.js'
-            ],
+            
+            dependencies: ['./tests/setup.js'],
+            
             mocks: {
                 [path.resolve('src/utils/transport.js')]: path.resolve('tests/mocks/transport.js')
             },
+            
             plugins: []
         })
     ]
 }
 ```
+
+
+### Supporting multiple test runners
+Now Test machine supports mocha and jasmine test runners, you can find them in `test-machine-plugins` package.
+Ava on the way!

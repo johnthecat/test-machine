@@ -4,6 +4,9 @@ import {Sandbox} from './sandbox';
 
 class PluginController {
     constructor(private plugins: Array<IPlugin>) {
+        if (!Array.isArray(plugins)) {
+            throw new Error(`Plugins must be array, got ${JSON.stringify(this.plugins)}`);
+        }
     }
 
     public applyCompilerPipeline(compiler: Compiler): void {
@@ -15,10 +18,6 @@ class PluginController {
     }
 
     private applyPluginsPipeline<T>(method: string, data: T): void {
-        if (!Array.isArray(this.plugins)) {
-            throw new Error(`Plugins must be array, got ${JSON.stringify(this.plugins)}`);
-        }
-
         for (let index = 0, count = this.plugins.length; index < count; index++) {
             if (typeof this.plugins[index][method] === 'function') {
                 this.plugins[index][method](data);
