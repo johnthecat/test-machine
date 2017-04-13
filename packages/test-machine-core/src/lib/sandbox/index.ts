@@ -38,7 +38,7 @@ class Sandbox {
             paths: Module._nodeModulePaths(filename),
         };
 
-        this.context = {
+        const ownContext = {
             __dirname: path.dirname(filename),
             __filename: filename,
             exports: {},
@@ -51,17 +51,28 @@ class Sandbox {
                 config.dependencies || DEFAULT_DEPENDENCIES,
                 config.mocks || DEFAULT_MOCKS,
                 parentModule
-            ),
-            process,
-            console,
-            setTimeout,
-            setInterval,
-            setImmediate,
-            clearTimeout,
-            clearInterval,
-            clearImmediate,
-            Buffer
+            )
         };
+
+        this.context = new Proxy(ownContext, {
+            get(target, key): any {
+                if (key in target) {
+                    return target[key];
+                } else if (key in global) {
+                    return global[key];
+                }
+
+                return void 0;
+            },
+
+            set(target, key, value): any {
+                return target[key] = value;
+            },
+
+            has(target, key): boolean {
+                return (key in target) || (key in global);
+            }
+        });
 
         Sandbox.linkObject(this.context, 'exports', this);
         Sandbox.linkObject(this.context.module, 'exports', this);

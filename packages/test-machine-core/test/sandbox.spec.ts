@@ -9,6 +9,10 @@ const createExport = (data) => {
     return `module.exports = ${JSON.stringify(data)}`;
 };
 
+const createExportFromGlobal = (key) => {
+    return `module.exports = global["${key}"];`;
+};
+
 describe('Sandbox', () => {
     afterEach(() => Sandbox.clearCache());
 
@@ -168,7 +172,7 @@ describe('Sandbox', () => {
         });
     });
 
-    it('should set global variables into current context', (done) => {
+    it('should set global variables into own context', (done) => {
         readFile('./fixtures/sandbox/global-variable.js').then((source) => {
             const sandbox = new Sandbox(source, 'global-variable.js');
 
@@ -178,6 +182,26 @@ describe('Sandbox', () => {
 
             chai.expect(context['amaGlobal']).to.be.equal(true);
             chai.expect(global['amaGlobal']).to.be.equal(void 0);
+
+            done();
+        });
+    });
+
+    it('should read global variables from current process context', (done) => {
+        const key = '__$test$__';
+
+        global[key] = {};
+
+        readFile('./fixtures/sandbox/global-variable.js').then((source) => {
+            const sandbox = new Sandbox(createExportFromGlobal(key), 'global.js');
+
+            sandbox.getExports();
+
+            const context = sandbox.getContext();
+
+            chai.expect(context[key]).to.be.equal(global[key]);
+
+            delete global[key];
 
             done();
         });

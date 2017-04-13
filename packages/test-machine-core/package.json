@@ -8,5 +8,9 @@
     "babel-code-frame": "^6.22.0",
     "glob": "^7.1.1",
     "stacktrace-parser": "^0.1.4"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 6.0.0"
   }
 }
