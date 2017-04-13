@@ -22,7 +22,7 @@
   "main": "dist/index.js",
   "scripts": {
     "postinstall": "node_modules/.bin/lerna bootstrap && node_modules/.bin/lerna exec --no-sort --concurrency 1 -- node ../../bin/link",
-    "lint": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/tslint --config='../../tslint.json' --project='../../tsconfig.json' src/**/*.ts",
+    "lint": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" src/**/*.ts",
     "test": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
     "test:watch": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
     "build": "npm run lint && lerna exec -- ../../node_modules/.bin/tsc",
