@@ -1,6 +1,6 @@
 {
   "name": "test-machine-plugins",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "",
   "license": "MIT",
   "main": "dist/index.js",
@@ -8,6 +8,6 @@
     "babel-code-frame": "^6.22.0",
     "glob": "^7.1.1",
     "stacktrace-parser": "^0.1.4",
-    "test-machine-core": "^0.2.1"
+    "test-machine-core": "^0.2.3"
   }
 }
