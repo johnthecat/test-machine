@@ -46,7 +46,7 @@ class Sandbox {
 
         const module = new Proxy(moduleObject, {
             get: (target, key): any => {
-                switch(key) {
+                switch (key) {
                     case 'exports': {
                         return this.exports;
                     }
@@ -86,7 +86,7 @@ class Sandbox {
 
         this.context = new Proxy(ownContext, {
             get: (target, key): any => {
-                switch(key) {
+                switch (key) {
                     case 'global': {
                         return this.context;
                     }
