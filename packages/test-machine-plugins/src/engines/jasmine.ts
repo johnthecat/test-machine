@@ -17,20 +17,22 @@ export function jasmineEngine(config?): TEngine {
             return Promise.resolve();
         }
 
-        jasmine = new Jasmine(config);
-        jasmine.loadConfig({
-            spec_files: tests
-        });
+        jasmine = new Jasmine();
+        jasmine.loadConfig(
+            Object.assign({}, config, {
+                spec_files: tests
+            })
+        );
 
         return new Promise((resolve, reject) => {
             jasmine.onComplete((passed) => {
+                jasmine = null;
+
                 if (passed) {
                     resolve();
                 } else {
                     reject();
                 }
-
-                jasmine = null;
             });
 
             jasmine.execute();
