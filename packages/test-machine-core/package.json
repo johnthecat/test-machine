@@ -1,6 +1,6 @@
 {
   "name": "test-machine-core",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "",
   "license": "MIT",
   "main": "dist/index.js",
