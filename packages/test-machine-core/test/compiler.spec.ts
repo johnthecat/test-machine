@@ -27,4 +27,16 @@ describe('Compiler', () => {
 
         chai.expect(result).to.be.equal('0 1 2');
     });
+
+    it('should cleanup cache after pushing to pipeline', () => {
+        const compiler = new Compiler([
+            (source) => source + ' 1'
+        ]);
+
+        chai.expect(compiler.compile('0')).to.be.equal('0 1');
+
+        compiler.push((source) => source + ' 2');
+
+        chai.expect(compiler.compile('0')).to.be.equal('0 1 2');
+    });
 });
