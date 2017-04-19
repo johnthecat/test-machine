@@ -6,11 +6,15 @@ import {TestExtractor} from '../src/lib/test-extractor';
 import {TRouter} from '../src/interface';
 
 const ROOT = path.join(__dirname, 'fixtures', 'test-extractor');
+const ROOT1 = path.join(ROOT, 'root1');
+const ROOT2 = path.join(ROOT, 'root2');
+
 const TESTS = {
-    'module-1': path.join(ROOT, 'module-1.js'),
-    'module-2': path.join(ROOT, 'module-2.js'),
-    'module-3': path.join(ROOT, 'module-3.js'),
-    'module-3.more': path.join(ROOT, 'module-3.more.js'),
+    'module-1': path.join(ROOT1, 'module-1.js'),
+    'module-2': path.join(ROOT1, 'module-2.js'),
+    'module-3': path.join(ROOT1, 'module-3.js'),
+    'module-3.more': path.join(ROOT1, 'module-3.more.js'),
+    'module-4': path.join(ROOT2, 'module-4.js')
 };
 
 describe('TestExtractor', () => {
@@ -25,29 +29,46 @@ describe('TestExtractor', () => {
             return '';
         };
 
-        const testExtractor = new TestExtractor(ROOT, router);
+        const testExtractor = new TestExtractor([ROOT1], router);
 
         testExtractor.extractTests(['root/module.js']);
     });
 
-    it('should return all tests from abstract route', () => {
+    it('should return all tests from given root using abstract route (\'**/*\')', () => {
         const router = () => '**/*';
 
-        const testExtractor = new TestExtractor(ROOT, router);
-        const tests = testExtractor.extractTests(['module.js']);
+        const root1Extractor = new TestExtractor([ROOT1], router);
+        const root1 = root1Extractor.extractTests(['module.js']);
 
-        chai.expect(tests).to.deep.equal([
+        chai.expect(root1).to.deep.equal([
             TESTS['module-1'],
             TESTS['module-2'],
             TESTS['module-3'],
             TESTS['module-3.more']
         ]);
+
+        const root2Extractor = new TestExtractor([ROOT2], router);
+        const root2 = root2Extractor.extractTests(['module.js']);
+
+        chai.expect(root2).to.deep.equal([
+            TESTS['module-4']
+        ]);
+    });
+
+    it('should correct use cache of globs', () => {
+        const router = () => '**/*';
+
+        const testExtractor = new TestExtractor([ROOT1], router);
+        const woCache = testExtractor.extractTests(['module.js']);
+        const wCache = testExtractor.extractTests(['module.js']);
+
+        chai.expect(woCache).to.deep.equal(wCache);
     });
 
     it('should return specific files, when filename passed', () => {
         const router = (resource: path.ParsedPath) => `**/${resource.name}.js`;
 
-        const testExtractor = new TestExtractor(ROOT, router);
+        const testExtractor = new TestExtractor([ROOT1], router);
         const tests = testExtractor.extractTests(['module-1.js', 'module-2.js']);
 
         chai.expect(tests).to.deep.equal([
@@ -64,7 +85,7 @@ describe('TestExtractor', () => {
             ];
         };
 
-        const testExtractor = new TestExtractor(ROOT, router);
+        const testExtractor = new TestExtractor([ROOT1], router);
         const tests = testExtractor.extractTests(['module-3.js']);
 
         chai.expect(tests).to.deep.equal([
@@ -76,7 +97,7 @@ describe('TestExtractor', () => {
     it('should ignore tests, when empty string returned for router', () => {
         const router = () => '';
 
-        const testExtractor = new TestExtractor(ROOT, router);
+        const testExtractor = new TestExtractor([ROOT1], router);
         const tests = testExtractor.extractTests(['module-1.js', 'module-2.js']);
 
         chai.expect(tests.length).to.be.equal(0);
@@ -85,7 +106,7 @@ describe('TestExtractor', () => {
     it('should not fail, when incorrect data passed from router', () => {
         const router: TRouter = (): any => ({fail: true});
 
-        const testExtractor = new TestExtractor(ROOT, router);
+        const testExtractor = new TestExtractor([ROOT1], router);
         const tests = testExtractor.extractTests(['module-1.js', 'module-2.js']);
 
         chai.expect(tests.length).to.be.equal(0);
@@ -100,7 +121,7 @@ describe('TestExtractor', () => {
             ];
         };
 
-        const testExtractor = new TestExtractor(ROOT, router);
+        const testExtractor = new TestExtractor([ROOT1], router);
         const tests = testExtractor.extractTests(['module-1.js']);
 
         chai.expect(tests).to.deep.equal([

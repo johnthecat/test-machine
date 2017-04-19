@@ -1,5 +1,5 @@
-import {IUserConfig, IConfig} from 'test-machine-core/src/interface';
-import {TNodeCallback} from './interface';
+import {IConfig} from 'test-machine-core/src/interface';
+import {IWebpackConfig, TNodeCallback} from './interface';
 
 import * as webpack from 'webpack';
 import {TestMachine} from 'test-machine-core';
@@ -8,15 +8,19 @@ import {WebpackModulesPreprocessor} from './lib/webpack-modules-preprocessor';
 import {TestWatcher} from './lib/test-watcher';
 import {definePluginCompilerFactory} from './lib/define-plugin-compiler';
 
-const defaultUserConfig: IUserConfig = {
-    testRoot: './test',
-    router: () => '**/*.js',
+const defaultUserConfig: IWebpackConfig = {
+    testRoots: ['./test'],
+    router: () => [
+        '**/*.spec.js',
+        '**/*.test.js'
+    ],
     include: [/[^]*/],
     exclude: [/node_modules/],
-    compiler: (source) => source,
+    compilers: [],
     dependencies: [],
     plugins: [],
-    mocks: {}
+    mocks: {},
+    watch: false
 };
 
 class TestMachineWebpack {
@@ -35,7 +39,9 @@ class TestMachineWebpack {
 
     private isFirstRun = true;
 
-    constructor(userConfig: IUserConfig) {
+    private isUserWantWatch: boolean;
+
+    constructor(userConfig: IWebpackConfig) {
         if (typeof userConfig.engine !== 'function') {
             throw new Error('Test engine is not specified! You can install test-machine-plugins to get test engine you want.');
         }
@@ -46,11 +52,13 @@ class TestMachineWebpack {
 
         this.modulesPreprocessor = new WebpackModulesPreprocessor(this.config);
 
-        this.testWatcher = new TestWatcher(this.config.testRoot);
+        this.testWatcher = new TestWatcher(this.config.testRoots);
+
+        this.isUserWantWatch = userConfig.watch || false;
     }
 
     public apply(compiler): void {
-        this.isWatching = compiler.options.watch;
+        this.isWatching = compiler.options.watch && this.isUserWantWatch;
 
         const definePlugins = compiler.options.plugins.filter((plugin) => plugin instanceof webpack.DefinePlugin);
 

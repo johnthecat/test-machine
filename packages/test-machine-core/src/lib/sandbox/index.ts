@@ -2,7 +2,7 @@ import {IMocks, IModulesMap, TCompiler} from '../../interface';
 
 import * as vm from 'vm';
 import * as path from 'path';
-import {getHash} from '../utils';
+import {Cache} from '../cache';
 import {Script} from './script';
 
 export type TSandboxDependencies = IModulesMap<any>;
@@ -21,8 +21,6 @@ const Module: any = module.constructor;
 
 class Sandbox {
 
-    private static scriptCache: Map<string, Script> = new Map();
-
     private isCompiled = false;
 
     private exports: any = {};
@@ -32,6 +30,58 @@ class Sandbox {
     private compiledSource: string;
 
     constructor(private source: string, private filename: string, private config: ISandboxConfig = {}) {
+        this.context = this.createContext(config, filename);
+    }
+
+    public getContext(): any {
+        return this.context;
+    }
+
+    public getFilename(): string {
+        return this.context.module.filename;
+    }
+
+    public getCompiledSource(): string {
+        return this.compiledSource;
+    }
+
+    public getExports(): any {
+        if (this.isCompiled) {
+            return this.exports;
+        }
+
+        const compiler = typeof this.config.compiler === 'function' ? this.config.compiler : DEFAULT_COMPILER;
+
+        const context = vm.createContext(this.context);
+
+        let script;
+
+        if (Sandbox.scriptCache.has(this.source)) {
+            script = Sandbox.scriptCache.get(this.source);
+        } else {
+            this.compiledSource = compiler(this.source, this.context.module.filename);
+
+            script = new Script(this.compiledSource, this.filename);
+
+            Sandbox.scriptCache.set(this.source, script);
+        }
+
+        try {
+            script.runInContext(context);
+        } catch (exception) {
+            if (exception instanceof ReferenceError) {
+                throw exception;
+            } else {
+                throw new EvalError(exception);
+            }
+        }
+
+        this.isCompiled = true;
+
+        return this.exports;
+    }
+
+    private createContext(config: ISandboxConfig, filename: string): object {
         const parentModule = {
             filename: filename,
             id: filename,
@@ -82,13 +132,11 @@ class Sandbox {
             )
         };
 
-        ownContext['global'] = ownContext;
-
-        this.context = new Proxy(ownContext, {
+        return new Proxy(ownContext, {
             get: (target, key): any => {
                 switch (key) {
                     case 'global': {
-                        return this.context;
+                        return target;
                     }
 
                     case 'exports': {
@@ -123,75 +171,13 @@ class Sandbox {
                 return (key in target) || (key in global);
             }
         });
-
-        Sandbox.linkObject(this.context, 'exports', this);
-        Sandbox.linkObject(this.context.module, 'exports', this);
-    }
-
-    public getContext(): any {
-        return this.context;
-    }
-
-    public getFilename(): string {
-        return this.context.module.filename;
-    }
-
-    public getCompiledSource(): string {
-        return this.compiledSource;
-    }
-
-    public getExports(): any {
-        if (this.isCompiled) {
-            return this.exports;
-        }
-
-        const compiler = typeof this.config.compiler === 'function' ? this.config.compiler : DEFAULT_COMPILER;
-
-        const context = vm.createContext(this.context);
-        const scriptHash = getHash(this.source);
-
-        let script;
-
-        if (Sandbox.scriptCache.has(scriptHash)) {
-            script = Sandbox.scriptCache.get(scriptHash);
-        } else {
-            this.compiledSource = compiler(this.source, this.context.module.filename);
-
-            script = new Script(this.compiledSource, this.filename);
-
-            Sandbox.scriptCache.set(scriptHash, script);
-        }
-
-        try {
-            script.runInContext(context);
-        } catch (exception) {
-            if (exception instanceof ReferenceError) {
-                throw exception;
-            } else {
-                throw new EvalError(exception);
-            }
-        }
-
-        this.isCompiled = true;
-
-        return this.exports;
     }
 
     public static clearCache(): void {
         Sandbox.scriptCache.clear();
     }
 
-    private static linkObject(object: object, field: string, original: object): void {
-        Object.defineProperty(object, field, {
-            get(): any {
-                return original[field];
-            },
-
-            set(value): any {
-                return original[field] = value;
-            }
-        });
-    }
+    private static scriptCache: Cache<Script> = new Cache<Script>(true);
 
     private static resolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent, request: string): any {
         let catchedError;

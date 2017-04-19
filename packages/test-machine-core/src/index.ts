@@ -27,9 +27,9 @@ class TestMachine {
 
         this.engine = config.engine;
 
-        this.compiler = new Compiler([config.compiler]);
+        this.compiler = new Compiler(config.compilers);
 
-        this.testExtractor = new TestExtractor(config.testRoot, config.router);
+        this.testExtractor = new TestExtractor(config.testRoots, config.router);
 
         this.modulesGenerator = this.modulesGenerator = new ModulesGenerator(modulesFactory, resolver);
 
@@ -82,7 +82,7 @@ class TestMachine {
     private afterRun(tests: Array<string>): void {
         this.plugins.applyAfterRun(this.sandboxes.getResolvedModules());
 
-        this.sandboxes.clean();
+        this.sandboxes.clear();
         this.environmentPatch.clean(tests, this.config.mocks);
     }
 }

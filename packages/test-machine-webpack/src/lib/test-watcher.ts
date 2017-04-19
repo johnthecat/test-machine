@@ -6,15 +6,17 @@ class TestWatcher {
 
     private watcher: any;
 
-    constructor(private root: string) {
+    constructor(private roots: Array<string>) {
     }
 
     public setup(callback: Function): void {
+        const paths = this.roots.map((root) => path.resolve(root));
+
         this.watcher = new Watchpack({
             aggregateTimeout: 500
         });
 
-        this.watcher.watch([], [path.resolve(this.root)], Date.now());
+        this.watcher.watch([], paths, Date.now());
         this.watcher.on('aggregated', () => {
             callback();
         });

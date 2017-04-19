@@ -22,24 +22,24 @@ export interface IMocks {
 }
 
 export interface IConfig {
-    testRoot: string,
+    testRoots: Array<string>,
     exclude: Array<RegExp>,
     include: Array<RegExp>,
     plugins: Array<IPlugin>,
     router: TRouter,
-    compiler: TCompiler,
+    compilers: Array<TCompiler>,
     engine: TEngine,
     dependencies: Array<string>,
     mocks: IMocks
 }
 
 export interface IUserConfig {
-    testRoot: string,
+    testRoots: Array<string>,
     exclude?: Array<RegExp>,
     include?: Array<RegExp>,
     plugins?: Array<IPlugin>,
     router?: TRouter,
-    compiler?: TCompiler,
+    compilers?: Array<TCompiler>,
     engine?: TEngine,
     dependencies?: Array<string>,
     mocks?: IMocks

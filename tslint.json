@@ -22,11 +22,16 @@
     "label-position": true,
     "max-line-length": false,
     "member-access": false,
-    "member-ordering": [
-      true,
-      "public-before-private",
-      "variables-before-functions"
-    ],
+    "member-ordering": [true, {
+      "order": [
+        "instance-field",
+        "constructor",
+        "public-instance-method",
+        "protected-instance-method",
+        "private-instance-method",
+        "static-field"
+      ]
+    }],
     "no-any": false,
     "no-arg": true,
     "no-bitwise": false,

@@ -1,20 +1,18 @@
 import {TCompiler} from '../interface';
-import {getHash} from './utils';
+import {Cache} from './cache';
 
 const EMPTY_RESULT = '';
 const DEFAULT_FILENAME = 'unknown';
 
 class Compiler {
 
-    private cache: Map<string, string> = new Map();
+    private cache: Cache<string> = new Cache<string>(true);
 
     constructor(private pipeline: Array<TCompiler>) {}
 
     public compile(source: string, filename: string = DEFAULT_FILENAME): string {
-        const hash = getHash(source);
-
-        if (this.cache.has(hash)) {
-            return this.cache.get(hash) || EMPTY_RESULT;
+        if (this.cache.has(source)) {
+            return this.cache.get(source) || EMPTY_RESULT;
         }
 
         let result = source;
@@ -23,7 +21,7 @@ class Compiler {
             result = this.pipeline[index](result, filename);
         }
 
-        this.cache.set(hash, result);
+        this.cache.set(source, result);
 
         return result;
     }

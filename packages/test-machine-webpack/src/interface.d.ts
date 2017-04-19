@@ -1,3 +1,4 @@
+import {IUserConfig} from 'test-machine-core/src/interface';
 
 export type TNodeCallback = (error?: string|Error|null, result?: any) => void;
 
@@ -13,4 +14,8 @@ export interface IWebpackModule {
     _source: {
         _value: string
     }
+}
+
+export interface IWebpackConfig extends IUserConfig {
+    watch?: boolean
 }

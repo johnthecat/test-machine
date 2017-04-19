@@ -1,5 +1,6 @@
 import {IModulesMap, ITestModule, IMocks, ITestDependency, TCompiler} from '../interface';
 
+import {Cache} from './cache';
 import {Sandbox} from './sandbox';
 import {Compiler} from './compiler';
 import {ExceptionProvider} from './exception-provider';
@@ -8,25 +9,27 @@ class SandboxController {
 
     private compiler: TCompiler;
 
-    private cache: IModulesMap<Sandbox> = Object.create(null);
+    private modules: Cache<Sandbox> = new Cache<Sandbox>();
 
     constructor(compiler: Compiler) {
         this.compiler = (source: string, filename: string): string => compiler.compile(source, filename);
     }
 
     public getResolvedModules(): IModulesMap<Sandbox> {
-        return this.cache;
+        return this.modules.getStore();
     }
 
-    public clean(): void {
-        this.cache = Object.create(null);
+    public clear(): void {
+        this.modules.clear();
     }
 
     public getModule(module: ITestModule, mocks: IMocks): Sandbox {
         const resource = module.getResource();
 
-        if (resource in this.cache) {
-            return this.cache[resource].getExports();
+        const cachedModule = this.modules.get(resource);
+
+        if (cachedModule) {
+            return cachedModule.getExports();
         }
 
         const dependencies = module.getDependencies();
@@ -54,7 +57,7 @@ class SandboxController {
             throw ExceptionProvider.compilationException(e, module, sandbox);
         }
 
-        this.cache[resource] = sandbox;
+        this.modules.set(resource, sandbox);
 
         return compiledModule;
     }

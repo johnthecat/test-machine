@@ -19,7 +19,7 @@ export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IW
         },
 
         getDependencies(): Array<ITestDependency> {
-            if (this._dependencyCache) {
+            if (this._dependencyCache !== null) {
                 return this._dependencyCache;
             }
 
