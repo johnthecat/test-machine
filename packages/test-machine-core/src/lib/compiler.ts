@@ -28,6 +28,7 @@ class Compiler {
 
     public push(compiler: TCompiler): void {
         this.pipeline.push(compiler);
+        this.cache.clear();
     }
 }
 
