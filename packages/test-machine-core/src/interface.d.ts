@@ -60,6 +60,6 @@ export interface ITestDependency {
     module: ITestModule
 }
 
-export interface ITestModulesMap {
-    [key: string]: ITestModule
+export interface ITestModulesMap extends IModulesMap<ITestModule> {
+
 }

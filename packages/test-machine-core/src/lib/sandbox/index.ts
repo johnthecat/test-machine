@@ -2,7 +2,7 @@ import {IMocks, IModulesMap, TCompiler} from '../../interface';
 
 import * as vm from 'vm';
 import * as path from 'path';
-import {Cache} from '../cache';
+import {Collection} from '../collection';
 import {Script} from './script';
 
 export type TSandboxDependencies = IModulesMap<any>;
@@ -177,7 +177,7 @@ class Sandbox {
         Sandbox.scriptCache.clear();
     }
 
-    private static scriptCache: Cache<Script> = new Cache<Script>(true);
+    private static scriptCache: Collection<Script> = new Collection<Script>(true);
 
     private static resolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent, request: string): any {
         let catchedError;

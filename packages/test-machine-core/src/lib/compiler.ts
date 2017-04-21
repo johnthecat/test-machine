@@ -1,12 +1,12 @@
 import {TCompiler} from '../interface';
-import {Cache} from './cache';
+import {Collection} from './collection';
 
 const EMPTY_RESULT = '';
 const DEFAULT_FILENAME = 'unknown';
 
 class Compiler {
 
-    private cache: Cache<string> = new Cache<string>(true);
+    private cache: Collection<string> = new Collection<string>(true);
 
     constructor(private pipeline: Array<TCompiler>) {}
 

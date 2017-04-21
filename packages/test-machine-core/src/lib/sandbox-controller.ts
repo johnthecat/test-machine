@@ -1,6 +1,6 @@
 import {IModulesMap, ITestModule, IMocks, ITestDependency, TCompiler} from '../interface';
 
-import {Cache} from './cache';
+import {Collection} from './collection';
 import {Sandbox} from './sandbox';
 import {Compiler} from './compiler';
 import {ExceptionProvider} from './exception-provider';
@@ -9,7 +9,7 @@ class SandboxController {
 
     private compiler: TCompiler;
 
-    private modules: Cache<Sandbox> = new Cache<Sandbox>();
+    private modules: Collection<Sandbox> = new Collection<Sandbox>();
 
     constructor(compiler: Compiler) {
         this.compiler = (source: string, filename: string): string => compiler.compile(source, filename);

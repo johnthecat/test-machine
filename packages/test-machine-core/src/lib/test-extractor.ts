@@ -1,11 +1,11 @@
 import {TRouter} from '../interface';
 import * as path from 'path';
 import * as glob from 'glob';
-import {Cache} from './cache';
+import {Collection} from './collection';
 
 class TestExtractor {
 
-    private globCache: Cache<string> = new Cache<string>();
+    private globCache: Collection<string> = new Collection<string>();
 
     constructor(private roots: Array<string>, private router: TRouter) {
     }

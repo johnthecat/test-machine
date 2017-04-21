@@ -2,8 +2,6 @@ import {TPathResolver, TModuleResolver, TModulesFactory, ITestModule, ITestModul
 
 class ModulesGenerator {
 
-    private lastCompiledModules: ITestModulesMap | null = null;
-
     private currentProcessor: TModuleResolver;
 
     constructor(private modulesFactory: TModulesFactory<any>, private resolver: TPathResolver) {
@@ -20,17 +18,15 @@ class ModulesGenerator {
             }
         }
 
-        this.lastCompiledModules = testModulesMap;
-
         return testModulesMap;
     }
 
-    private processModule(originalModules: object, convertedModules: object, resource: string): ITestModule | null {
-        if (convertedModules[resource]) {
-            return convertedModules[resource];
+    private processModule(original: IModulesMap<any>, converted: ITestModulesMap, resource: string): ITestModule | null {
+        if (converted[resource]) {
+            return converted[resource];
         }
 
-        const module = originalModules[resource];
+        const module = original[resource];
 
         if (!module) {
             return null;
@@ -38,7 +34,7 @@ class ModulesGenerator {
 
         const testModule = this.modulesFactory(module, this.currentProcessor);
 
-        convertedModules[resource] = testModule;
+        converted[resource] = testModule;
 
         return testModule;
     }
