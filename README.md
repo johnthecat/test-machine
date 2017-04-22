@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<p align="center">
 <img/>
 <br/>
 <br/>
@@ -10,7 +10,10 @@ Quick links:
 |
 <a href="https://github.com/johnthecat/test-machine/tree/master/packages/test-machine-plugins">Engines and compilers</a>
 <hr/>
-</div>
+</p>
+
+[![NPM Version](https://img.shields.io/npm/v/test-machine-core.svg?style=flat-square)](https://www.npmjs.com/package/test-machine-core)
+[![Travis status](https://img.shields.io/travis/johnthecat/test-machine/master.svg?style=flat-square)](https://travis-ci.org/johnthecat/test-machine)
 
 Test machine is easy to use [bundler ↔ test runner] adapter, that makes all dirty job for you.
 
@@ -45,7 +48,9 @@ module.exports = {
         
             // Required
             
-            testRoot: './tests',
+            testRoots: [
+              './tests'
+            ],
             
             engine: engine.mocha({
                 reporter: 'tap',
@@ -58,9 +63,11 @@ module.exports = {
                 return `**/*${resource.name}.spec.js`
             },
             
-            compiler: compiler.babel({
+            compilers: [
+              compiler.babel({
                 presets: ['es2015']
-            }),
+              })
+            ],
             
             include: [/src/],
             
