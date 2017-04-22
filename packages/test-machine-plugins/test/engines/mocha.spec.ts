@@ -20,27 +20,27 @@ describe('Mocha engine', () => {
 
     it('should complete, when mocha test passed', (done) => {
         const runner = mochaEngine({
-            reporter() {
-                //avoid logs
+            reporter(): void {
+                // avoid logs
             }
         });
 
         runner([
             resolve('./engines/fixtures/correct-test-set.js')
         ])
-            .then(() => done())
+            .then(() => done());
     });
 
     it('should fail, when mocha test not passed', (done) => {
         const runner = mochaEngine({
-            reporter() {
-                //avoid logs
+            reporter(): void {
+                // avoid logs
             }
         });
 
         runner([
             resolve('./engines/fixtures/incorrect-test-set.js')
         ])
-            .catch(() => done())
+            .catch(() => done());
     });
 });
