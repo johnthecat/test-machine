@@ -5,9 +5,6 @@
   "license": "MIT",
   "main": "dist/index.js",
   "dependencies": {
-    "babel-code-frame": "^6.22.0",
-    "glob": "^7.1.1",
-    "stacktrace-parser": "^0.1.4",
     "test-machine-core": "^0.2.5"
   }
 }
