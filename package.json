@@ -29,7 +29,7 @@
     "test": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
     "test:watch": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
 
-    "build": "lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/tsc",
+    "build": "lerna exec -- ../../node_modules/.bin/tsc",
     "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch",
     "build:ci": "npm run lint:src && npm run lint:test && npm run test && npm run build"
   },
