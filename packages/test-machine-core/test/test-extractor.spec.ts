@@ -1,9 +1,10 @@
 /// <reference path="../../../node_modules/@types/mocha/index.d.ts" />
 
+import {TRouter} from '../src/interface';
+
 import * as chai from 'chai';
 import * as path from 'path';
 import {TestExtractor} from '../src/lib/test-extractor';
-import {TRouter} from '../src/interface';
 
 const ROOT = path.join(__dirname, 'fixtures', 'test-extractor');
 const ROOT1 = path.join(ROOT, 'root1');

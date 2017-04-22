@@ -5,7 +5,7 @@ import {Collection} from './collection';
 
 class TestExtractor {
 
-    private globCache: Collection<string> = new Collection<string>();
+    private globCache = new Collection<string>();
 
     constructor(private roots: Array<string>, private router: TRouter) {
     }

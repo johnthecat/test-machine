@@ -28,12 +28,51 @@ describe('Sandbox', () => {
         });
     });
 
+    it('should give correct filename', (done) => {
+        const filename = 'root/test-file.js';
+
+        readFile('./fixtures/sandbox/simple-module.js').then((source) => {
+            const sandbox = new Sandbox(source, filename);
+
+            chai.expect(sandbox.getFilename()).to.be.equal(filename);
+
+            done();
+        });
+    });
+
     it('should have all primitives provided', (done) => {
         readFile('./fixtures/sandbox/primitives.js').then((source) => {
             const sandbox = new Sandbox(source, 'primitives.js');
-            const module = sandbox.getExports();
 
-            chai.expect(module).to.be.equal(true);
+            try {
+                sandbox.getExports();
+                done();
+            } catch (exception) {
+                done(exception);
+            }
+        });
+    });
+
+    it('should correctly pass "instanceof" check for all primitives', (done) => {
+        readFile('./fixtures/sandbox/primitives.js').then((source) => {
+            const sandbox = new Sandbox(source, 'primitives.js');
+            const {
+                array,
+                map,
+                set,
+                weakMap,
+                weakSet,
+                promise,
+                buffer
+            } = sandbox.getExports();
+
+            chai.expect(array instanceof Array).to.be.equal(true);
+            chai.expect(map instanceof Map).to.be.equal(true);
+            chai.expect(set instanceof Set).to.be.equal(true);
+            chai.expect(weakMap instanceof WeakMap).to.be.equal(true);
+            chai.expect(weakSet instanceof WeakSet).to.be.equal(true);
+            chai.expect(promise instanceof Promise).to.be.equal(true);
+            chai.expect(buffer instanceof Buffer).to.be.equal(true);
 
             done();
         });
@@ -196,10 +235,10 @@ describe('Sandbox', () => {
         readFile('./fixtures/sandbox/global-variable.js').then((source) => {
             const sandbox = new Sandbox(source, 'global-variable.js');
 
-            sandbox.getExports();
-
+            const module = sandbox.getExports();
             const context = sandbox.getContext();
 
+            chai.expect(module).to.be.equal(true);
             chai.expect(context['amaGlobal']).to.be.equal(true);
             chai.expect(global['amaGlobal']).to.be.equal(void 0);
 
