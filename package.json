@@ -22,13 +22,10 @@
   "main": "dist/index.js",
   "scripts": {
     "postinstall": "node_modules/.bin/lerna bootstrap && node_modules/.bin/lerna exec --no-sort --concurrency 1 -- node ../../bin/link",
-
     "lint:src": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" src/**/*.ts",
     "lint:test": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" test/**/*.ts",
-
     "test": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
     "test:watch": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
-
     "build": "lerna exec -- ../../node_modules/.bin/tsc",
     "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch",
     "build:ci": "npm run lint:src && npm run lint:test && npm run test && npm run build"
@@ -38,6 +35,7 @@
   ],
   "devDependencies": {
     "@types/chai": "3.5.1",
+    "@types/core-js": "0.9.41",
     "@types/mocha": "2.2.41",
     "@types/node": "7.0.13",
     "@types/webpack": "2.2.15",
