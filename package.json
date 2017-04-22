@@ -23,15 +23,15 @@
   "scripts": {
     "postinstall": "node_modules/.bin/lerna bootstrap && node_modules/.bin/lerna exec --no-sort --concurrency 1 -- node ../../bin/link",
 
-    "lint:src": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" src/**/*.ts",
-    "lint:test": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" test/**/*.ts",
+    "lint:src": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" src/**/*.ts",
+    "lint:test": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/tslint --config=\"../../tslint.json\" --project=\"../../tsconfig.json\" test/**/*.ts",
 
-    "test": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
-    "test:watch": "node_modules/.bin/lerna exec -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
+    "test": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/mocha --opts ../../mocha.opts",
+    "test:watch": "node_modules/.bin/lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
 
-    "build": "lerna exec -- ../../node_modules/.bin/tsc",
+    "build": "lerna exec --no-sort --concurrency 3 -- ../../node_modules/.bin/tsc",
     "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch",
-    "build:ci": "npm run test && npm run lint:src && npm run lint:test && npm run build"
+    "build:ci": "npm run lint:src && npm run lint:test && npm run test && npm run build"
   },
   "pre-commit": [
     "build:ci"
