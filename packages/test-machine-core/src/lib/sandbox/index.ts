@@ -69,10 +69,10 @@ class Sandbox {
         try {
             script.runInContext(context);
         } catch (exception) {
-            if (exception instanceof ReferenceError) {
-                throw exception;
-            } else {
+            if (typeof exception === 'string') {
                 throw new EvalError(exception);
+            } else {
+                throw exception;
             }
         }
 

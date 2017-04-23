@@ -29,7 +29,7 @@ describe('Sandbox', () => {
             });
         });
 
-        it('should throw EvalError, if code have some inner exceptions', (done) => {
+        it('should throw exception, if code have some inner exceptions', (done) => {
             readFile('./fixtures/sandbox/eval-error.js').then((source) => {
                 const sandbox = new Sandbox(source, 'eval-error.js');
 
@@ -37,9 +37,7 @@ describe('Sandbox', () => {
                     sandbox.getExports();
 
                     done('Code was compiled');
-                } catch (expection) {
-                    chai.expect(expection).to.be.instanceof(EvalError);
-
+                } catch (exception) {
                     done();
                 }
             });
