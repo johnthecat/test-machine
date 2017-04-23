@@ -40,6 +40,40 @@ describe('Sandbox', () => {
         });
     });
 
+    it('should give correct compiled source', (done) => {
+        readFile('./fixtures/sandbox/simple-module.js').then((source) => {
+            const sandbox = new Sandbox(source, 'simple-module.js');
+
+            sandbox.getExports();
+
+            const compiledSource = sandbox.getCompiledSource();
+
+            chai.expect(compiledSource).to.be.equal(source);
+
+            done();
+        });
+    });
+
+    it('should give correct compiled source after applying compilation pipeline', (done) => {
+        const compilerPostfix = '\n const value = 1';
+
+        readFile('./fixtures/sandbox/simple-module.js').then((source) => {
+            const sandbox = new Sandbox(source, 'simple-module.js', {
+                compiler: (source) => {
+                    return source + compilerPostfix;
+                }
+            });
+
+            sandbox.getExports();
+
+            const compiledSource = sandbox.getCompiledSource();
+
+            chai.expect(compiledSource).to.be.equal(source + compilerPostfix);
+
+            done();
+        });
+    });
+
     it('should have all primitives provided', (done) => {
         readFile('./fixtures/sandbox/primitives.js').then((source) => {
             const sandbox = new Sandbox(source, 'primitives.js');
@@ -259,6 +293,18 @@ describe('Sandbox', () => {
         chai.expect(context[key]).to.be.equal(global[key]);
 
         delete global[key];
+    });
+
+    it('should correctly handle exports reference', (done) => {
+        readFile('./fixtures/sandbox/exports-reference.js').then((source) => {
+            const sandbox = new Sandbox(source, 'exports-reference.js');
+
+            const module = sandbox.getExports();
+
+            chai.expect(module.data).to.be.equal(true);
+
+            done();
+        });
     });
 
     it('should add fields to "module" object', (done) => {
