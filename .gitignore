@@ -11,3 +11,4 @@ node_modules
 packages/*/tsconfig.*
 packages/*/.npmignore
 packages/*/dist
+packages/*/test/.tmp

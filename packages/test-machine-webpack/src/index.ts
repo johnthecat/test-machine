@@ -1,5 +1,6 @@
+import {Plugin} from 'webpack';
 import {IConfig} from 'test-machine-core/src/interface';
-import {IWebpackConfig, TNodeCallback} from './interface';
+import {IWebpackConfig, ICompiler, ICompilation, IDefinePlugin, TNodeCallback} from './interface';
 
 import * as webpack from 'webpack';
 import {TestMachine} from 'test-machine-core';
@@ -20,12 +21,13 @@ const defaultUserConfig: IWebpackConfig = {
     dependencies: [],
     plugins: [],
     mocks: {},
-    watch: false
+    watch: false,
+    failOnError: true
 };
 
-class TestMachineWebpack {
+class TestMachineWebpack implements Plugin {
 
-    private config: IConfig;
+    private config: IWebpackConfig;
 
     private runner: TestMachine;
 
@@ -37,38 +39,45 @@ class TestMachineWebpack {
 
     private isWatching = false;
 
+    private failOnError = false;
+
     private isFirstRun = true;
 
-    private isUserWantWatch: boolean;
+    private isUserWantToWatch: boolean;
 
     constructor(userConfig: IWebpackConfig) {
         if (typeof userConfig.engine !== 'function') {
             throw new Error('Test engine is not specified! You can install test-machine-plugins to get test engine you want.');
         }
 
-        this.config = Object.assign(defaultUserConfig, userConfig) as IConfig;
+        this.config = Object.assign(defaultUserConfig, userConfig) as IWebpackConfig;
 
         this.runner = new TestMachine(this.config, webpackModuleFactory, (module) => module.resource);
 
-        this.modulesPreprocessor = new WebpackModulesPreprocessor(this.config);
+        this.modulesPreprocessor = new WebpackModulesPreprocessor(this.config as IConfig);
 
         this.testWatcher = new TestWatcher(this.config.testRoots);
 
-        this.isUserWantWatch = userConfig.watch || false;
+        this.isUserWantToWatch = userConfig.watch || false;
+
+        this.failOnError = this.config.failOnError || this.failOnError;
     }
 
-    public apply(compiler): void {
-        this.isWatching = compiler.options.watch && this.isUserWantWatch;
+    public apply(compiler: ICompiler): void {
+        this.isWatching = !!(compiler.options.watch && this.isUserWantToWatch);
 
-        const definePlugins = compiler.options.plugins.filter((plugin) => plugin instanceof webpack.DefinePlugin);
+        const definePlugins = (compiler.options.plugins || []).filter((plugin) => plugin instanceof webpack.DefinePlugin);
 
         if (definePlugins.length !== 0) {
             definePlugins.forEach((plugin) => {
-                this.runner.pushCompiler(definePluginCompilerFactory(plugin));
+                this.runner.pushCompiler(definePluginCompilerFactory(plugin as IDefinePlugin));
             });
         }
 
-        compiler.plugin('emit', (compilation: any, callback: TNodeCallback) => {
+        // console.log(compiler);
+        // process.exit(0);
+
+        compiler.plugin('emit', (compilation: ICompilation, callback: TNodeCallback) => {
             if (this.inProgress) {
                 return callback();
             }
@@ -85,8 +94,15 @@ class TestMachineWebpack {
             const modulesMap = this.modulesPreprocessor.getModulesMap(modules);
 
             this.runner.runTests(modulesMap, changedModules)
-                .then(() => TestMachineWebpack._processTestResult(callback))
-                .catch((error) => TestMachineWebpack._generateInternalError(error, callback, this.isWatching))
+                .then(() => {
+                    callback();
+                })
+                .catch(() => TestMachineWebpack._generateInternalError(
+                    compilation,
+                    this.isWatching,
+                    this.failOnError,
+                    callback
+                ))
                 .then(() => {
                     this.inProgress = false;
                 });
@@ -123,15 +139,14 @@ class TestMachineWebpack {
         });
     }
 
-    private static _processTestResult(callback: TNodeCallback): void {
-        callback();
-    }
+    private static _generateInternalError(compilation: any, isWatching: boolean, failOnError: boolean, callback: TNodeCallback): void {
+        const error = new Error('Test running failed');
 
-    private static _generateInternalError(error: Error, callback: TNodeCallback, isWatching: boolean): void {
-        if (isWatching) {
-            console.error(error.message);
+        if (isWatching || !failOnError) {
+            compilation.warnings.push(error);
             callback();
         } else {
+            compilation.errors.push(error);
             callback(error);
         }
     }

@@ -1,12 +1,5 @@
+import {IDefinePlugin} from '../interface';
 import {TCompiler} from 'test-machine-core/src/interface';
-
-export interface IDeclarations {
-    [key: string]: any
-}
-
-export interface IDefinePlugin {
-    definitions: IDeclarations
-}
 
 const defaultCompiler = (source: string): string => source;
 

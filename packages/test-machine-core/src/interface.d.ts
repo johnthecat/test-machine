@@ -4,7 +4,7 @@ export type TRouter = (resource: path.ParsedPath) => string | Array<string>;
 
 export type TCompiler = (source: string, filename: string) => string;
 
-export type TEngine = (tests: Array<string>) => Promise<void>;
+export type TEngine = (tests: Array<string>) => Promise<any>;
 
 export type TPathResolver = (module: any) => string;
 

@@ -1,3 +1,4 @@
+import * as webpack from '@types/webpack';
 import {IUserConfig} from 'test-machine-core/src/interface';
 
 export type TNodeCallback = (error?: string|Error|null, result?: any) => void;
@@ -18,4 +19,21 @@ export interface IWebpackModule {
 
 export interface IWebpackConfig extends IUserConfig {
     watch?: boolean
+    failOnError?: boolean
+}
+
+export interface ICompiler extends webpack.Compiler {
+    options: webpack.Configuration
+}
+
+export interface ICompilation {
+    modules: Array<IWebpackModule>
+    warnings: Array<Error>,
+    errors: Array<Error>
+}
+
+export interface IDefinePlugin extends webpack.Plugin {
+    definitions: {
+        [key: string]: any
+    }
 }
