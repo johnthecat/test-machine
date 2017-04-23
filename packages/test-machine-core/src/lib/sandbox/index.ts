@@ -21,13 +21,13 @@ const Module: any = module.constructor;
 
 class Sandbox {
 
-    private isCompiled = false;
-
-    private exports = {};
+    private compiledSource: string;
 
     private context: any;
 
-    private compiledSource: string;
+    private isCompiled = false;
+
+    private exports = {};
 
     constructor(private source: string, private filename: string, private config: ISandboxConfig = {}) {
         this.context = this.createContext(config, filename);

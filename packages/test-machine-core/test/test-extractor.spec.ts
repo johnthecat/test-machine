@@ -18,6 +18,8 @@ const TESTS = {
     'module-4': path.join(ROOT2, 'module-4.js')
 };
 
+// TODO add contexts
+
 describe('TestExtractor', () => {
     it('should pass parsed path into router', (done) => {
         const router = (resource: path.ParsedPath) => {
