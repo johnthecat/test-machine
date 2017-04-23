@@ -130,11 +130,11 @@ class Sandbox {
             )
         };
 
-        return new Proxy(ownContext, {
+        const contextProxy = new Proxy(ownContext, {
             get: (target, key): any => {
                 switch (key) {
                     case 'global': {
-                        return target;
+                        return contextProxy;
                     }
 
                     case 'exports': {
@@ -169,6 +169,8 @@ class Sandbox {
                 return (key in target) || (key in global);
             }
         });
+
+        return contextProxy;
     }
 
     public static clearCache(): void {

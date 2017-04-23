@@ -329,6 +329,24 @@ describe('Sandbox', () => {
                 done();
             });
         });
+
+        it('should throw ReferenceError, if can\'t resolve mock', (done) => {
+            readFile('./fixtures/sandbox/pass-dependency.js').then((source) => {
+                const sandbox = new Sandbox(source, path.resolve('./test/fixtures/sandbox/pass-dependency.js'), {
+                    mocks: {}
+                });
+
+                try {
+                    sandbox.getExports();
+
+                    done('Code was compiled');
+                } catch (exception) {
+                    chai.expect(exception).to.be.instanceof(ReferenceError);
+
+                    done();
+                }
+            });
+        });
     });
 
     context('Exports', () => {
@@ -358,9 +376,21 @@ describe('Sandbox', () => {
             });
         });
 
+        it('should correctly provide commonjs module.exports object', (done) => {
+            readFile('./fixtures/sandbox/commonjs-module-exports.js').then((source) => {
+                const sandbox = new Sandbox(source, 'commonjs-module-exports.js');
+
+                const exports = sandbox.getExports();
+
+                chai.expect(exports.equals).to.be.equal(true);
+
+                done();
+            });
+        });
+
         it('should correctly provide commonjs exports object', (done) => {
-            readFile('./fixtures/sandbox/commonjs-export.js').then((source) => {
-                const sandbox = new Sandbox(source, 'commonjs-export.js');
+            readFile('./fixtures/sandbox/commonjs-exports.js').then((source) => {
+                const sandbox = new Sandbox(source, 'commonjs-exports.js');
 
                 const exports = sandbox.getExports();
 
