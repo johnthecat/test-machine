@@ -66,6 +66,19 @@ describe('TestExtractor', () => {
         chai.expect(woCache).to.deep.equal(wCache);
     });
 
+    it('should correctly clear cache', () => {
+        const router = () => '**/*';
+
+        const testExtractor = new TestExtractor([ROOT1], router);
+        const result1 = testExtractor.extractTests(['module.js']);
+
+        testExtractor.clearCache();
+
+        const result2 = testExtractor.extractTests(['module.js']);
+
+        chai.expect(result1).to.deep.equal(result2);
+    });
+
     it('should return specific files, when filename passed', () => {
         const router = (resource: path.ParsedPath) => `**/${resource.name}.js`;
 
@@ -128,5 +141,32 @@ describe('TestExtractor', () => {
         chai.expect(tests).to.deep.equal([
             TESTS['module-1']
         ]);
+    });
+
+    it('should always return empty array, if test roots not specified', () => {
+        const router = () => '';
+
+        const testExtractor = new TestExtractor([], router);
+        const tests = testExtractor.extractTests(['module-1.js', 'module-4.js']);
+
+        chai.expect(tests.length).to.be.equal(0);
+    });
+
+    it('should return empty array, if changedModules are not array', () => {
+        const router = () => '';
+
+        const testExtractor = new TestExtractor([ROOT1], router);
+        const tests = testExtractor.extractTests(({} as Array<string>));
+
+        chai.expect(tests.length).to.be.equal(0);
+    });
+
+    it('should return empty array, if changedModules has invalid value', () => {
+        const router = () => '';
+
+        const testExtractor = new TestExtractor([ROOT1], router);
+        const tests = testExtractor.extractTests([({} as string)]);
+
+        chai.expect(tests.length).to.be.equal(0);
     });
 });

@@ -3,7 +3,7 @@
 import * as path from 'path';
 import * as chai from 'chai';
 import {readFile} from './utils/fs';
-import {compiler} from '../../test-machine-plugins/src';
+import {babelCompiler} from '../../test-machine-plugins/src/compilers/babel';
 import {Sandbox} from '../src/lib/sandbox';
 
 const createExport = (data) => {
@@ -81,7 +81,7 @@ describe('Sandbox', () => {
     it('should apply compiler to source', (done) => {
         readFile('./fixtures/sandbox/es6-export.js').then((source) => {
             const sandbox = new Sandbox(source, 'es6-export.js', {
-                compiler: compiler.babel({
+                compiler: babelCompiler({
                     plugins: ['transform-es2015-modules-commonjs']
                 }),
                 dependencies: {}
@@ -259,6 +259,20 @@ describe('Sandbox', () => {
         chai.expect(context[key]).to.be.equal(global[key]);
 
         delete global[key];
+    });
+
+    it('should add fields to "module" object', (done) => {
+        readFile('./fixtures/sandbox/module-mutation.js').then((source) => {
+            const sandbox = new Sandbox(source, 'module-mutation.js');
+
+            const module = sandbox.getExports();
+            const context = sandbox.getContext();
+
+            chai.expect(module).to.be.equal(true);
+            chai.expect(context.module.customField).to.be.equal(true);
+
+            done();
+        });
     });
 
     it('should correctly handle function declarations', (done) => {

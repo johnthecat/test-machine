@@ -23,7 +23,7 @@ class Sandbox {
 
     private isCompiled = false;
 
-    private exports: any = {};
+    private exports = {};
 
     private context: any;
 
@@ -89,7 +89,6 @@ class Sandbox {
         };
 
         const moduleObject = {
-            exports: {},
             filename: filename,
             id: filename
         };
@@ -114,7 +113,7 @@ class Sandbox {
                     }
 
                     default: {
-                        return value;
+                        return target[key] = value;
                     }
                 }
             }
@@ -123,7 +122,6 @@ class Sandbox {
         const ownContext = {
             __dirname: path.dirname(filename),
             __filename: filename,
-            exports: {},
             module: module,
             require: Sandbox.getResolver(
                 config.dependencies || DEFAULT_DEPENDENCIES,

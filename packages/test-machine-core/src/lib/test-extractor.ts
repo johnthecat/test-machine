@@ -11,8 +11,13 @@ class TestExtractor {
     }
 
     public extractTests(changedModules: Array<string>): Array<string> {
-        const count = changedModules.length;
         const tests = [];
+
+        if (Array.isArray(changedModules) === false) {
+            return tests;
+        }
+
+        const count = changedModules.length;
 
         for (let index = 0; index < count; index++) {
             this.extractTest(changedModules[index], tests);
@@ -74,9 +79,14 @@ class TestExtractor {
             return;
         }
 
+        const rootsCount = this.roots.length;
+
+        if (rootsCount === 0) {
+            return;
+        }
+
         const source = path.parse(resource);
         const userGlob = this.router(source);
-        const rootsCount = this.roots.length;
 
         let patternIndex;
 

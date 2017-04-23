@@ -25,6 +25,18 @@ describe('Collection', () => {
         chai.expect(collection.get('weakSet')).to.be.instanceof(WeakSet);
     });
 
+    it('should return correct store', () => {
+        const collection = new Collection();
+
+        collection.set('set', new Set());
+
+        const store = collection.getStore();
+
+        chai.expect(store).to.be.deep.equal({
+            set: new Set()
+        });
+    });
+
     it('should store value correctly (with hashing)', () => {
         const collection = new Collection(true);
 
