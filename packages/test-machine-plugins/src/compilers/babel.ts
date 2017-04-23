@@ -1,7 +1,7 @@
 import {TCompiler} from 'test-machine-core/src/interface';
 import {noModuleException} from '../utils';
 
-export function babelCompiler(config): TCompiler {
+export function babelCompiler(config = {}): TCompiler {
     let babel;
 
     try {

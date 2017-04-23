@@ -2,9 +2,22 @@
 
 import * as chai from 'chai';
 import {readFile} from '../utils/fs';
+import {excludeFromResolve} from '../utils/resolve';
 import {babelCompiler} from '../../src/compilers/babel';
 
 describe('Babel compiler', () => {
+    it('should fail, if babel-core isn\'t installed', () => {
+        const restore = excludeFromResolve('mocha');
+
+        try {
+            babelCompiler();
+        } catch (exception) {
+            chai.expect(exception).to.be.instanceof(Error);
+        }
+
+        restore();
+    });
+
     it('should handle empty string', () => {
         const compiler = babelCompiler({
             presets: ['es2015']

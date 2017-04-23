@@ -1,9 +1,23 @@
 /// <reference path="../../../../node_modules/@types/mocha/index.d.ts" />
 
+import * as chai from 'chai';
 import {resolve} from '../utils/fs';
+import {excludeFromResolve} from '../utils/resolve';
 import {mochaEngine} from '../../src/engines/mocha';
 
 describe('Mocha engine', () => {
+    it('should fail, if mocha isn\'t installed', () => {
+        const restore = excludeFromResolve('mocha');
+
+        try {
+            mochaEngine();
+        } catch (exception) {
+            chai.expect(exception).to.be.instanceof(Error);
+        }
+
+        restore();
+    });
+
     it('should pass without tests', (done) => {
         const runner = mochaEngine();
 
