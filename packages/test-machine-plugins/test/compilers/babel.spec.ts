@@ -7,7 +7,7 @@ import {babelCompiler} from '../../src/compilers/babel';
 
 describe('Babel compiler', () => {
     it('should fail, if babel-core isn\'t installed', () => {
-        const restore = excludeFromResolve('mocha');
+        const restore = excludeFromResolve('babel-core');
 
         try {
             babelCompiler();
