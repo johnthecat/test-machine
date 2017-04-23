@@ -4,6 +4,7 @@
   "description": "",
   "license": "MIT",
   "main": "dist/index.js",
+  "typings": "src/index.ts",
   "dependencies": {
     "babel-code-frame": "^6.22.0",
     "glob": "^7.1.1",

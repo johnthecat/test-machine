@@ -1,7 +1,6 @@
 {
   "name": "test-machine-build",
   "private": true,
-  "version": "0.2.0",
   "license": "MIT",
   "homepage": "https://github.com/johnthecat/test-machine",
   "author": "Sergey Zhuravlev <zhuravlev1337@gmail.com> (https://github.com/johnthecat)",
@@ -77,6 +76,6 @@
     "tslint": "5.1.0",
     "typescript": "2.2.2",
     "webpack": "2.4.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "4.1.0"
   }
 }

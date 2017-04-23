@@ -1,4 +1,4 @@
-/// <reference path="../../../node_modules/@types/mocha/index.d.ts" />
+/// <reference types="mocha" />
 
 import * as path from 'path';
 import * as chai from 'chai';

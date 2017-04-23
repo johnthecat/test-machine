@@ -1,4 +1,4 @@
-/// <reference path="../../../node_modules/@types/mocha/index.d.ts" />
+/// <reference types="mocha" />
 
 import * as chai from 'chai';
 import {noModuleException} from '../src/utils';

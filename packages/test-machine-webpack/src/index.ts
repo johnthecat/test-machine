@@ -27,7 +27,7 @@ const defaultUserConfig: IWebpackConfig = {
 
 class TestMachineWebpack implements Plugin {
 
-    private config: IWebpackConfig;
+    private config: IConfig;
 
     private runner: TestMachine;
 
@@ -50,7 +50,7 @@ class TestMachineWebpack implements Plugin {
             throw new Error('Test engine is not specified! You can install test-machine-plugins to get test engine you want.');
         }
 
-        this.config = Object.assign(defaultUserConfig, userConfig) as IWebpackConfig;
+        this.config = Object.assign(defaultUserConfig, userConfig) as IConfig;
 
         this.runner = new TestMachine(this.config, webpackModuleFactory, (module) => module.resource);
 
@@ -60,7 +60,7 @@ class TestMachineWebpack implements Plugin {
 
         this.isUserWantToWatch = userConfig.watch || false;
 
-        this.failOnError = this.config.failOnError || this.failOnError;
+        this.failOnError = defaultUserConfig.failOnError || userConfig.failOnError || this.failOnError;
     }
 
     public apply(compiler: ICompiler): void {
