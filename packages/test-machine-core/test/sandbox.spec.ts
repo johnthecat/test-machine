@@ -145,6 +145,21 @@ describe('Sandbox', () => {
                 done();
             });
         });
+
+        it('should wrap string exception into EvalError', (done) => {
+            readFile('./fixtures/sandbox/string-exception.js').then((source) => {
+                const sandbox = new Sandbox(source, 'string-exception.js');
+
+                try {
+                    sandbox.getExports();
+
+                    done('Code was compiled');
+                } catch (exception) {
+                    chai.expect(exception).to.be.instanceof(EvalError);
+                    done();
+                }
+            });
+        });
     });
 
     context('Environment', () => {
@@ -262,9 +277,9 @@ describe('Sandbox', () => {
                     done('Code was compiled');
                 } catch (error) {
                     chai.expect(error).to.be.instanceof(ReferenceError);
-                }
 
-                done();
+                    done();
+                }
             });
         });
     });
