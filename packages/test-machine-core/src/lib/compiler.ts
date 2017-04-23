@@ -1,7 +1,6 @@
 import {TCompiler} from '../interface';
 import {Collection} from './collection';
 
-const EMPTY_RESULT = '';
 const DEFAULT_FILENAME = 'unknown';
 
 class Compiler {
@@ -12,7 +11,7 @@ class Compiler {
 
     public compile(source: string, filename: string = DEFAULT_FILENAME): string {
         if (this.cache.has(source)) {
-            return this.cache.get(source) || EMPTY_RESULT;
+            return this.cache.get(source) as string;
         }
 
         let result = source;
