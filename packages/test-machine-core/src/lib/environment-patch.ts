@@ -1,4 +1,5 @@
 import {IMocks, IModulesMap, ITestModule} from '../interface';
+import {Collection} from './collection';
 import {SandboxController} from './sandbox-controller';
 
 type TLoadFunction = (request: string, parent: NodeModule, isMain: boolean) => any;
@@ -7,11 +8,11 @@ const Module: any = module.constructor;
 
 class EnvironmentPatch {
 
-    private modulesDefinition: IModulesMap<ITestModule>;
-
     private originLoad: TLoadFunction;
 
     private fakeLoad: TLoadFunction;
+
+    private modulesDefinition = new Collection<ITestModule>();
 
     public static removeFromCache(name: string): void {
         delete require.cache[name];
@@ -24,8 +25,8 @@ class EnvironmentPatch {
         this.fakeLoad = (request: string, parent: NodeModule, isMain: boolean) => {
             const filename = Module._resolveFilename(request, parent, isMain);
 
-            if (this.modulesDefinition[filename]) {
-                return this.sandboxes.getModule(this.modulesDefinition[filename], this.mocks);
+            if (this.modulesDefinition.has(filename)) {
+                return this.sandboxes.getModule(this.modulesDefinition.get(filename) as ITestModule, this.mocks);
             }
 
             return this.originLoad(request, parent, isMain);
@@ -33,7 +34,7 @@ class EnvironmentPatch {
     }
 
     setup(modulesDefinition: IModulesMap<ITestModule>): void {
-        this.modulesDefinition = modulesDefinition;
+        this.modulesDefinition.fill(modulesDefinition);
 
         this.patch();
 
@@ -43,7 +44,7 @@ class EnvironmentPatch {
     }
 
     clean(tests: Array<string>, mocks: IMocks): void {
-        this.modulesDefinition = {};
+        this.modulesDefinition.clear();
 
         this.restore();
 

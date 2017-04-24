@@ -126,4 +126,17 @@ describe('Collection', () => {
         chai.expect(collection.has('3')).to.be.equal(false);
         chai.expect(collection.size()).to.be.equal(0);
     });
+
+    it('should fill collection with values from object', () => {
+        const collection = new Collection();
+
+        collection.fill({
+            'a': 1,
+            'b': 2
+        });
+
+        chai.expect(collection.get('a')).to.be.equal(1);
+        chai.expect(collection.get('b')).to.be.equal(2);
+        chai.expect(collection.size()).to.be.equal(2);
+    });
 });

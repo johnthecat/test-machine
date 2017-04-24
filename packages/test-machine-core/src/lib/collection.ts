@@ -17,7 +17,7 @@ class Collection<V> {
     public get(key: string): V | void {
         const normalizedKey = this._normalizeKey(key);
 
-        if (normalizedKey in this._store) {
+        if (this._has(normalizedKey) === true) {
             return this._store[normalizedKey];
         }
 
@@ -37,9 +37,17 @@ class Collection<V> {
     public delete(key: string): void {
         const normalizedKey = this._normalizeKey(key);
 
-        if (this._has(normalizedKey)) {
+        if (this._has(normalizedKey) === true) {
             delete this._store[normalizedKey];
             this._size--;
+        }
+    }
+
+    public fill(map: { [key: string]: V }): void {
+        for (let key in map) {
+            if (map.hasOwnProperty(key)) {
+                this.set(key, map[key]);
+            }
         }
     }
 

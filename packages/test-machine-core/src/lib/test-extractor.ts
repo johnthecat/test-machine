@@ -7,8 +7,7 @@ class TestExtractor {
 
     private globCache = new Collection<string>();
 
-    constructor(private roots: Array<string>, private router: TRouter) {
-    }
+    constructor(private roots: Array<string>, private router: TRouter) {}
 
     public extractTests(changedModules: Array<string>): Array<string> {
         const tests = [];
