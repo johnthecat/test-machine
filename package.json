@@ -29,8 +29,8 @@
     "test:publish": "node_modules/.bin/coveralls < coverage/lcov.info && rimraf coverage",
     "build": "lerna exec -- ../../node_modules/.bin/tsc",
     "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch",
-    "build:precommit": "npm run lint:src && npm run lint:test && npm run test && npm run build",
-    "build:ci": "npm run lint:src && npm run lint:test && npm run test:coverage && npm run build"
+    "build:precommit": "npm run lint:src && npm run lint:test && npm run build && npm run test",
+    "build:ci": "npm run lint:src && npm run lint:test && npm run build && npm run test:coverage"
   },
   "pre-commit": [
     "build:precommit"
