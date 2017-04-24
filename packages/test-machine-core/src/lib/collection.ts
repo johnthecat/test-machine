@@ -45,7 +45,10 @@ class Collection<V> {
 
     public fill(map: { [key: string]: V }): void {
         for (let key in map) {
-            if (map.hasOwnProperty(key)) {
+            if (
+                typeof map.hasOwnProperty !== 'function' ||
+                map.hasOwnProperty(key)
+            ) {
                 this.set(key, map[key]);
             }
         }

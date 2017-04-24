@@ -139,4 +139,19 @@ describe('Collection', () => {
         chai.expect(collection.get('b')).to.be.equal(2);
         chai.expect(collection.size()).to.be.equal(2);
     });
+
+    it('should fill collection with values from object (without prototype)', () => {
+        const collection = new Collection();
+
+        const object = Object.create(null);
+
+        object.a = 1;
+        object.b = 2;
+
+        collection.fill(object);
+
+        chai.expect(collection.get('a')).to.be.equal(1);
+        chai.expect(collection.get('b')).to.be.equal(2);
+        chai.expect(collection.size()).to.be.equal(2);
+    });
 });

@@ -27,10 +27,11 @@
     "test:watch": "node_modules/.bin/lerna exec --no-sort -- ../../node_modules/.bin/mocha --opts ../mocha.opts --watch",
     "test:coverage": "node_modules/.bin/nyc npm run test",
     "test:publish": "node_modules/.bin/coveralls < coverage/lcov.info && rimraf coverage",
+    "cleanup": "lerna exec -- ../../node_modules/.bin/rimraf /dist -G",
     "build": "lerna exec -- ../../node_modules/.bin/tsc",
     "build:watch": "npm run clean && npm run lint && lerna exec -- ../../node_modules/.bin/tsc --watch",
     "build:precommit": "npm run lint:src && npm run lint:test && npm run build && npm run test",
-    "build:ci": "npm run lint:src && npm run lint:test && npm run build && npm run test:coverage"
+    "build:ci": "npm run lint:src && npm run lint:test && npm run cleanup && npm run build && npm run test:coverage"
   },
   "pre-commit": [
     "build:precommit"
@@ -72,6 +73,7 @@
     "mocha": "3.2.0",
     "nyc": "10.2.0",
     "pre-commit": "1.2.2",
+    "rimraf": "^2.6.1",
     "ts-node": "3.0.2",
     "tslint": "5.1.0",
     "typescript": "2.2.2",
