@@ -25,6 +25,14 @@ const defaultUserConfig: IWebpackConfig = {
     failOnError: true
 };
 
+const select = (...args) => {
+    for (let index = 0; index < args.length; index++) {
+        if (args[index] !== void 0 && args[index] !== null) {
+            return args[index];
+        }
+    }
+};
+
 class TestMachineWebpack implements Plugin {
 
     private config: IConfig;
@@ -39,9 +47,9 @@ class TestMachineWebpack implements Plugin {
 
     private isWatching = false;
 
-    private failOnError = false;
-
     private isFirstRun = true;
+
+    private failOnError: boolean;
 
     private isUserWantToWatch: boolean;
 
@@ -50,7 +58,7 @@ class TestMachineWebpack implements Plugin {
             throw new Error('Test engine is not specified! You can install test-machine-plugins to get test engine you want.');
         }
 
-        this.config = Object.assign(defaultUserConfig, userConfig) as IConfig;
+        this.config = Object.assign({}, defaultUserConfig, userConfig) as IConfig;
 
         this.runner = new TestMachine(this.config, webpackModuleFactory, (module) => module.resource);
 
@@ -58,9 +66,9 @@ class TestMachineWebpack implements Plugin {
 
         this.testWatcher = new TestWatcher(this.config.testRoots);
 
-        this.isUserWantToWatch = userConfig.watch || false;
+        this.isUserWantToWatch = select(userConfig.watch, false);
 
-        this.failOnError = defaultUserConfig.failOnError || userConfig.failOnError || this.failOnError;
+        this.failOnError = select(userConfig.failOnError, defaultUserConfig.failOnError);
     }
 
     public apply(compiler: ICompiler): void {
@@ -97,7 +105,8 @@ class TestMachineWebpack implements Plugin {
                 .then(() => {
                     callback();
                 })
-                .catch(() => TestMachineWebpack._generateInternalError(
+                .catch((error) => TestMachineWebpack._generateInternalError(
+                    error,
                     compilation,
                     this.isWatching,
                     this.failOnError,
@@ -139,8 +148,10 @@ class TestMachineWebpack implements Plugin {
         });
     }
 
-    private static _generateInternalError(compilation: any, isWatching: boolean, failOnError: boolean, callback: TNodeCallback): void {
-        const error = new Error('Test running failed');
+    private static _generateInternalError(error: Error | void, compilation: any, isWatching: boolean, failOnError: boolean, callback: TNodeCallback): void {
+        if (!error) {
+            error = new Error('Test running failed');
+        }
 
         if (isWatching || !failOnError) {
             compilation.warnings.push(error);

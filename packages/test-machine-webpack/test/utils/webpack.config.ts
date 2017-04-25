@@ -4,6 +4,7 @@ import * as webpackMerge from 'webpack-merge';
 import {FIXTURES} from './constants';
 import {TestMachineWebpack} from '../../src';
 
+const NODE_MODULES = path.resolve('../../node_modules');
 const OUTPUT = path.resolve(__dirname, '../', '.tmp');
 
 export const getTestRoots = (fixture: string): Array<string> => {
@@ -12,7 +13,7 @@ export const getTestRoots = (fixture: string): Array<string> => {
     ];
 };
 
-export const configFactory = (fixture: string, plugin: TestMachineWebpack, extend: webpack.Configuration = {}): webpack.Configuration => {
+export const configFactory = (fixture: string, plugin: TestMachineWebpack | null, extend: webpack.Configuration = {}): webpack.Configuration => {
     const src = path.join(FIXTURES, fixture, 'src');
 
     return webpackMerge({
@@ -24,12 +25,12 @@ export const configFactory = (fixture: string, plugin: TestMachineWebpack, exten
         },
 
         resolve: {
-            extensions: ['.js', '.ts'],
-            modules: [src]
+            extensions: ['.js', '.ts', '.css'],
+            modules: [NODE_MODULES, src]
         },
 
-        plugins: [
+        plugins: plugin ? [
             plugin
-        ]
+        ] : []
     }, extend);
 };

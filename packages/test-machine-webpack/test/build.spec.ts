@@ -6,9 +6,22 @@ import * as webpack from 'webpack';
 import {configFactory, getTestRoots} from './utils/webpack.config';
 import {mochaEngine} from '../../test-machine-plugins/src/engines/mocha';
 import {babelCompiler} from '../../test-machine-plugins/src/compilers/babel';
+import {IWebpackConfig} from '../src/interface';
 import {TestMachineWebpack} from '../src';
 
+import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
+
 describe('Webpack plugin', () => {
+    it ('should fail, if engine not passed', (done) => {
+        try {
+            const plugin = new TestMachineWebpack({} as IWebpackConfig);
+
+            done(`No exception ${plugin}`);
+        } catch (e) {
+            done();
+        }
+    });
+
     it('should pass build', (done) => {
         const config = configFactory('simple-js', new TestMachineWebpack({
             testRoots: getTestRoots('simple-js'),
@@ -135,7 +148,7 @@ describe('Webpack plugin', () => {
         });
     });
 
-    it('should not fail test, if "failOnError" is true', (done) => {
+    it('should not fail test, if "failOnError" is false', (done) => {
         const config = configFactory('failing-test', new TestMachineWebpack({
             testRoots: getTestRoots('failing-test'),
             router: (resource) => {
@@ -148,6 +161,42 @@ describe('Webpack plugin', () => {
             }),
             failOnError: false
         }));
+
+        webpack(config, (error) => {
+            done(error);
+        });
+    });
+
+    it('should handle other non-typical extensions', (done) => {
+        const extractCSS = new ExtractTextPlugin('stylesheets/css-modules.css');
+        const config = configFactory('css-modules', new TestMachineWebpack({
+            testRoots: getTestRoots('css-modules'),
+            router: (resource) => {
+                return `${resource.name}.spec.js`;
+            },
+            engine: mochaEngine({
+                reporter(): void {
+
+                }
+            })
+        }), {
+            module: {
+                rules: [
+                    {
+                        test: /\.css$/,
+                        use: extractCSS.extract([{
+                            loader: 'css-loader',
+                            options: {
+                                modules: true
+                            }
+                        }])
+                    }
+                ]
+            },
+            plugins: [
+                extractCSS
+            ]
+        });
 
         webpack(config, (error) => {
             done(error);
