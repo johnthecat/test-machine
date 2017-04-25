@@ -82,9 +82,6 @@ class TestMachineWebpack implements Plugin {
             });
         }
 
-        // console.log(compiler);
-        // process.exit(0);
-
         compiler.plugin('emit', (compilation: ICompilation, callback: TNodeCallback) => {
             if (this.inProgress) {
                 return callback();
