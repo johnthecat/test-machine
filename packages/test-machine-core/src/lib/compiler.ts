@@ -5,7 +5,7 @@ const DEFAULT_FILENAME = 'unknown';
 
 class Compiler {
 
-    private cache: Collection<string> = new Collection<string>(true);
+    private cache: Collection<string> = new Collection(true);
 
     constructor(private pipeline: Array<TCompiler>) {}
 

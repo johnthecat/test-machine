@@ -12,7 +12,7 @@ class EnvironmentPatch {
 
     private fakeLoad: TLoadFunction;
 
-    private modulesDefinition = new Collection<ITestModule>();
+    private modulesDefinition: Collection<ITestModule> = new Collection();
 
     public static removeFromCache(name: string): void {
         delete require.cache[name];

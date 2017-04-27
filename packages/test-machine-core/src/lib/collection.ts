@@ -1,6 +1,6 @@
 import {getHash} from './utils';
 
-class Collection<V> {
+class Collection<V = any> {
 
     private _store: any = Collection.createStore();
 

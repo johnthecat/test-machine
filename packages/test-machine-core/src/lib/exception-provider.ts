@@ -1,6 +1,6 @@
 import {ITestModule} from '../interface';
 
-import * as codeFrame from 'babel-code-frame';
+import codeFrame = require('babel-code-frame');
 import * as StackTraceParser from 'stacktrace-parser';
 import {Sandbox} from './sandbox';
 
@@ -26,8 +26,8 @@ class ExceptionProvider {
                 module.getResource(),
                 codeFrame(
                     source,
-                    parsedStack.lineNumber,
-                    parsedStack.column
+                    parsedStack.lineNumber as number,
+                    parsedStack.column as number
                 ),
                 error.message,
                 error.stack as string
