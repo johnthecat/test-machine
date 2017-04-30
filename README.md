@@ -1,7 +1,8 @@
 <p align="center">
-<img/>
-<br/>
-<br/>
+<img width="400px" src="https://cloud.githubusercontent.com/assets/5618341/25568246/4fcfed3e-2e07-11e7-992b-e9a61abfd6e2.png"/>
+</p>
+<hr/>
+<p align="center">
 Quick links:
 <br/>
 <a href="https://github.com/johnthecat/test-machine/tree/master/packages/test-machine-core">Core</a>
