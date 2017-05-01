@@ -16,7 +16,8 @@
     "unit",
     "plugin",
     "mocha",
-    "jasmine"
+    "jasmine",
+    "webpack"
   ],
   "main": "dist/index.js",
   "scripts": {
