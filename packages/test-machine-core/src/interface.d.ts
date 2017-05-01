@@ -1,8 +1,15 @@
 import * as path from 'path';
 
+export interface ICompilerSource {
+    source: string,
+    sourcemap?: string | null
+}
+
 export type TRouter = (resource: path.ParsedPath) => string | Array<string>;
 
 export type TCompiler = (source: string, filename: string) => string;
+
+export type TCompilerPlugin = (source: ICompilerSource, filename: string) => ICompilerSource;
 
 export type TEngine = (tests: Array<string>) => Promise<any>;
 
@@ -27,7 +34,7 @@ export interface IConfig {
     include: Array<RegExp>,
     plugins: Array<IPlugin>,
     router: TRouter,
-    compilers: Array<TCompiler>,
+    compilers: Array<TCompilerPlugin>,
     engine: TEngine,
     dependencies: Array<string>,
     mocks: IMocks
@@ -39,7 +46,7 @@ export interface IUserConfig {
     include?: Array<RegExp>,
     plugins?: Array<IPlugin>,
     router?: TRouter,
-    compilers?: Array<TCompiler>,
+    compilers?: Array<TCompilerPlugin>,
     engine?: TEngine,
     dependencies?: Array<string>,
     mocks?: IMocks
@@ -61,5 +68,4 @@ export interface ITestDependency {
 }
 
 export interface ITestModulesMap extends IModulesMap<ITestModule> {
-
 }

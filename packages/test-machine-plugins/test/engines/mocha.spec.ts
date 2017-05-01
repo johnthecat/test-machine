@@ -1,9 +1,9 @@
 /// <reference types="mocha" />
 
 import * as chai from 'chai';
-import {resolve} from '../utils/fs';
-import {excludeFromResolve} from '../utils/resolve';
-import {mochaEngine} from '../../src/engines/mocha';
+import { resolve } from '../utils/fs';
+import { excludeFromResolve } from '../utils/resolve';
+import { mochaEngine } from '../../src/engines/mocha';
 
 describe('Mocha engine', () => {
     it('should fail, if mocha isn\'t installed', () => {
@@ -28,7 +28,7 @@ describe('Mocha engine', () => {
     it('should reject, when mocha can\'t run tests', (done) => {
         const runner = mochaEngine();
 
-        runner(['fake-test.js'])
+        runner([ 'fake-test.js' ])
             .catch((e) => done());
     });
 

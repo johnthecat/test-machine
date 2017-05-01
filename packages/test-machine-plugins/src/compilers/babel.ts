@@ -1,9 +1,9 @@
-import {TCompiler} from 'test-machine-core/src/interface';
-import {noModuleException} from '../utils';
+import { TCompilerPlugin, ICompilerSource } from 'test-machine-core/src/interface';
+import { noModuleException } from '../utils';
 
 const DEFAULT_FILENAME = 'webpack-module';
 
-export function babelCompiler(config = {}): TCompiler {
+export function babelCompiler(config = {}): TCompilerPlugin {
     let babel;
 
     try {
@@ -12,11 +12,22 @@ export function babelCompiler(config = {}): TCompiler {
         throw noModuleException('babel-core');
     }
 
-    return (source: string, filename: string = DEFAULT_FILENAME): string => {
-        if (source.length === 0) {
-            return source;
+    return (input: ICompilerSource, filename: string = DEFAULT_FILENAME): ICompilerSource => {
+        if (input.source.length === 0) {
+            return input;
         }
 
-        return babel.transform(source, Object.assign({filename}, config)).code;
+        const result = babel.transform(
+            input.source,
+            Object.assign({
+                filename,
+                inputSourceMap: input.sourcemap
+            }, config)
+        );
+
+        return {
+            source: result.code,
+            sourcemap: result.map
+        };
     };
 }

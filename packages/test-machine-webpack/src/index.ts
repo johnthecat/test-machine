@@ -1,22 +1,22 @@
-import {Plugin} from 'webpack';
-import {IConfig} from 'test-machine-core/src/interface';
-import {IWebpackConfig, ICompiler, ICompilation, IDefinePlugin, TNodeCallback} from './interface';
+import { Plugin } from 'webpack';
+import { IConfig } from 'test-machine-core/src/interface';
+import { IWebpackConfig, ICompiler, ICompilation, IDefinePlugin, TNodeCallback } from './interface';
 
 import * as webpack from 'webpack';
-import {TestMachine} from 'test-machine-core';
-import {webpackModuleFactory} from './lib/test-module-factory';
-import {WebpackModulesPreprocessor} from './lib/webpack-modules-preprocessor';
-import {TestWatcher} from './lib/test-watcher';
-import {definePluginCompilerFactory} from './lib/define-plugin-compiler';
+import { TestMachine } from 'test-machine-core';
+import { webpackModuleFactory } from './lib/test-module-factory';
+import { WebpackModulesPreprocessor } from './lib/webpack-modules-preprocessor';
+import { TestWatcher } from './lib/test-watcher';
+import { definePluginCompilerFactory } from './lib/define-plugin-compiler';
 
 const defaultUserConfig: IWebpackConfig = {
-    testRoots: ['./test'],
+    testRoots: [ './test' ],
     router: () => [
         '**/*.spec.js',
         '**/*.test.js'
     ],
-    include: [/[^]*/],
-    exclude: [/node_modules/],
+    include: [ /[^]*/ ],
+    exclude: [ /node_modules/ ],
     compilers: [],
     dependencies: [],
     plugins: [],
@@ -27,8 +27,8 @@ const defaultUserConfig: IWebpackConfig = {
 
 const select = (...args) => {
     for (let index = 0; index < args.length; index++) {
-        if (args[index] !== void 0 && args[index] !== null) {
-            return args[index];
+        if (args[ index ] !== void 0 && args[ index ] !== null) {
+            return args[ index ];
         }
     }
 };
@@ -160,4 +160,4 @@ class TestMachineWebpack implements Plugin {
     }
 }
 
-export {TestMachineWebpack};
+export { TestMachineWebpack };

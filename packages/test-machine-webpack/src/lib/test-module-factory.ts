@@ -1,5 +1,5 @@
-import {TModulesFactory, ITestDependency} from 'test-machine-core/src/interface';
-import {IWebpackModule} from '../interface';
+import { TModulesFactory, ITestDependency } from 'test-machine-core/src/interface';
+import { IWebpackModule } from '../interface';
 
 export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
     return {
@@ -30,7 +30,7 @@ export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IW
             let module;
 
             for (let index = 0, count = webpackDependencies.length; index < count; index++) {
-                dependency = webpackDependencies[index].module;
+                dependency = webpackDependencies[ index ].module;
 
                 if (!dependency) {
                     continue;

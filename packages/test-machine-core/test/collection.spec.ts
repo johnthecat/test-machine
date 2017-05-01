@@ -1,7 +1,7 @@
 /// <reference types="mocha" />
 
 import * as chai from 'chai';
-import {Collection} from '../src/lib/collection';
+import { Collection } from '../src/lib/collection';
 
 describe('Collection', () => {
     it('should store any type of value', () => {

@@ -2,7 +2,7 @@
 
 import * as chai from 'chai';
 import * as webpack from 'webpack';
-import {definePluginCompilerFactory} from '../src/lib/define-plugin-compiler';
+import { definePluginCompilerFactory } from '../src/lib/define-plugin-compiler';
 
 const normalizeString = (str: string): string => {
     return str.replace(/^ +/gm, '').trim();
@@ -18,11 +18,13 @@ describe('Define plugin compiler', () => {
         );
 
         const result = normalizeString(
-            compiler(`
-                if (process.env.NODE_ENV === 'production') {
-                    console.log(typeof window);
-                }
-            `, 'test.js')
+            compiler({
+                source: `
+                    if (process.env.NODE_ENV === 'production') {
+                        console.log(typeof window);
+                    }
+                `
+            }, 'test.js').source
         );
 
         chai.expect(result).to.be.equal(normalizeString(`

@@ -57,7 +57,7 @@
     ]
   },
   "devDependencies": {
-    "@types/chai": "3.5.1",
+    "@types/chai": "3.5.2",
     "@types/core-js": "0.9.41",
     "@types/mocha": "2.2.41",
     "@types/node": "7.0.14",
@@ -73,12 +73,12 @@
     "jasmine": "2.6.0",
     "lerna": "2.0.0-rc.1",
     "mocha": "3.3.0",
-    "nyc": "10.2.0",
+    "nyc": "10.3.0",
     "pre-commit": "1.2.2",
     "rimraf": "2.6.1",
     "ts-node": "3.0.2",
     "tslint": "5.1.0",
-    "typescript": "2.3.1",
+    "typescript": "2.3.2",
     "webpack": "2.4.1",
     "webpack-merge": "4.1.0"
   }

@@ -1,4 +1,3 @@
-
 const Module: any = module.constructor;
 
 export const excludeFromResolve = (module: string): () => void => {

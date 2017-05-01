@@ -2,9 +2,9 @@
 
 import * as path from 'path';
 import * as chai from 'chai';
-import {readFile} from './utils/fs';
-import {babelCompiler} from '../../test-machine-plugins/src/compilers/babel';
-import {Sandbox} from '../src/lib/sandbox';
+import { readFile } from './utils/fs';
+import { babelCompiler } from '../../test-machine-plugins/src/compilers/babel';
+import { Sandbox } from '../src/lib/sandbox';
 
 const createExport = (data) => {
     return `module.exports = ${JSON.stringify(data)}`;
@@ -57,10 +57,18 @@ describe('Sandbox', () => {
 
         it('should apply compiler to source', (done) => {
             readFile('./fixtures/sandbox/es6-export.js').then((source) => {
+                const compiler = babelCompiler({
+                    plugins: [ 'transform-es2015-modules-commonjs' ]
+                });
+
+                const compilerWrapper = (code: string): string => {
+                    const result = compiler({ source: code }, '');
+
+                    return result.source;
+                };
+
                 const sandbox = new Sandbox(source, 'es6-export.js', {
-                    compiler: babelCompiler({
-                        plugins: ['transform-es2015-modules-commonjs']
-                    }),
+                    compiler: compilerWrapper,
                     dependencies: {}
                 });
 
@@ -209,8 +217,8 @@ describe('Sandbox', () => {
                 const context = sandbox.getContext();
 
                 chai.expect(module).to.be.equal(true);
-                chai.expect(context['amaGlobal']).to.be.equal(true);
-                chai.expect(global['amaGlobal']).to.be.equal(void 0);
+                chai.expect(context[ 'amaGlobal' ]).to.be.equal(true);
+                chai.expect(global[ 'amaGlobal' ]).to.be.equal(void 0);
 
                 done();
             });
@@ -232,15 +240,15 @@ describe('Sandbox', () => {
             const key = '__$test$__';
             const sandbox = new Sandbox(createExportFromGlobal(key), 'global.js');
 
-            global[key] = {};
+            global[ key ] = {};
 
             sandbox.getExports();
 
             const context = sandbox.getContext();
 
-            chai.expect(context[key]).to.be.equal(global[key]);
+            chai.expect(context[ key ]).to.be.equal(global[ key ]);
 
-            delete global[key];
+            delete global[ key ];
         });
     });
 

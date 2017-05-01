@@ -1,5 +1,5 @@
-import {IConfig, IModulesMap} from 'test-machine-core/src/interface';
-import {IWebpackModule} from '../interface';
+import { IConfig, IModulesMap } from 'test-machine-core/src/interface';
+import { IWebpackModule } from '../interface';
 
 class WebpackModulesPreprocessor {
 
@@ -9,7 +9,8 @@ class WebpackModulesPreprocessor {
 
     private lastChangedModules: Array<string>;
 
-    constructor(private config: IConfig) {}
+    constructor(private config: IConfig) {
+    }
 
     public getLastCompilationResult(): Array<IWebpackModule> {
         return this.lastCompiledModules;
@@ -26,7 +27,7 @@ class WebpackModulesPreprocessor {
         const filteredModules: Array<IWebpackModule> = [];
 
         for (let index = 0, count = modules.length; index < count; index++) {
-            module = modules[index];
+            module = modules[ index ];
 
             if (
                 module.resource &&
@@ -49,7 +50,7 @@ class WebpackModulesPreprocessor {
         let module: IWebpackModule;
 
         for (let index = 0, count = modules.length; index < count; index++) {
-            module = modules[index];
+            module = modules[ index ];
 
             if (module.buildTimestamp > this.lastCompilation) {
                 changedModules.push(module.resource);
@@ -71,10 +72,10 @@ class WebpackModulesPreprocessor {
     }
 
     private static pushModuleToMap(map: IModulesMap<IWebpackModule>, module: IWebpackModule): IModulesMap<IWebpackModule> {
-        map[module.resource] = module;
+        map[ module.resource ] = module;
 
         return map;
     }
 }
 
-export {WebpackModulesPreprocessor};
+export { WebpackModulesPreprocessor };

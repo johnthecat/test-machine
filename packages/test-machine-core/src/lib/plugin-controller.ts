@@ -1,6 +1,6 @@
-import {IPlugin, IModulesMap} from '../interface';
-import {Compiler} from './compiler';
-import {Sandbox} from './sandbox';
+import { IPlugin, IModulesMap } from '../interface';
+import { Compiler } from './compiler';
+import { Sandbox } from './sandbox';
 
 class PluginController {
     constructor(private plugins: Array<IPlugin>) {
@@ -19,11 +19,11 @@ class PluginController {
 
     private applyPluginsPipeline<T>(method: string, data: T): void {
         for (let index = 0, count = this.plugins.length; index < count; index++) {
-            if (typeof this.plugins[index][method] === 'function') {
-                this.plugins[index][method](data);
+            if (typeof this.plugins[ index ][ method ] === 'function') {
+                this.plugins[ index ][ method ](data);
             }
         }
     }
 }
 
-export {PluginController};
+export { PluginController };

@@ -1,7 +1,7 @@
 /// <reference types="mocha" />
 
 import * as chai from 'chai';
-import {noModuleException} from '../src/utils';
+import { noModuleException } from '../src/utils';
 
 describe('Utils', () => {
     context('noModuleException', () => {

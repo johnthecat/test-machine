@@ -1,7 +1,8 @@
-import {jasmineEngine} from './engines/jasmine';
-import {mochaEngine} from './engines/mocha';
+import { ICompilerSource } from 'test-machine-core/src/interface';
+import { jasmineEngine } from './engines/jasmine';
+import { mochaEngine } from './engines/mocha';
 
-import {babelCompiler} from './compilers/babel';
+import { babelCompiler } from './compilers/babel';
 
 export const engine = {
     jasmine: jasmineEngine,
@@ -11,3 +12,5 @@ export const engine = {
 export const compiler = {
     babel: babelCompiler
 };
+
+export { ICompilerSource };

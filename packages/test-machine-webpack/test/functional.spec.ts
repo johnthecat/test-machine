@@ -3,16 +3,16 @@
 import * as path from 'path';
 import * as chai from 'chai';
 import * as webpack from 'webpack';
-import {configFactory, getTestRoots} from './utils/webpack.config';
-import {mochaEngine} from '../../test-machine-plugins/src/engines/mocha';
-import {babelCompiler} from '../../test-machine-plugins/src/compilers/babel';
-import {IWebpackConfig} from '../src/interface';
-import {TestMachineWebpack} from '../src';
+import { configFactory, getTestRoots } from './utils/webpack.config';
+import { mochaEngine } from '../../test-machine-plugins/src/engines/mocha';
+import { babelCompiler } from '../../test-machine-plugins/src/compilers/babel';
+import { IWebpackConfig } from '../src/interface';
+import { TestMachineWebpack } from '../src';
 
 import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 describe('Webpack plugin', () => {
-    it ('should fail, if engine not passed', (done) => {
+    it('should fail, if engine not passed', (done) => {
         try {
             const plugin = new TestMachineWebpack({} as IWebpackConfig);
 
@@ -39,7 +39,7 @@ describe('Webpack plugin', () => {
 
     it('should return correct tests', (done) => {
         const roots = getTestRoots('simple-js');
-        const root = roots[0];
+        const root = roots[ 0 ];
 
         let testsException;
 
@@ -79,7 +79,7 @@ describe('Webpack plugin', () => {
             },
             compilers: [
                 babelCompiler({
-                    plugins: ['transform-es2015-modules-commonjs']
+                    plugins: [ 'transform-es2015-modules-commonjs' ]
                 })
             ],
             engine: mochaEngine({
@@ -113,7 +113,7 @@ describe('Webpack plugin', () => {
                         use: {
                             loader: 'babel-loader',
                             options: {
-                                plugins: ['transform-es2015-modules-commonjs']
+                                plugins: [ 'transform-es2015-modules-commonjs' ]
                             }
                         }
                     }
@@ -184,12 +184,12 @@ describe('Webpack plugin', () => {
                 rules: [
                     {
                         test: /\.css$/,
-                        use: extractCSS.extract([{
+                        use: extractCSS.extract([ {
                             loader: 'css-loader',
                             options: {
                                 modules: true
                             }
-                        }])
+                        } ])
                     }
                 ]
             },

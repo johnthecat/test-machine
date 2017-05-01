@@ -27,4 +27,4 @@ class TestWatcher {
     }
 }
 
-export {TestWatcher};
+export { TestWatcher };

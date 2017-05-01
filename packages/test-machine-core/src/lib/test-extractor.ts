@@ -1,13 +1,14 @@
-import {TRouter} from '../interface';
+import { TRouter } from '../interface';
 import * as path from 'path';
 import * as glob from 'glob';
-import {Collection} from './collection';
+import { Collection } from './collection';
 
 class TestExtractor {
 
     private globCache = new Collection<string>();
 
-    constructor(private roots: Array<string>, private router: TRouter) {}
+    constructor(private roots: Array<string>, private router: TRouter) {
+    }
 
     public extractTests(changedModules: Array<string>): Array<string> {
         const tests = [];
@@ -19,7 +20,7 @@ class TestExtractor {
         const count = changedModules.length;
 
         for (let index = 0; index < count; index++) {
-            this.extractTest(changedModules[index], tests);
+            this.extractTest(changedModules[ index ], tests);
         }
 
         return tests;
@@ -54,9 +55,9 @@ class TestExtractor {
             let normalizedPath;
 
             for (let index = 0; index < globResult.length; index++) {
-                normalizedPath = path.resolve(root, globResult[index]);
+                normalizedPath = path.resolve(root, globResult[ index ]);
 
-                newCache[index] = normalizedPath;
+                newCache[ index ] = normalizedPath;
 
                 if (tests.includes(normalizedPath) === false) {
                     tests.push(normalizedPath);
@@ -66,8 +67,8 @@ class TestExtractor {
             this.pushToCache(resource, root, pattern, newCache);
         } else {
             for (let index = 0; index < cache.length; index++) {
-                if (tests.includes(cache[index]) === false) {
-                    tests.push(cache[index]);
+                if (tests.includes(cache[ index ]) === false) {
+                    tests.push(cache[ index ]);
                 }
             }
         }
@@ -90,11 +91,11 @@ class TestExtractor {
         let patternIndex;
 
         for (let rootIndex = 0; rootIndex < rootsCount; rootIndex++) {
-            let root = this.roots[rootIndex];
+            let root = this.roots[ rootIndex ];
 
             if (Array.isArray(userGlob)) {
                 for (patternIndex = 0; patternIndex < userGlob.length; patternIndex++) {
-                    this.processPattern(resource, root, userGlob[patternIndex], tests);
+                    this.processPattern(resource, root, userGlob[ patternIndex ], tests);
                 }
 
                 continue;
@@ -111,4 +112,4 @@ class TestExtractor {
     }
 }
 
-export {TestExtractor};
+export { TestExtractor };

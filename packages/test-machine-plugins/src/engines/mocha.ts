@@ -1,5 +1,5 @@
-import {TEngine} from 'test-machine-core/src/interface';
-import {noModuleException} from '../utils';
+import { TEngine } from 'test-machine-core/src/interface';
+import { noModuleException } from '../utils';
 
 export function mochaEngine(config?): TEngine {
     let Mocha;
@@ -22,7 +22,7 @@ export function mochaEngine(config?): TEngine {
         mocha = new Mocha(config);
 
         for (index = 0, count = tests.length; index < count; index++) {
-            mocha.addFile(tests[index]);
+            mocha.addFile(tests[ index ]);
         }
 
         return new Promise((resolve, reject) => {

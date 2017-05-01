@@ -1,9 +1,9 @@
-import {IModulesMap, ITestModule, IMocks, ITestDependency, TCompiler} from '../interface';
+import { IModulesMap, ITestModule, IMocks, ITestDependency, TCompiler } from '../interface';
 
-import {Collection} from './collection';
-import {Sandbox} from './sandbox';
-import {Compiler} from './compiler';
-import {ExceptionProvider} from './exception-provider';
+import { Collection } from './collection';
+import { Sandbox } from './sandbox';
+import { Compiler } from './compiler';
+import { ExceptionProvider } from './exception-provider';
 
 class SandboxController {
 
@@ -38,8 +38,8 @@ class SandboxController {
         let dependency: ITestDependency;
 
         for (let index = 0, count = dependencies.length; index < count; index++) {
-            dependency = dependencies[index];
-            compiledDependencies[dependency.request] = this.getModule(dependency.module, mocks);
+            dependency = dependencies[ index ];
+            compiledDependencies[ dependency.request ] = this.getModule(dependency.module, mocks);
         }
 
         let sandbox;
@@ -63,4 +63,4 @@ class SandboxController {
     }
 }
 
-export {SandboxController};
+export { SandboxController };

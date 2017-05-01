@@ -1,11 +1,11 @@
-import {IConfig, IModulesMap, TEngine, TCompiler, TPathResolver, TModulesFactory} from './interface';
+import { IConfig, IModulesMap, TEngine, TCompilerPlugin, TPathResolver, TModulesFactory } from './interface';
 
-import {Compiler} from './lib/compiler';
-import {EnvironmentPatch} from './lib/environment-patch';
-import {ModulesGenerator} from './lib/modules-generator';
-import {TestExtractor} from './lib/test-extractor';
-import {PluginController} from './lib/plugin-controller';
-import {SandboxController} from './lib/sandbox-controller';
+import { Compiler } from './lib/compiler';
+import { EnvironmentPatch } from './lib/environment-patch';
+import { ModulesGenerator } from './lib/modules-generator';
+import { TestExtractor } from './lib/test-extractor';
+import { PluginController } from './lib/plugin-controller';
+import { SandboxController } from './lib/sandbox-controller';
 
 class TestMachine {
 
@@ -46,7 +46,7 @@ class TestMachine {
         this.testExtractor.clearCache();
     }
 
-    public pushCompiler(compiler: TCompiler): void {
+    public pushCompiler(compiler: TCompilerPlugin): void {
         this.compiler.push(compiler);
     }
 
@@ -87,4 +87,4 @@ class TestMachine {
     }
 }
 
-export {TestMachine};
+export { TestMachine };

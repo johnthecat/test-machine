@@ -1,5 +1,5 @@
-import {TEngine} from 'test-machine-core/src/interface';
-import {noModuleException} from '../utils';
+import { TEngine } from 'test-machine-core/src/interface';
+import { noModuleException } from '../utils';
 
 export function jasmineEngine(config?): TEngine {
     let Jasmine;

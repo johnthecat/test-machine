@@ -1,8 +1,8 @@
-import {ITestModule} from '../interface';
+import { ITestModule } from '../interface';
 
 import codeFrame = require('babel-code-frame');
 import * as StackTraceParser from 'stacktrace-parser';
-import {Sandbox} from './sandbox';
+import { Sandbox } from './sandbox';
 
 const PADDING = (' ').repeat(4);
 
@@ -43,4 +43,4 @@ class ExceptionProvider {
 
 }
 
-export {ExceptionProvider};
+export { ExceptionProvider };

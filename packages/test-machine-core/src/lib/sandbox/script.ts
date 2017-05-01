@@ -5,7 +5,7 @@ class Script {
     private script: vm.Script;
 
     constructor(source: string, filename: string) {
-        this.script = new vm.Script(source, {filename});
+        this.script = new vm.Script(source, { filename });
     }
 
     runInContext(context: vm.Context): void {
@@ -13,4 +13,4 @@ class Script {
     }
 }
 
-export {Script};
+export { Script };

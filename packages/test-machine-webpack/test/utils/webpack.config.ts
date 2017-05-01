@@ -1,8 +1,8 @@
 import * as path from 'path';
 import * as webpack from 'webpack';
 import * as webpackMerge from 'webpack-merge';
-import {FIXTURES} from './constants';
-import {TestMachineWebpack} from '../../src';
+import { FIXTURES } from './constants';
+import { TestMachineWebpack } from '../../src';
 
 const NODE_MODULES = path.resolve('../../node_modules');
 const OUTPUT = path.resolve(__dirname, '../', '.tmp');
@@ -25,8 +25,8 @@ export const configFactory = (fixture: string, plugin: TestMachineWebpack | null
         },
 
         resolve: {
-            extensions: ['.js', '.ts', '.css'],
-            modules: [NODE_MODULES, src]
+            extensions: [ '.js', '.ts', '.css' ],
+            modules: [ NODE_MODULES, src ]
         },
 
         plugins: plugin ? [

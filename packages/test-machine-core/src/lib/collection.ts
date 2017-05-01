@@ -1,4 +1,4 @@
-import {getHash} from './utils';
+import { getHash } from './utils';
 
 class Collection<V = any> {
 
@@ -6,7 +6,8 @@ class Collection<V = any> {
 
     private _size = 0;
 
-    constructor(private useHashing = false) {}
+    constructor(private useHashing = false) {
+    }
 
     public has(key: string): boolean {
         const normalizedKey = this._normalizeKey(key);
@@ -18,7 +19,7 @@ class Collection<V = any> {
         const normalizedKey = this._normalizeKey(key);
 
         if (this._has(normalizedKey) === true) {
-            return this._store[normalizedKey];
+            return this._store[ normalizedKey ];
         }
 
         return void 0;
@@ -31,14 +32,14 @@ class Collection<V = any> {
             this._size++;
         }
 
-        this._store[normalizedKey] = value;
+        this._store[ normalizedKey ] = value;
     }
 
     public delete(key: string): void {
         const normalizedKey = this._normalizeKey(key);
 
         if (this._has(normalizedKey) === true) {
-            delete this._store[normalizedKey];
+            delete this._store[ normalizedKey ];
             this._size--;
         }
     }
@@ -49,7 +50,7 @@ class Collection<V = any> {
                 typeof map.hasOwnProperty !== 'function' ||
                 map.hasOwnProperty(key)
             ) {
-                this.set(key, map[key]);
+                this.set(key, map[ key ]);
             }
         }
     }
@@ -84,4 +85,4 @@ class Collection<V = any> {
     }
 }
 
-export {Collection};
+export { Collection };

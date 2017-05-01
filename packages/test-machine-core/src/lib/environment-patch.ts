@@ -1,6 +1,6 @@
-import {IMocks, IModulesMap, ITestModule} from '../interface';
-import {Collection} from './collection';
-import {SandboxController} from './sandbox-controller';
+import { IMocks, IModulesMap, ITestModule } from '../interface';
+import { Collection } from './collection';
+import { SandboxController } from './sandbox-controller';
 
 type TLoadFunction = (request: string, parent: NodeModule, isMain: boolean) => any;
 
@@ -15,7 +15,7 @@ class EnvironmentPatch {
     private modulesDefinition: Collection<ITestModule> = new Collection();
 
     public static removeFromCache(name: string): void {
-        delete require.cache[name];
+        delete require.cache[ name ];
     }
 
     constructor(private sandboxes: SandboxController, private dependencies: Array<string>, private mocks: IMocks) {
@@ -39,7 +39,7 @@ class EnvironmentPatch {
         this.patch();
 
         for (let index = 0; index < this.dependencies.length; index++) {
-            require(this.dependencies[index]);
+            require(this.dependencies[ index ]);
         }
     }
 
@@ -49,16 +49,16 @@ class EnvironmentPatch {
         this.restore();
 
         for (let index = 0; index < tests.length; index++) {
-            EnvironmentPatch.removeFromCache(tests[index]);
+            EnvironmentPatch.removeFromCache(tests[ index ]);
         }
 
         for (let index = 0; index < this.dependencies.length; index++) {
-            EnvironmentPatch.removeFromCache(this.dependencies[index]);
+            EnvironmentPatch.removeFromCache(this.dependencies[ index ]);
         }
 
         for (let key in mocks) {
             if (mocks.hasOwnProperty(key)) {
-                EnvironmentPatch.removeFromCache(mocks[key]);
+                EnvironmentPatch.removeFromCache(mocks[ key ]);
             }
         }
     }
@@ -72,4 +72,4 @@ class EnvironmentPatch {
     }
 }
 
-export {EnvironmentPatch};
+export { EnvironmentPatch };
