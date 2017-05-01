@@ -10,10 +10,12 @@
     "outDir": "dist",
     "sourceMap": false,
     "lib": [
-      "es6",
-      "es7"
+      "es5",
+      "es2015",
+      "es2016"
     ],
     "typeRoots": [
+      "./node_modules/@types",
       "../../node_modules/@types"
     ],
     "noUnusedLocals": true,

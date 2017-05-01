@@ -58,7 +58,6 @@
   },
   "devDependencies": {
     "@types/chai": "3.5.2",
-    "@types/core-js": "0.9.41",
     "@types/mocha": "2.2.41",
     "@types/node": "7.0.14",
     "@types/webpack": "2.2.15",
