@@ -1,5 +1,5 @@
 {
-  "name": "test-machine-build",
+  "name": "test-machine",
   "private": true,
   "license": "MIT",
   "homepage": "https://github.com/johnthecat/test-machine",
@@ -27,14 +27,14 @@
     "test": "lerna exec --parallel -- mocha --opts ../../mocha.opts",
     "test:watch": "lerna exec --no-sort -- mocha --opts ../mocha.opts --watch",
     "test:coverage": "nyc npm run test",
-    "test:publish": "coveralls < coverage/lcov.info && rimraf coverage",
-    "cleanup": "lerna exec -- rimraf /dist -G",
+    "test:publish": "coveralls < ./coverage/lcov.info && rimraf ./coverage -G",
+    "cleanup": "lerna exec --parallel -- rimraf ./dist -G",
     "build": "lerna exec --parallel -- tsc",
     "build:watch": "npm run clean && npm run lint && lerna exec -- tsc --watch",
     "build:precommit": "npm run lint:src && npm run lint:test && npm run build && npm run test",
     "build:ci": "npm run lint:src && npm run lint:test && npm run cleanup && npm run build && npm run test:coverage"
   },
-  "pre-commit": [
+  "precommit": [
     "build:precommit"
   ],
   "nyc": {
