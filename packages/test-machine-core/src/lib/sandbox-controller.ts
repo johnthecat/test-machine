@@ -38,8 +38,8 @@ class SandboxController {
         let dependency: ITestDependency;
 
         for (let index = 0, count = dependencies.length; index < count; index++) {
-            dependency = dependencies[ index ];
-            compiledDependencies[ dependency.request ] = this.getModule(dependency.module, mocks);
+            dependency = dependencies[index];
+            compiledDependencies[dependency.request] = this.getModule(dependency.module, mocks);
         }
 
         let sandbox;

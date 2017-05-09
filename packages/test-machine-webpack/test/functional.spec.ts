@@ -39,7 +39,7 @@ describe('Webpack plugin', () => {
 
     it('should return correct tests', (done) => {
         const roots = getTestRoots('simple-js');
-        const root = roots[ 0 ];
+        const root = roots[0];
 
         let testsException;
 
@@ -79,7 +79,7 @@ describe('Webpack plugin', () => {
             },
             compilers: [
                 babelCompiler({
-                    plugins: [ 'transform-es2015-modules-commonjs' ]
+                    plugins: ['transform-es2015-modules-commonjs']
                 })
             ],
             engine: mochaEngine({
@@ -113,7 +113,7 @@ describe('Webpack plugin', () => {
                         use: {
                             loader: 'babel-loader',
                             options: {
-                                plugins: [ 'transform-es2015-modules-commonjs' ]
+                                plugins: ['transform-es2015-modules-commonjs']
                             }
                         }
                     }
@@ -184,12 +184,12 @@ describe('Webpack plugin', () => {
                 rules: [
                     {
                         test: /\.css$/,
-                        use: extractCSS.extract([ {
+                        use: extractCSS.extract([{
                             loader: 'css-loader',
                             options: {
                                 modules: true
                             }
-                        } ])
+                        }])
                     }
                 ]
             },

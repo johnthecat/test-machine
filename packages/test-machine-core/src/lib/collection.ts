@@ -19,7 +19,7 @@ class Collection<V = any> {
         const normalizedKey = this._normalizeKey(key);
 
         if (this._has(normalizedKey) === true) {
-            return this._store[ normalizedKey ];
+            return this._store[normalizedKey];
         }
 
         return void 0;
@@ -32,14 +32,14 @@ class Collection<V = any> {
             this._size++;
         }
 
-        this._store[ normalizedKey ] = value;
+        this._store[normalizedKey] = value;
     }
 
     public delete(key: string): void {
         const normalizedKey = this._normalizeKey(key);
 
         if (this._has(normalizedKey) === true) {
-            delete this._store[ normalizedKey ];
+            delete this._store[normalizedKey];
             this._size--;
         }
     }
@@ -50,7 +50,7 @@ class Collection<V = any> {
                 typeof map.hasOwnProperty !== 'function' ||
                 map.hasOwnProperty(key)
             ) {
-                this.set(key, map[ key ]);
+                this.set(key, map[key]);
             }
         }
     }

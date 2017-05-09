@@ -10,13 +10,13 @@ import { TestWatcher } from './lib/test-watcher';
 import { definePluginCompilerFactory } from './lib/define-plugin-compiler';
 
 const defaultUserConfig: IWebpackConfig = {
-    testRoots: [ './test' ],
+    testRoots: ['./test'],
     router: () => [
         '**/*.spec.js',
         '**/*.test.js'
     ],
-    include: [ /[^]*/ ],
-    exclude: [ /node_modules/ ],
+    include: [/[^]*/],
+    exclude: [/node_modules/],
     compilers: [],
     dependencies: [],
     plugins: [],
@@ -27,8 +27,8 @@ const defaultUserConfig: IWebpackConfig = {
 
 const select = (...args) => {
     for (let index = 0; index < args.length; index++) {
-        if (args[ index ] !== void 0 && args[ index ] !== null) {
-            return args[ index ];
+        if (args[index] !== void 0 && args[index] !== null) {
+            return args[index];
         }
     }
 };

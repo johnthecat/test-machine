@@ -25,8 +25,8 @@ export const configFactory = (fixture: string, plugin: TestMachineWebpack | null
         },
 
         resolve: {
-            extensions: [ '.js', '.ts', '.css' ],
-            modules: [ NODE_MODULES, src ]
+            extensions: ['.js', '.ts', '.css'],
+            modules: [NODE_MODULES, src]
         },
 
         plugins: plugin ? [

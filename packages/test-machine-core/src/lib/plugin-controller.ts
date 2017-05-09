@@ -19,8 +19,8 @@ class PluginController {
 
     private applyPluginsPipeline<T>(method: string, data: T): void {
         for (let index = 0, count = this.plugins.length; index < count; index++) {
-            if (typeof this.plugins[ index ][ method ] === 'function') {
-                this.plugins[ index ][ method ](data);
+            if (typeof this.plugins[index][method] === 'function') {
+                this.plugins[index][method](data);
             }
         }
     }

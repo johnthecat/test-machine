@@ -101,7 +101,7 @@ class Sandbox {
                     }
 
                     default: {
-                        return target[ key ];
+                        return target[key];
                     }
                 }
             },
@@ -113,7 +113,7 @@ class Sandbox {
                     }
 
                     default: {
-                        return target[ key ] = value;
+                        return target[key] = value;
                     }
                 }
             }
@@ -143,9 +143,9 @@ class Sandbox {
 
                     default: {
                         if (key in target) {
-                            return target[ key ];
+                            return target[key];
                         } else if (key in global) {
-                            return global[ key ];
+                            return global[key];
                         }
 
                         return void 0;
@@ -160,7 +160,7 @@ class Sandbox {
                     }
 
                     default: {
-                        return target[ key ] = value;
+                        return target[key] = value;
                     }
                 }
             },
@@ -193,17 +193,17 @@ class Sandbox {
 
             if (
                 typeof filename === 'string' &&
-                typeof mocks[ filename ] === 'string'
+                typeof mocks[filename] === 'string'
             ) {
-                return require(mocks[ filename ]);
+                return require(mocks[filename]);
             }
         }
 
-        if (dependencies[ request ]) {
-            if (dependencies[ request ] instanceof Sandbox) {
-                return dependencies[ request ].getExports();
+        if (dependencies[request]) {
+            if (dependencies[request] instanceof Sandbox) {
+                return dependencies[request].getExports();
             } else {
-                return dependencies[ request ];
+                return dependencies[request];
             }
         }
 

@@ -20,7 +20,7 @@ describe('Babel compiler', () => {
 
     it('should handle empty string', () => {
         const compiler = babelCompiler({
-            presets: [ 'es2015' ]
+            presets: ['es2015']
         });
 
         const result = compiler({
@@ -33,7 +33,7 @@ describe('Babel compiler', () => {
     it('should handle source code', (done) => {
         readFile('./compilers/fixtures/import-export.js').then((source: string) => {
             const compiler = babelCompiler({
-                presets: [ 'es2015' ]
+                presets: ['es2015']
             });
 
             const result = compiler({ source }, '');

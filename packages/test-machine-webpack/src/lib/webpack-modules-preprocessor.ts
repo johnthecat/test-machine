@@ -27,7 +27,7 @@ class WebpackModulesPreprocessor {
         const filteredModules: Array<IWebpackModule> = [];
 
         for (let index = 0, count = modules.length; index < count; index++) {
-            module = modules[ index ];
+            module = modules[index];
 
             if (
                 module.resource &&
@@ -50,7 +50,7 @@ class WebpackModulesPreprocessor {
         let module: IWebpackModule;
 
         for (let index = 0, count = modules.length; index < count; index++) {
-            module = modules[ index ];
+            module = modules[index];
 
             if (module.buildTimestamp > this.lastCompilation) {
                 changedModules.push(module.resource);
@@ -72,7 +72,7 @@ class WebpackModulesPreprocessor {
     }
 
     private static pushModuleToMap(map: IModulesMap<IWebpackModule>, module: IWebpackModule): IModulesMap<IWebpackModule> {
-        map[ module.resource ] = module;
+        map[module.resource] = module;
 
         return map;
     }

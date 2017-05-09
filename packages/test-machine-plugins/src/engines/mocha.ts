@@ -22,7 +22,7 @@ export function mochaEngine(config?): TEngine {
         mocha = new Mocha(config);
 
         for (index = 0, count = tests.length; index < count; index++) {
-            mocha.addFile(tests[ index ]);
+            mocha.addFile(tests[index]);
         }
 
         return new Promise((resolve, reject) => {

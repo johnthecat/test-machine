@@ -26,8 +26,9 @@ class Compiler {
         let compiler: TCompilerPlugin;
 
         for (let index = 0, count = this.pipeline.length; index < count; index++) {
-            compiler = this.pipeline[ index ];
-            result = compiler(result, filename);
+            compiler = this.pipeline[index];
+
+            Object.assign(result, compiler(result, filename));
         }
 
         this.cache.set(source, result);

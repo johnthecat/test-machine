@@ -21,7 +21,7 @@ class ModulesGenerator {
 
         for (let moduleID in modulesMap) {
             if (modulesMap.hasOwnProperty(moduleID)) {
-                (this.currentProcessor as TModuleResolver)(this.resolver(modulesMap[ moduleID ]));
+                (this.currentProcessor as TModuleResolver)(this.resolver(modulesMap[moduleID]));
             }
         }
 
@@ -32,10 +32,10 @@ class ModulesGenerator {
 
     private processModule(original: IModulesMap<any>, converted: ITestModulesMap, resource: string): ITestModule | null {
         if (resource in converted) {
-            return converted[ resource ];
+            return converted[resource];
         }
 
-        const module = original[ resource ];
+        const module = original[resource];
 
         if (!module) {
             return null;
@@ -43,7 +43,7 @@ class ModulesGenerator {
 
         const testModule = this.modulesFactory(module, this.currentProcessor as TModuleResolver);
 
-        converted[ resource ] = testModule;
+        converted[resource] = testModule;
 
         return testModule;
     }

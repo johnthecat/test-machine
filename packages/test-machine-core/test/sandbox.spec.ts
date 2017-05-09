@@ -58,7 +58,7 @@ describe('Sandbox', () => {
         it('should apply compiler to source', (done) => {
             readFile('./fixtures/sandbox/es6-export.js').then((source) => {
                 const compiler = babelCompiler({
-                    plugins: [ 'transform-es2015-modules-commonjs' ]
+                    plugins: ['transform-es2015-modules-commonjs']
                 });
 
                 const compilerWrapper = (code: string): string => {
@@ -217,8 +217,8 @@ describe('Sandbox', () => {
                 const context = sandbox.getContext();
 
                 chai.expect(module).to.be.equal(true);
-                chai.expect(context[ 'amaGlobal' ]).to.be.equal(true);
-                chai.expect(global[ 'amaGlobal' ]).to.be.equal(void 0);
+                chai.expect(context['amaGlobal']).to.be.equal(true);
+                chai.expect(global['amaGlobal']).to.be.equal(void 0);
 
                 done();
             });
@@ -240,15 +240,15 @@ describe('Sandbox', () => {
             const key = '__$test$__';
             const sandbox = new Sandbox(createExportFromGlobal(key), 'global.js');
 
-            global[ key ] = {};
+            global[key] = {};
 
             sandbox.getExports();
 
             const context = sandbox.getContext();
 
-            chai.expect(context[ key ]).to.be.equal(global[ key ]);
+            chai.expect(context[key]).to.be.equal(global[key]);
 
-            delete global[ key ];
+            delete global[key];
         });
     });
 

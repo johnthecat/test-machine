@@ -28,7 +28,7 @@ describe('Mocha engine', () => {
     it('should reject, when mocha can\'t run tests', (done) => {
         const runner = mochaEngine();
 
-        runner([ 'fake-test.js' ])
+        runner(['fake-test.js'])
             .catch((e) => done());
     });
 

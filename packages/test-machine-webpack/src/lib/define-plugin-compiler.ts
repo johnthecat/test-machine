@@ -10,7 +10,7 @@ export const definePluginCompilerFactory = (plugin: any): TCompilerPlugin => {
 
     return compiler.babel({
         plugins: [
-            [ 'transform-define', plugin.definitions ]
+            ['transform-define', plugin.definitions]
         ]
     });
 };
