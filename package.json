@@ -22,8 +22,8 @@
   "main": "dist/index.js",
   "scripts": {
     "postinstall": "lerna bootstrap && lerna exec --no-sort --parallel -- node \"../../bin/link\"",
-    "lint:src": "lerna exec --no-sort --concurrency 3 --parallel -- tslint --config \"../../tslint.json\" --project \"../../tsconfig.json\" \"./src/**/*\"",
-    "lint:test": "lerna exec --no-sort --concurrency 3 --parallel -- tslint --config \"../../tslint.json\" --project \"../../tsconfig.json\" \"./test/**/*\"",
+    "lint:src": "lerna exec --no-sort --concurrency 3 --parallel -- tslint -c \"../../tslint.json\" \"./src/**/*\"",
+    "lint:test": "lerna exec --no-sort --concurrency 3 --parallel -- tslint -c \"../../tslint.json\" \"./test/**/*\"",
     "test": "lerna exec --parallel -- mocha --opts \"../../mocha.opts\"",
     "test:watch": "lerna exec --no-sort -- mocha --opts \"../mocha.opts\" --watch",
     "test:coverage": "nyc npm run test",
@@ -77,7 +77,7 @@
     "pre-commit": "1.2.2",
     "rimraf": "2.6.1",
     "ts-node": "3.0.6",
-    "tslint": "5.2.0",
+    "tslint": "5.4.3",
     "typescript": "2.3.4",
     "webpack": "3.0.0",
     "webpack-merge": "4.1.0"
