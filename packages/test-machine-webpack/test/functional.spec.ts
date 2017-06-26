@@ -71,6 +71,35 @@ describe('Webpack plugin', () => {
         });
     });
 
+    it('should correctly work with webpack.optimize.ModuleConcatenationPlugin', (done) => {
+        const config = configFactory('module-concatenation-plugin', new TestMachineWebpack({
+            testRoots: getTestRoots('module-concatenation-plugin'),
+            router: (resource) => {
+                return `${resource.name}.spec.js`;
+            },
+            compilers: [
+                babelCompiler({
+                    plugins: ['transform-es2015-modules-commonjs']
+                })
+            ],
+            engine: mochaEngine({
+                reporter(): void {
+
+                }
+            })
+        }), {
+            plugins: [
+                new (webpack.optimize as any).ModuleConcatenationPlugin()
+            ]
+        });
+
+        const runner = webpack(config);
+
+        runner.run((error) => {
+            done(error);
+        });
+    });
+
     it('should correctly handle different types of imports (using test-machine compilation)', (done) => {
         const config = configFactory('es6-export', new TestMachineWebpack({
             testRoots: getTestRoots('es6-export'),
@@ -145,30 +174,6 @@ describe('Webpack plugin', () => {
             } else {
                 done('Error wasn\'t handled');
             }
-        });
-    });
-
-    it('should correctly work with webpack.optimize.ModuleConcatenationPlugin', (done) => {
-        const config = configFactory('simple-js', new TestMachineWebpack({
-            testRoots: getTestRoots('simple-js'),
-            router: (resource) => {
-                return `${resource.name}.spec.js`;
-            },
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            })
-        }), {
-            plugins: [
-                new (webpack.optimize as any).ModuleConcatenationPlugin()
-            ]
-        });
-
-        const runner = webpack(config);
-
-        runner.run((error) => {
-            done(error);
         });
     });
 

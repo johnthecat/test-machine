@@ -21,20 +21,28 @@ class WebpackModulesPreprocessor {
     }
 
     public filterModules(modules: Array<IWebpackModule>): Array<IWebpackModule> {
+        let flatModules: Array<IWebpackModule>;
         let module: IWebpackModule;
 
         const testResource = (regExp) => regExp.test(module.resource);
         const filteredModules: Array<IWebpackModule> = [];
 
-        for (let index = 0, count = modules.length; index < count; index++) {
-            module = modules[index];
+        let index: number;
+        let moduleIndex: number;
 
-            if (
-                module.resource &&
-                !this.config.exclude.some(testResource) &&
-                this.config.include.some(testResource)
-            ) {
-                filteredModules.push(module);
+        for (index = 0; index < modules.length; index++) {
+            flatModules = WebpackModulesPreprocessor.normalizeModules(modules[index]);
+
+            for (moduleIndex = 0; moduleIndex < flatModules.length; moduleIndex++) {
+                module = flatModules[moduleIndex];
+
+                if (
+                    module.resource &&
+                    !this.config.exclude.some(testResource) &&
+                    this.config.include.some(testResource)
+                ) {
+                    filteredModules.push(module);
+                }
             }
         }
 
@@ -69,6 +77,16 @@ class WebpackModulesPreprocessor {
 
     public getModulesMap(modules: Array<IWebpackModule>): IModulesMap<IWebpackModule> {
         return modules.reduce(WebpackModulesPreprocessor.pushModuleToMap, {});
+    }
+
+    private static normalizeModules(module: any): Array<IWebpackModule> {
+        switch (module.constructor.name) {
+            case 'ConcatenatedModule':
+                return module.modules.concat(module.rootModule);
+
+            default:
+                return [module];
+        }
     }
 
     private static pushModuleToMap(map: IModulesMap<IWebpackModule>, module: IWebpackModule): IModulesMap<IWebpackModule> {
