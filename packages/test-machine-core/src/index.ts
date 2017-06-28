@@ -31,7 +31,7 @@ class TestMachine {
 
         this.testExtractor = new TestExtractor(config.testRoots, config.router);
 
-        this.modulesGenerator = this.modulesGenerator = new ModulesGenerator(modulesFactory, resolver);
+        this.modulesGenerator = new ModulesGenerator(modulesFactory, resolver);
 
         this.plugins = new PluginController(config.plugins);
 

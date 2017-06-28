@@ -167,7 +167,7 @@ describe('TestExtractor', () => {
         const router = () => '';
 
         const testExtractor = new TestExtractor([ROOT1], router);
-        const tests = testExtractor.extractTests([({} as string)]);
+        const tests = testExtractor.extractTests([ ({} as string)  ]);
 
         chai.expect(tests.length).to.be.equal(0);
     });

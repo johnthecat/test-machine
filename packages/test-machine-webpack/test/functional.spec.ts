@@ -11,6 +11,12 @@ import { TestMachineWebpack } from '../src';
 
 import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
 
+const DEFAULT_ENGINE_CONFIG = {
+    reporter(): void {
+
+    }
+};
+
 describe('Webpack plugin', () => {
     it('should fail, if engine not passed', (done) => {
         try {
@@ -82,14 +88,10 @@ describe('Webpack plugin', () => {
                     plugins: ['transform-es2015-modules-commonjs']
                 })
             ],
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            })
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
         }), {
             plugins: [
-                new (webpack.optimize as any).ModuleConcatenationPlugin()
+                new webpack.optimize.ModuleConcatenationPlugin()
             ]
         });
 
@@ -111,11 +113,7 @@ describe('Webpack plugin', () => {
                     plugins: ['transform-es2015-modules-commonjs']
                 })
             ],
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            })
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
         }));
 
         webpack(config, (error) => {
@@ -129,11 +127,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            })
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
         }), {
             module: {
                 rules: [
@@ -161,11 +155,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            })
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
         }));
 
         webpack(config, (error) => {
@@ -183,11 +173,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            }),
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG),
             failOnError: false
         }));
 
@@ -196,18 +182,14 @@ describe('Webpack plugin', () => {
         });
     });
 
-    xit('should handle other non-typical extensions', (done) => {
+    it('should handle other non-typical extensions', (done) => {
         const extractCSS = new ExtractTextPlugin('stylesheets/css-modules.css');
         const config = configFactory('css-modules', new TestMachineWebpack({
             testRoots: getTestRoots('css-modules'),
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine({
-                reporter(): void {
-
-                }
-            })
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
         }), {
             module: {
                 rules: [

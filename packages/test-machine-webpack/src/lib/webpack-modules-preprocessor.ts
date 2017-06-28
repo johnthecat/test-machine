@@ -81,8 +81,15 @@ class WebpackModulesPreprocessor {
 
     private static normalizeModules(module: any): Array<IWebpackModule> {
         switch (module.constructor.name) {
+            // webpack.optimize.ModuleConcatenationPlugin
+            // https://github.com/webpack/webpack/blob/master/lib/optimize/ConcatenatedModule.js
             case 'ConcatenatedModule':
                 return module.modules.concat(module.rootModule);
+
+            // extract-text-webpack-plugin
+            // https://github.com/webpack-contrib/extract-text-webpack-plugin/blob/master/ExtractedModule.js
+            case 'ExtractedModule':
+                return [module.getOriginalModule()];
 
             default:
                 return [module];

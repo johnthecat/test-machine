@@ -1,4 +1,4 @@
-import * as webpack from '@types/webpack';
+import * as webpack from 'webpack';
 import { IUserConfig } from 'test-machine-core/src/interface';
 
 export type TNodeCallback = (error?: string | Error | null, result?: any) => void;

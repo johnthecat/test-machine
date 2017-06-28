@@ -1,5 +1,13 @@
 import { TModulesFactory, ITestDependency } from 'test-machine-core/src/interface';
-import { IWebpackModule } from '../interface';
+import { IWebpackModule, IWebpackDependency } from '../interface';
+
+// for cases, when dependency hasn't typical interface to extract it's own module
+const normalizeDependency = (dependency: any): IWebpackDependency => {
+    switch (dependency.constructor.name) {
+        default:
+            return dependency.module;
+    }
+};
 
 export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
     return {
@@ -30,7 +38,7 @@ export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IW
             let module;
 
             for (let index = 0, count = webpackDependencies.length; index < count; index++) {
-                dependency = webpackDependencies[index].module;
+                dependency = normalizeDependency(webpackDependencies[index]);
 
                 if (!dependency) {
                     continue;

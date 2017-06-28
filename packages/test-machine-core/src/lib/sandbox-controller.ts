@@ -5,35 +5,37 @@ import { Sandbox } from './sandbox';
 import { Compiler } from './compiler';
 import { ExceptionProvider } from './exception-provider';
 
+interface ITestDependencies extends IModulesMap<ITestDependency> {}
+
 class SandboxController {
 
     private compiler: TCompiler;
 
-    private modules: Collection<Sandbox> = new Collection<Sandbox>();
+    private resolvedModules: Collection<Sandbox> = new Collection();
 
     constructor(compiler: Compiler) {
-        this.compiler = (source: string, filename: string): string => compiler.compile(source, filename);
+        this.compiler = (source, filename) => compiler.compile(source, filename);
     }
 
     public getResolvedModules(): IModulesMap<Sandbox> {
-        return this.modules.getStore();
+        return this.resolvedModules.getStore();
     }
 
     public clear(): void {
-        this.modules.clear();
+        this.resolvedModules.clear();
     }
 
-    public getModule(module: ITestModule, mocks: IMocks): Sandbox {
+    public getModule(module: ITestModule, mocks: IMocks): any {
         const resource = module.getResource();
 
-        const cachedModule = this.modules.get(resource);
+        const cachedModule = this.resolvedModules.get(resource);
 
         if (cachedModule) {
             return cachedModule.getExports();
         }
 
         const dependencies = module.getDependencies();
-        const compiledDependencies = {};
+        const compiledDependencies: ITestDependencies = {};
 
         let dependency: ITestDependency;
 
@@ -42,24 +44,29 @@ class SandboxController {
             compiledDependencies[dependency.request] = this.getModule(dependency.module, mocks);
         }
 
+        let sandbox = this.createModule(module, resource, compiledDependencies, mocks);
+
+        this.resolvedModules.set(resource, sandbox);
+
+        return sandbox.getExports();
+    }
+
+    private createModule(module: ITestModule, resource: string, dependencies: ITestDependencies, mocks: IMocks): Sandbox {
         let sandbox;
-        let compiledModule;
 
         try {
             sandbox = new Sandbox(module.getSource(), resource, {
                 compiler: this.compiler,
-                dependencies: compiledDependencies,
-                mocks: mocks
+                dependencies,
+                mocks
             });
 
-            compiledModule = sandbox.getExports();
+            sandbox.getExports();
         } catch (e) {
             throw ExceptionProvider.compilationException(e, module, sandbox);
         }
 
-        this.modules.set(resource, sandbox);
-
-        return compiledModule;
+        return sandbox;
     }
 }
 

@@ -14,10 +14,6 @@ class EnvironmentPatch {
 
     private modulesDefinition: Collection<ITestModule> = new Collection();
 
-    public static removeFromCache(name: string): void {
-        delete require.cache[name];
-    }
-
     constructor(private sandboxes: SandboxController, private dependencies: Array<string>, private mocks: IMocks) {
 
         this.originLoad = Module._load;
@@ -33,7 +29,7 @@ class EnvironmentPatch {
         };
     }
 
-    setup(modulesDefinition: IModulesMap<ITestModule>): void {
+    public setup(modulesDefinition: IModulesMap<ITestModule>): void {
         this.modulesDefinition.fill(modulesDefinition);
 
         this.patch();
@@ -43,7 +39,7 @@ class EnvironmentPatch {
         }
     }
 
-    clean(tests: Array<string>, mocks: IMocks): void {
+    public clean(tests: Array<string>, mocks: IMocks): void {
         this.modulesDefinition.clear();
 
         this.restore();
@@ -69,6 +65,10 @@ class EnvironmentPatch {
 
     private restore(): void {
         Module._load = this.originLoad;
+    }
+
+    public static removeFromCache(name: string): void {
+        delete require.cache[name];
     }
 }
 

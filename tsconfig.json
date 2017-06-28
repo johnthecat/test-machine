@@ -1,5 +1,4 @@
 {
-  "version": "2.3.1",
   "compilerOptions": {
     "target": "es3",
     "module": "commonjs",

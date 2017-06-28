@@ -51,7 +51,6 @@ class Sandbox {
         }
 
         const compiler = typeof this.config.compiler === 'function' ? this.config.compiler : DEFAULT_COMPILER;
-
         const context = vm.createContext(this.context);
 
         let script;
@@ -66,6 +65,13 @@ class Sandbox {
             Sandbox.scriptCache.set(this.source, script);
         }
 
+        this.runInContext(script, context);
+        this.isCompiled = true;
+
+        return this.exports;
+    }
+
+    private runInContext(script: Script, context: object): void {
         try {
             script.runInContext(context);
         } catch (exception) {
@@ -75,10 +81,6 @@ class Sandbox {
                 throw exception;
             }
         }
-
-        this.isCompiled = true;
-
-        return this.exports;
     }
 
     private createContext(config: ISandboxConfig, filename: string): object {
