@@ -40,9 +40,9 @@
   "nyc": {
     "all": true,
     "check-coverage": true,
-    "lines": 75,
-    "statements": 75,
-    "functions": 75,
+    "lines": 70,
+    "statements": 70,
+    "functions": 70,
     "branches": 70,
     "sourceMap": true,
     "include": [
