@@ -4,7 +4,7 @@ import { noModuleException } from '../utils';
 const DEFAULT_FILENAME = 'webpack-module';
 
 export function babelCompiler(config = {}): TCompilerPlugin {
-    let babel;
+    let babel: any;
 
     try {
         babel = require('babel-core');

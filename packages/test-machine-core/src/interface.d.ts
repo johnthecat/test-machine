@@ -21,7 +21,8 @@ export type TModulesFactory<T> = (module: T, resolver: TModuleResolver) => ITest
 
 export interface IPlugin {
     compilerPipeline: (compiler: any) => void,
-    afterRun: (modules: Array<any>) => void
+    afterRun: (modules: Array<any>) => void,
+    [key: string]: (data: any) => void,
 }
 
 export interface IMocks {

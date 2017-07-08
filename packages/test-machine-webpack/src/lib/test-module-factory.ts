@@ -1,62 +1,62 @@
-import { TModulesFactory, ITestDependency } from 'test-machine-core/src/interface';
+import { TModulesFactory, ITestModule, ITestDependency } from 'test-machine-core/src/interface';
 import { IWebpackModule, IWebpackDependency } from '../interface';
 
 // for cases, when dependency hasn't typical interface to extract it's own module
-const normalizeDependency = (dependency: any): IWebpackDependency => {
+const normalizeDependency = (dependency: any): IWebpackModule => {
     switch (dependency.constructor.name) {
         default:
             return dependency.module;
     }
 };
 
-export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
-    return {
+class WebpackModule implements ITestModule {
 
-        _dependencyCache: null,
+    private dependencyCache: Array<ITestDependency> | null = null;
 
-        _resolver: resolver,
+    constructor(private module: IWebpackModule, private resolver: Function) {}
 
-        _module: module,
+    getResource(): string {
+        return this.module.resource;
+    }
 
-        getResource(): string {
-            return this._module.resource;
-        },
+    getSource(): string {
+        return this.module._source._value;
+    }
 
-        getSource(): string {
-            return this._module._source._value;
-        },
-
-        getDependencies(): Array<ITestDependency> {
-            if (this._dependencyCache !== null) {
-                return this._dependencyCache;
-            }
-
-            const webpackDependencies = this._module.dependencies;
-            const dependencies: Array<ITestDependency> = [];
-
-            let dependency;
-            let module;
-
-            for (let index = 0, count = webpackDependencies.length; index < count; index++) {
-                dependency = normalizeDependency(webpackDependencies[index]);
-
-                if (!dependency) {
-                    continue;
-                }
-
-                module = this._resolver(dependency.resource);
-
-                if (module) {
-                    dependencies.push({
-                        request: dependency.rawRequest,
-                        module: module
-                    });
-                }
-            }
-
-            this._dependencyCache = dependencies;
-
-            return dependencies;
+    getDependencies(): Array<ITestDependency> {
+        if (this.dependencyCache !== null) {
+            return this.dependencyCache;
         }
-    };
+
+        const webpackDependencies: Array<IWebpackDependency> = this.module.dependencies;
+        const dependencies: Array<ITestDependency> = [];
+
+        let dependency: IWebpackModule;
+        let module: ITestModule;
+
+        for (let index = 0, count = webpackDependencies.length; index < count; index++) {
+            dependency = normalizeDependency(webpackDependencies[index]);
+
+            if (!dependency) {
+                continue;
+            }
+
+            module = this.resolver(dependency.resource);
+
+            if (module) {
+                dependencies.push({
+                    request: dependency.rawRequest,
+                    module: module
+                });
+            }
+        }
+
+        this.dependencyCache = dependencies;
+
+        return dependencies;
+    }
+}
+
+export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
+    return new WebpackModule(module, resolver);
 };

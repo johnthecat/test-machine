@@ -5,6 +5,18 @@ import * as path from 'path';
 import { Collection } from '../collection';
 import { Script } from './script';
 
+const DEFAULT_COMPILER = (source: string): string => source;
+const DEFAULT_DEPENDENCIES = {};
+const DEFAULT_MOCKS = null;
+
+const Module: any = module.constructor;
+
+interface IModuleParent {
+    filename: string,
+    id: string,
+    paths: Array<string>,
+}
+
 export type TSandboxDependencies = IModulesMap<any>;
 
 export interface ISandboxConfig {
@@ -12,12 +24,6 @@ export interface ISandboxConfig {
     dependencies?: TSandboxDependencies,
     mocks?: IMocks
 }
-
-const DEFAULT_COMPILER = (source: string): string => source;
-const DEFAULT_DEPENDENCIES = {};
-const DEFAULT_MOCKS = null;
-
-const Module: any = module.constructor;
 
 class Sandbox {
 
@@ -65,7 +71,7 @@ class Sandbox {
             Sandbox.scriptCache.set(this.source, script);
         }
 
-        this.runInContext(script, context);
+        this.runInContext(script as Script, context);
         this.isCompiled = true;
 
         return this.exports;
@@ -84,10 +90,10 @@ class Sandbox {
     }
 
     private createContext(config: ISandboxConfig, filename: string): object {
-        const parentModule = {
+        const parentModule: IModuleParent = {
             filename: filename,
             id: filename,
-            paths: Module._nodeModulePaths(filename),
+            paths: Module._nodeModulePaths(filename)
         };
 
         const moduleObject = {
@@ -96,7 +102,7 @@ class Sandbox {
         };
 
         const module = new Proxy(moduleObject, {
-            get: (target, key): any => {
+            get: (target: any, key: string): any => {
                 switch (key) {
                     case 'exports': {
                         return this.exports;
@@ -108,7 +114,7 @@ class Sandbox {
                 }
             },
 
-            set: (target, key, value): any => {
+            set: (target: any, key: string, value: any): any => {
                 switch (key) {
                     case 'exports': {
                         return this.exports = value;
@@ -133,7 +139,7 @@ class Sandbox {
         };
 
         const contextProxy = new Proxy(ownContext, {
-            get: (target, key): any => {
+            get: (target: any, key: string): any => {
                 switch (key) {
                     case 'global': {
                         return contextProxy;
@@ -147,7 +153,7 @@ class Sandbox {
                         if (key in target) {
                             return target[key];
                         } else if (key in global) {
-                            return global[key];
+                            return (global as any)[key];
                         }
 
                         return void 0;
@@ -155,7 +161,7 @@ class Sandbox {
                 }
             },
 
-            set: (target, key, value): any => {
+            set: (target: any, key: string, value: any): any => {
                 switch (key) {
                     case 'exports': {
                         return this.exports = value;
@@ -167,7 +173,7 @@ class Sandbox {
                 }
             },
 
-            has(target, key): boolean {
+            has(target: any, key: string): boolean {
                 return (key in target) || (key in global);
             }
         });
@@ -181,7 +187,7 @@ class Sandbox {
 
     private static scriptCache: Collection<Script> = new Collection<Script>(true);
 
-    private static resolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent, request: string): any {
+    private static resolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent: IModuleParent, request: string): any {
         let catchedError;
         let filename;
 
@@ -224,7 +230,7 @@ class Sandbox {
         return require(filename);
     }
 
-    private static getResolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent): void {
+    private static getResolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent: IModuleParent): void {
         return Sandbox.resolver.bind(null, dependencies, mocks, parent);
     }
 }

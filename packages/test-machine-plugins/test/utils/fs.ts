@@ -7,7 +7,7 @@ export const readFile = (source: string): Promise<string> => {
     const normalizedPath = path.resolve(ROOT, source);
 
     return new Promise((resolve, reject) => {
-        fs.readFile(normalizedPath, 'utf8', (err, file) => {
+        fs.readFile(normalizedPath, 'utf8', (err: Error, file: string) => {
             if (err) {
                 reject(err);
             } else {

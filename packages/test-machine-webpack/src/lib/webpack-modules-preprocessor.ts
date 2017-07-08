@@ -24,7 +24,7 @@ class WebpackModulesPreprocessor {
         let flatModules: Array<IWebpackModule>;
         let module: IWebpackModule;
 
-        const testResource = (regExp) => regExp.test(module.resource);
+        const testResource = (regExp: RegExp) => regExp.test(module.resource);
         const filteredModules: Array<IWebpackModule> = [];
 
         let index: number;

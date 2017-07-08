@@ -11,7 +11,7 @@ class TestExtractor {
     }
 
     public extractTests(changedModules: Array<string>): Array<string> {
-        const tests = [];
+        const tests: Array<string> = [];
 
         if (Array.isArray(changedModules) === false) {
             return tests;

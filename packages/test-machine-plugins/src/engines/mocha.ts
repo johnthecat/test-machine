@@ -1,8 +1,8 @@
 import { TEngine } from 'test-machine-core/src/interface';
 import { noModuleException } from '../utils';
 
-export function mochaEngine(config?): TEngine {
-    let Mocha;
+export function mochaEngine(config?: any): TEngine {
+    let Mocha: any;
 
     try {
         Mocha = require('mocha');
@@ -10,9 +10,9 @@ export function mochaEngine(config?): TEngine {
         throw noModuleException('mocha');
     }
 
-    let mocha;
-    let index;
-    let count;
+    let mocha: any;
+    let index: number;
+    let count: number;
 
     return (tests: Array<string>): Promise<any> => {
         if (tests.length === 0) {
@@ -26,7 +26,7 @@ export function mochaEngine(config?): TEngine {
         }
 
         return new Promise((resolve, reject) => {
-            mocha.run((errors) => {
+            mocha.run((errors: number) => {
                 if (errors) {
                     reject();
                 } else {

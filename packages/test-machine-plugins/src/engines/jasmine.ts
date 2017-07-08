@@ -1,8 +1,8 @@
 import { TEngine } from 'test-machine-core/src/interface';
 import { noModuleException } from '../utils';
 
-export function jasmineEngine(config?): TEngine {
-    let Jasmine;
+export function jasmineEngine(config?: any): TEngine {
+    let Jasmine: any;
 
     try {
         Jasmine = require('jasmine');
@@ -10,7 +10,7 @@ export function jasmineEngine(config?): TEngine {
         throw noModuleException('jasmine');
     }
 
-    let jasmine;
+    let jasmine: any;
 
     return (tests: Array<string>): Promise<any> => {
         if (tests.length === 0) {
@@ -25,7 +25,7 @@ export function jasmineEngine(config?): TEngine {
         );
 
         return new Promise((resolve, reject) => {
-            jasmine.onComplete((passed) => {
+            jasmine.onComplete((passed: boolean) => {
                 jasmine = null;
 
                 if (passed) {

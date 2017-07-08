@@ -1,19 +1,19 @@
 import { ITestModule } from '../interface';
 
 import codeFrame = require('babel-code-frame');
-import * as StackTraceParser from 'stacktrace-parser';
+import ErrorStackParser = require('error-stack-parser');
 import { Sandbox } from './sandbox';
 
 class ExceptionProvider {
     public static compilationException(error: Error, module: ITestModule, sandbox?: Sandbox): SyntaxError {
         const source = sandbox ? sandbox.getCompiledSource() : module.getSource();
-        const parsedStack = StackTraceParser.parse(error.stack).find((record) => !!record);
+        const parsedStack = ErrorStackParser.parse(error)[0];
         const errorMessage = ExceptionProvider.generateMessage(
             module.getResource(),
             codeFrame(
                 source,
                 parsedStack.lineNumber as number,
-                parsedStack.column as number
+                parsedStack.columnNumber as number
             ),
             error.message,
             error.stack as string

@@ -1,7 +1,7 @@
-import { TCompilerPlugin } from 'test-machine-core/src/interface';
+import { TCompilerPlugin, ICompilerSource } from 'test-machine-core/src/interface';
 import { compiler } from 'test-machine-plugins';
 
-const defaultCompiler = ({ source }) => ({ source });
+const defaultCompiler = ({ source }: ICompilerSource): ICompilerSource => ({ source });
 
 export const definePluginCompilerFactory = (plugin: any): TCompilerPlugin => {
     if (!plugin) {

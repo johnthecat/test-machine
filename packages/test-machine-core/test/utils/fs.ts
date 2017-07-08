@@ -1,13 +1,13 @@
-import * as fs from 'fs';
-import * as path from 'path';
+import {readFile as fsRead} from 'fs';
+import {resolve} from 'path';
 
-const ROOT = path.resolve(__dirname, '../');
+const ROOT = resolve(__dirname, '../');
 
 export const readFile = (source: string): Promise<string> => {
-    const normalizedPath = path.resolve(ROOT, source);
+    const normalizedPath = resolve(ROOT, source);
 
     return new Promise((resolve, reject) => {
-        fs.readFile(normalizedPath, 'utf8', (err, file) => {
+        fsRead(normalizedPath, 'utf8', (err: Error, file: string) => {
             if (err) {
                 reject(err);
             } else {

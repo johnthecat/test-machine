@@ -6,7 +6,6 @@ import * as webpack from 'webpack';
 import { TestMachine } from 'test-machine-core';
 import { webpackModuleFactory } from './lib/test-module-factory';
 import { WebpackModulesPreprocessor } from './lib/webpack-modules-preprocessor';
-import { TestWatcher } from './lib/test-watcher';
 import { definePluginCompilerFactory } from './lib/define-plugin-compiler';
 
 const defaultUserConfig: IWebpackConfig = {
@@ -25,7 +24,7 @@ const defaultUserConfig: IWebpackConfig = {
     failOnError: true
 };
 
-const select = (...args) => {
+const select = (...args: Array<any>): any => {
     for (let index = 0; index < args.length; index++) {
         if (args[index] !== void 0 && args[index] !== null) {
             return args[index];
@@ -41,17 +40,11 @@ class TestMachineWebpack implements Plugin {
 
     private modulesPreprocessor: WebpackModulesPreprocessor;
 
-    private testWatcher: TestWatcher;
-
     private inProgress = false;
 
     private isWatching = false;
 
-    private isFirstRun = true;
-
     private failOnError: boolean;
-
-    private isUserWantToWatch: boolean;
 
     constructor(userConfig: IWebpackConfig) {
         if (typeof userConfig.engine !== 'function') {
@@ -64,15 +57,11 @@ class TestMachineWebpack implements Plugin {
 
         this.modulesPreprocessor = new WebpackModulesPreprocessor(this.config as IConfig);
 
-        this.testWatcher = new TestWatcher(this.config.testRoots);
-
-        this.isUserWantToWatch = select(userConfig.watch, false);
-
         this.failOnError = select(userConfig.failOnError, defaultUserConfig.failOnError);
     }
 
     public apply(compiler: ICompiler): void {
-        this.isWatching = !!(compiler.options.watch && this.isUserWantToWatch);
+        this.isWatching = !!compiler.options.watch;
 
         const definePlugins = (compiler.options.plugins || []).filter((plugin) => plugin instanceof webpack.DefinePlugin);
 
@@ -109,36 +98,6 @@ class TestMachineWebpack implements Plugin {
                     this.failOnError,
                     callback
                 ))
-                .then(() => {
-                    this.inProgress = false;
-                });
-
-            if (this.isFirstRun) {
-                this.isFirstRun = false;
-
-                if (compiler.options.watch) {
-                    this._setupFSWatch();
-                }
-            }
-        });
-    }
-
-    private _setupFSWatch(): void {
-        this.testWatcher.setup(() => {
-            if (this.inProgress) {
-                return;
-            }
-
-            this.inProgress = true;
-            this.runner.clearTestsFSCache();
-            this.runner.runTests(
-                this.modulesPreprocessor.getLastCompilationResult(),
-                this.modulesPreprocessor.getLastChangedResult()
-            )
-                .catch((error) => {
-                    this.inProgress = false;
-                    console.error(error);
-                })
                 .then(() => {
                     this.inProgress = false;
                 });
