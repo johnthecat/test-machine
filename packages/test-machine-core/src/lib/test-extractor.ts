@@ -31,7 +31,7 @@ class TestExtractor {
     }
 
     private getCacheKey(resource: string, root: string, pattern: string): string {
-        return resource + root + pattern;
+        return `${resource}_${root}_${pattern}`;
     }
 
     private getFromCache(resource: string, root: string, pattern: string): string | void {
@@ -47,11 +47,18 @@ class TestExtractor {
             return;
         }
 
-        let cache = this.getFromCache(resource, root, pattern);
+        const cache = this.getFromCache(resource, root, pattern);
 
-        if (cache === void 0) {
-            let globResult = glob.sync(pattern, TestExtractor.createGlobConfig(root));
-            let newCache = new Array(globResult.length);
+        if (cache !== void 0) {
+            for (let index = 0; index < cache.length; index++) {
+                if (tests.includes(cache[index]) === false) {
+                    tests.push(cache[index]);
+                }
+            }
+        } else {
+            const globResult = glob.sync(pattern, TestExtractor.createGlobConfig(root));
+            const newCache = new Array(globResult.length);
+
             let normalizedPath;
 
             for (let index = 0; index < globResult.length; index++) {
@@ -65,12 +72,6 @@ class TestExtractor {
             }
 
             this.pushToCache(resource, root, pattern, newCache);
-        } else {
-            for (let index = 0; index < cache.length; index++) {
-                if (tests.includes(cache[index]) === false) {
-                    tests.push(cache[index]);
-                }
-            }
         }
     }
 

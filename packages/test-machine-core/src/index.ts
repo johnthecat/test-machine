@@ -7,6 +7,8 @@ import { TestExtractor } from './lib/test-extractor';
 import { PluginController } from './lib/plugin-controller';
 import { SandboxController } from './lib/sandbox-controller';
 
+import { isNullOrUndefined } from './lib/utils';
+
 class TestMachine {
 
     private engine: TEngine;
@@ -53,7 +55,7 @@ class TestMachine {
     public runTests(modules: IModulesMap<any>, changedModules?: Array<string>): Promise<void> {
         const modulesMap = this.modulesGenerator.convertModules(modules);
 
-        if (!changedModules) {
+        if (isNullOrUndefined(changedModules)) {
             changedModules = Object.keys(modules);
         }
 

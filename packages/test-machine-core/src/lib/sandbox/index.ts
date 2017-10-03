@@ -2,6 +2,7 @@ import { IMocks, IModulesMap, TCompiler } from '../../interface';
 
 import * as vm from 'vm';
 import * as path from 'path';
+import { isNull } from '../utils';
 import { Collection } from '../collection';
 import { Script } from './script';
 
@@ -191,7 +192,7 @@ class Sandbox {
         let catchedError;
         let filename;
 
-        if (mocks !== null) {
+        if (!isNull(mocks)) {
             try {
                 filename = Module._resolveFilename(request, parent);
             } catch (error) {
@@ -219,7 +220,7 @@ class Sandbox {
             throw catchedError;
         }
 
-        if (mocks === null) {
+        if (isNull(mocks)) {
             try {
                 filename = Module._resolveFilename(request, parent);
             } catch (error) {
