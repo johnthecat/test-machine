@@ -1,6 +1,6 @@
 /// <reference types="mocha" />
 
-import { TRouter } from '../src/interface';
+import { Router } from '../src/interface';
 
 import * as chai from 'chai';
 import * as path from 'path';
@@ -120,7 +120,7 @@ describe('TestExtractor', () => {
     });
 
     it('should not fail, when incorrect data passed from router', () => {
-        const router: TRouter = (): any => ({ fail: true });
+        const router: Router = (): any => ({ fail: true });
 
         const testExtractor = new TestExtractor([ROOT1], router);
         const tests = testExtractor.extractTests(['module-1.js', 'module-2.js']);
@@ -129,7 +129,7 @@ describe('TestExtractor', () => {
     });
 
     it('should not fail, when incorrect data passed from router (as array)', () => {
-        const router: TRouter = (resource: path.ParsedPath): any => {
+        const router: Router = (resource: path.ParsedPath): any => {
             return [
                 `**/${resource.name}.js`,
                 '',

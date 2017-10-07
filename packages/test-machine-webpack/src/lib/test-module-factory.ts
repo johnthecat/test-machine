@@ -1,4 +1,4 @@
-import { TModulesFactory, ITestModule, ITestDependency } from 'test-machine-core/src/interface';
+import { ModulesFactory, ITestModule, ITestDependency } from 'test-machine-core/src/interface';
 import { IWebpackModule, IWebpackDependency } from '../interface';
 
 // for cases, when dependency hasn't typical interface to extract it's own module
@@ -57,6 +57,6 @@ class WebpackModule implements ITestModule {
     }
 }
 
-export const webpackModuleFactory: TModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
+export const webpackModuleFactory: ModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
     return new WebpackModule(module, resolver);
 };

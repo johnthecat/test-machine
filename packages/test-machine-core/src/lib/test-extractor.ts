@@ -1,13 +1,15 @@
-import { TRouter } from '../interface';
+import { Router } from '../interface';
 import * as path from 'path';
 import * as glob from 'glob';
 import { Collection } from './collection';
 
+type GlobCalculationResult = Array<string>;
+
 class TestExtractor {
 
-    private globCache = new Collection<string>();
+    private globCache = new Collection<GlobCalculationResult>();
 
-    constructor(private roots: Array<string>, private router: TRouter) {
+    constructor(private roots: Array<string>, private router: Router) {
     }
 
     public extractTests(changedModules: Array<string>): Array<string> {
@@ -34,11 +36,11 @@ class TestExtractor {
         return `${resource}_${root}_${pattern}`;
     }
 
-    private getFromCache(resource: string, root: string, pattern: string): string | void {
+    private getFromCache(resource: string, root: string, pattern: string): GlobCalculationResult | void {
         return this.globCache.get(this.getCacheKey(resource, root, pattern));
     }
 
-    private pushToCache(resource: string, root: string, pattern: string, value: any): void {
+    private pushToCache(resource: string, root: string, pattern: string, value: GlobCalculationResult): void {
         return this.globCache.set(this.getCacheKey(resource, root, pattern), value);
     }
 
@@ -49,7 +51,7 @@ class TestExtractor {
 
         const cache = this.getFromCache(resource, root, pattern);
 
-        if (cache !== void 0) {
+        if (Array.isArray(cache)) {
             for (let index = 0; index < cache.length; index++) {
                 if (tests.includes(cache[index]) === false) {
                     tests.push(cache[index]);
@@ -80,7 +82,8 @@ class TestExtractor {
             return;
         }
 
-        const rootsCount = this.roots.length;
+        const roots = this.roots;
+        const rootsCount = roots.length;
 
         if (rootsCount === 0) {
             return;
@@ -90,9 +93,10 @@ class TestExtractor {
         const userGlob = this.router(source);
 
         let patternIndex;
+        let root;
 
         for (let rootIndex = 0; rootIndex < rootsCount; rootIndex++) {
-            let root = this.roots[rootIndex];
+            root = roots[rootIndex];
 
             if (Array.isArray(userGlob)) {
                 for (patternIndex = 0; patternIndex < userGlob.length; patternIndex++) {

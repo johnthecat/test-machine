@@ -1,7 +1,7 @@
 import {
-    TPathResolver,
-    TModuleResolver,
-    TModulesFactory,
+    PathResolver,
+    ModuleResolver,
+    ModulesFactory,
     ITestModule,
     ITestModulesMap,
     IModulesMap
@@ -9,10 +9,9 @@ import {
 
 class ModulesGenerator {
 
-    private currentProcessor: TModuleResolver | null;
+    private currentProcessor: ModuleResolver | null;
 
-    constructor(private modulesFactory: TModulesFactory<any>, private resolver: TPathResolver) {
-    }
+    constructor(private modulesFactory: ModulesFactory<any>, private resolver: PathResolver) {}
 
     public convertModules(modulesMap: IModulesMap<any>): ITestModulesMap {
         const testModulesMap: ITestModulesMap = Object.create(null);
@@ -21,7 +20,7 @@ class ModulesGenerator {
 
         for (let moduleID in modulesMap) {
             if (modulesMap.hasOwnProperty(moduleID)) {
-                (this.currentProcessor as TModuleResolver)(this.resolver(modulesMap[moduleID]));
+                (this.currentProcessor as ModuleResolver)(this.resolver(modulesMap[moduleID]));
             }
         }
 
@@ -41,7 +40,7 @@ class ModulesGenerator {
             return null;
         }
 
-        const testModule = this.modulesFactory(module, this.currentProcessor as TModuleResolver);
+        const testModule = this.modulesFactory(module, this.currentProcessor as ModuleResolver);
 
         converted[resource] = testModule;
 

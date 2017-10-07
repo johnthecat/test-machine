@@ -1,4 +1,4 @@
-import { IConfig, IModulesMap, TEngine, TCompilerPlugin, TPathResolver, TModulesFactory } from './interface';
+import { IConfig, IModulesMap, Engine, CompilerPlugin, PathResolver, ModulesFactory } from './interface';
 
 import { Compiler } from './lib/compiler';
 import { EnvironmentPatch } from './lib/environment-patch';
@@ -11,7 +11,7 @@ import { isNullOrUndefined } from './lib/utils';
 
 class TestMachine {
 
-    private engine: TEngine;
+    private engine: Engine;
 
     private compiler: Compiler;
 
@@ -25,7 +25,7 @@ class TestMachine {
 
     private modulesGenerator: ModulesGenerator;
 
-    constructor(private config: IConfig, modulesFactory: TModulesFactory<any>, resolver: TPathResolver) {
+    constructor(private config: IConfig, modulesFactory: ModulesFactory<any>, resolver: PathResolver) {
 
         this.engine = config.engine;
 
@@ -48,7 +48,7 @@ class TestMachine {
         this.testExtractor.clearCache();
     }
 
-    public pushCompiler(compiler: TCompilerPlugin): void {
+    public pushCompiler(compiler: CompilerPlugin): void {
         this.compiler.push(compiler);
     }
 

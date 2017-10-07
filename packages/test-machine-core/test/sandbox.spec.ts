@@ -58,7 +58,7 @@ describe('Sandbox', () => {
             });
 
             const sandbox = new Sandbox(source, 'es6-export.js', {
-                compiler: (code) => compiler({ source: code }, '').source,
+                compiler: (code) => compiler({ source: code }, ''),
                 dependencies: {}
             });
 
@@ -82,7 +82,9 @@ describe('Sandbox', () => {
 
             const sandbox = new Sandbox(source, 'simple-module.js', {
                 compiler: (source) => {
-                    return source + compilerPostfix;
+                    return {
+                        source: source + compilerPostfix
+                    };
                 }
             });
 

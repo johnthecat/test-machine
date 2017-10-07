@@ -1,7 +1,7 @@
-import { TEngine } from 'test-machine-core/src/interface';
+import { Engine } from 'test-machine-core/src/interface';
 import { noModuleException } from '../utils';
 
-export function mochaEngine(config?: any): TEngine {
+export function mochaEngine(config?: any): Engine {
     let Mocha: any;
 
     try {

@@ -1,4 +1,4 @@
-import { IModulesMap, ITestModule, IMocks, ITestDependency, TCompiler } from '../interface';
+import { IModulesMap, ITestModule, IMocks, ITestDependency, CompilerFunction } from '../interface';
 
 import { Collection } from './collection';
 import { Sandbox } from './sandbox';
@@ -9,9 +9,9 @@ interface ITestDependencies extends IModulesMap<ITestDependency> {}
 
 class SandboxController {
 
-    private compiler: TCompiler;
-
     private resolvedModules: Collection<Sandbox> = new Collection();
+
+    private compiler: CompilerFunction;
 
     constructor(compiler: Compiler) {
         this.compiler = (source, filename) => compiler.compile(source, filename);

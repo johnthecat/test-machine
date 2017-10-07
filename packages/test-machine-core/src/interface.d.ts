@@ -1,23 +1,23 @@
 import * as path from 'path';
 
-export interface ICompilerSource {
+export type CompilerSource = {
     source: string,
     sourcemap?: string | null
-}
+};
 
-export type TRouter = (resource: path.ParsedPath) => string | Array<string>;
+export type Router = (resource: path.ParsedPath) => string | Array<string>;
 
-export type TCompiler = (source: string, filename: string) => string;
+export type CompilerFunction = (source: string, filename: string) => CompilerSource;
 
-export type TCompilerPlugin = (source: ICompilerSource, filename: string) => ICompilerSource;
+export type CompilerPlugin = (source: CompilerSource, filename: string) => CompilerSource;
 
-export type TEngine = (tests: Array<string>) => Promise<any>;
+export type Engine = (tests: Array<string>) => Promise<any>;
 
-export type TPathResolver = (module: any) => string;
+export type PathResolver = (module: any) => string;
 
-export type TModuleResolver = (...args: Array<any>) => ITestModule;
+export type ModuleResolver = (...args: Array<any>) => ITestModule;
 
-export type TModulesFactory<T> = (module: T, resolver: TModuleResolver) => ITestModule;
+export type ModulesFactory<T> = (module: T, resolver: ModuleResolver) => ITestModule;
 
 export interface IPlugin {
     compilerPipeline: (compiler: any) => void,
@@ -34,9 +34,9 @@ export interface IConfig {
     exclude: Array<RegExp>,
     include: Array<RegExp>,
     plugins: Array<IPlugin>,
-    router: TRouter,
-    compilers: Array<TCompilerPlugin>,
-    engine: TEngine,
+    router: Router,
+    compilers: Array<CompilerPlugin>,
+    engine: Engine,
     dependencies: Array<string>,
     mocks: IMocks
 }
@@ -46,9 +46,9 @@ export interface IUserConfig {
     exclude?: Array<RegExp>,
     include?: Array<RegExp>,
     plugins?: Array<IPlugin>,
-    router?: TRouter,
-    compilers?: Array<TCompilerPlugin>,
-    engine?: TEngine,
+    router?: Router,
+    compilers?: Array<CompilerPlugin>,
+    engine?: Engine,
     dependencies?: Array<string>,
     mocks?: IMocks
 }

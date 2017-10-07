@@ -1,4 +1,4 @@
-import { IMocks, IModulesMap, TCompiler } from '../../interface';
+import { IMocks, IModulesMap, CompilerFunction, CompilerSource } from '../../interface';
 
 import * as vm from 'vm';
 import * as path from 'path';
@@ -6,7 +6,7 @@ import { isNull } from '../utils';
 import { Collection } from '../collection';
 import { Script } from './script';
 
-const DEFAULT_COMPILER = (source: string): string => source;
+const DEFAULT_COMPILER = (source: string): CompilerSource => ({source, sourcemap: null});
 const DEFAULT_DEPENDENCIES = {};
 const DEFAULT_MOCKS = null;
 
@@ -21,7 +21,7 @@ interface IModuleParent {
 export type TSandboxDependencies = IModulesMap<any>;
 
 export interface ISandboxConfig {
-    compiler?: TCompiler,
+    compiler?: CompilerFunction,
     dependencies?: TSandboxDependencies,
     mocks?: IMocks
 }
@@ -65,7 +65,7 @@ class Sandbox {
         if (Sandbox.scriptCache.has(this.source)) {
             script = Sandbox.scriptCache.get(this.source);
         } else {
-            this.compiledSource = compiler(this.source, this.context.module.filename);
+            this.compiledSource = compiler(this.source, this.context.module.filename).source;
 
             script = new Script(this.compiledSource, this.filename);
 
@@ -174,7 +174,7 @@ class Sandbox {
                 }
             },
 
-            has(target: any, key: string): boolean {
+            has: (target: any, key: string): boolean => {
                 return (key in target) || (key in global);
             }
         });

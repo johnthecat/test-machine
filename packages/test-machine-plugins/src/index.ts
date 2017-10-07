@@ -1,4 +1,4 @@
-import { ICompilerSource } from 'test-machine-core/src/interface';
+import { CompilerSource } from 'test-machine-core/src/interface';
 import { jasmineEngine } from './engines/jasmine';
 import { mochaEngine } from './engines/mocha';
 
@@ -13,4 +13,4 @@ export const compiler = {
     babel: babelCompiler
 };
 
-export { ICompilerSource };
+export { CompilerSource };
