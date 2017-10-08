@@ -1,6 +1,6 @@
 import { Plugin } from 'webpack';
 import { IConfig } from 'test-machine-core/src/interface';
-import { IWebpackConfig, ICompiler, ICompilation, IDefinePlugin, TNodeCallback } from './interface';
+import { IWebpackConfig, ICompiler, ICompilation, IDefinePlugin, NodeCallback, OptionalParameters } from './interface';
 
 import * as webpack from 'webpack';
 import { TestMachine } from 'test-machine-core';
@@ -21,7 +21,7 @@ const defaultUserConfig: IWebpackConfig = {
     plugins: [],
     mocks: {},
     watch: false,
-    failOnError: true
+    failOnError: false
 };
 
 const select = (...args: Array<any>): any => {
@@ -46,7 +46,7 @@ class TestMachineWebpack implements Plugin {
 
     private failOnError: boolean;
 
-    constructor(userConfig: IWebpackConfig) {
+    constructor(userConfig: OptionalParameters<IWebpackConfig>) {
         if (typeof userConfig.engine !== 'function') {
             throw new Error('Test engine is not specified! You can install test-machine-plugins to get test engine you want.');
         }
@@ -71,7 +71,7 @@ class TestMachineWebpack implements Plugin {
             });
         }
 
-        compiler.plugin('emit', (compilation: ICompilation, callback: TNodeCallback) => {
+        compiler.plugin('emit', (compilation: ICompilation, callback: NodeCallback) => {
             if (this.inProgress) {
                 return callback();
             }
@@ -104,7 +104,7 @@ class TestMachineWebpack implements Plugin {
         });
     }
 
-    private static _generateInternalError(error: Error | void, compilation: any, isWatching: boolean, failOnError: boolean, callback: TNodeCallback): void {
+    private static _generateInternalError(error: Error | void, compilation: any, isWatching: boolean, failOnError: boolean, callback: NodeCallback): void {
         if (!error) {
             error = new Error('Test running failed');
         }

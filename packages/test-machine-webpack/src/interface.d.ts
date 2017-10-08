@@ -1,7 +1,11 @@
 import * as webpack from 'webpack';
 import { IUserConfig } from 'test-machine-core/src/interface';
 
-export type TNodeCallback = (error?: string | Error | null, result?: any) => void;
+export type OptionalParameters<T> = {
+    [P in keyof T]?: T[P];
+};
+
+export type NodeCallback = (error?: string | Error | null, result?: any) => void;
 
 interface IWebpackDependency {
     module: IWebpackModule
