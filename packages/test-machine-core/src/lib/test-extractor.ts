@@ -102,11 +102,9 @@ class TestExtractor {
                 for (patternIndex = 0; patternIndex < userGlob.length; patternIndex++) {
                     this.processPattern(resource, root, userGlob[patternIndex], tests);
                 }
-
-                continue;
+            } else {
+                this.processPattern(resource, root, userGlob, tests);
             }
-
-            this.processPattern(resource, root, userGlob, tests);
         }
     }
 

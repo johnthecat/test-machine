@@ -21,7 +21,7 @@ class WebpackModulesPreprocessor {
     }
 
     public filterModules(modules: Array<IWebpackModule>): Array<IWebpackModule> {
-        let flatModules: Array<IWebpackModule>;
+        let normalizedModules: IWebpackModule | Array<IWebpackModule>;
         let module: IWebpackModule;
 
         const testResource = (regExp: RegExp) => regExp.test(module.resource);
@@ -31,16 +31,20 @@ class WebpackModulesPreprocessor {
         let moduleIndex: number;
 
         for (index = 0; index < modules.length; index++) {
-            flatModules = WebpackModulesPreprocessor.normalizeModules(modules[index]);
+            normalizedModules = WebpackModulesPreprocessor.normalizeModules(modules[index]);
 
-            for (moduleIndex = 0; moduleIndex < flatModules.length; moduleIndex++) {
-                module = flatModules[moduleIndex];
+            if (Array.isArray(normalizedModules)) {
+                for (moduleIndex = 0; moduleIndex < normalizedModules.length; moduleIndex++) {
+                    module = normalizedModules[moduleIndex];
 
-                if (
-                    module.resource &&
-                    !this.config.exclude.some(testResource) &&
-                    this.config.include.some(testResource)
-                ) {
+                    if (this.checkModule(module, testResource)) {
+                        filteredModules.push(module);
+                    }
+                }
+            } else {
+                module = normalizedModules;
+
+                if (this.checkModule(module, testResource)) {
                     filteredModules.push(module);
                 }
             }
@@ -79,7 +83,19 @@ class WebpackModulesPreprocessor {
         return modules.reduce(WebpackModulesPreprocessor.pushModuleToMap, {});
     }
 
-    private static normalizeModules(module: any): Array<IWebpackModule> {
+    private checkModule(module: IWebpackModule, testFunc): boolean {
+        if (!module) {
+            return false;
+        }
+
+        return !!(
+            module.resource &&
+           !this.config.exclude.some(testFunc) &&
+            this.config.include.some(testFunc)
+        );
+    }
+
+    private static normalizeModules(module: any): IWebpackModule | Array<IWebpackModule> {
         switch (module.constructor.name) {
             // webpack.optimize.ModuleConcatenationPlugin
             // https://github.com/webpack/webpack/blob/master/lib/optimize/ConcatenatedModule.js
@@ -89,10 +105,10 @@ class WebpackModulesPreprocessor {
             // extract-text-webpack-plugin
             // https://github.com/webpack-contrib/extract-text-webpack-plugin/blob/master/ExtractedModule.js
             case 'ExtractedModule':
-                return [module.getOriginalModule()];
+                return module.getOriginalModule();
 
             default:
-                return [module];
+                return module;
         }
     }
 
