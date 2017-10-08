@@ -1,14 +1,14 @@
 {
   "name": "test-machine-core",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "src/index.ts",
   "dependencies": {
     "babel-code-frame": "^6.26.0",
-    "glob": "^7.1.2",
-    "error-stack-parser": "^2.0.1"
+    "error-stack-parser": "^2.0.1",
+    "glob": "^7.1.2"
   },
   "engineStrict": true,
   "engines": {
