@@ -1,4 +1,4 @@
-import { ModulesFactory, ITestModule, ITestDependency } from 'test-machine-core/src/interface';
+import { ModulesFactory, ITestModule, ITestDependency, ModuleResolver } from 'test-machine-core/src/interface';
 import { IWebpackModule, IWebpackDependency } from '../interface';
 
 // for cases, when dependency hasn't typical interface to extract it's own module
@@ -9,11 +9,11 @@ const normalizeDependency = (dependency: any): IWebpackModule => {
     }
 };
 
-class WebpackModule implements ITestModule {
+export class WebpackModule implements ITestModule {
 
     private dependencyCache: Array<ITestDependency> | null = null;
 
-    constructor(private module: IWebpackModule, private resolver: Function) {}
+    constructor(private module: IWebpackModule, private resolver: ModuleResolver) {}
 
     getResource(): string {
         return this.module.resource;
@@ -57,6 +57,6 @@ class WebpackModule implements ITestModule {
     }
 }
 
-export const webpackModuleFactory: ModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver) => {
+export const webpackModuleFactory: ModulesFactory<IWebpackModule> = (module: IWebpackModule, resolver: ModuleResolver) => {
     return new WebpackModule(module, resolver);
 };

@@ -26,11 +26,11 @@ export interface IWebpackConfig extends IUserConfig {
     failOnError?: boolean
 }
 
-export interface ICompiler extends webpack.Compiler {
+export interface IWebpackCompiler extends webpack.Compiler {
     options: webpack.Configuration
 }
 
-export interface ICompilation {
+export interface IWebpackCompilation {
     modules: Array<IWebpackModule>
     warnings: Array<Error>,
     errors: Array<Error>

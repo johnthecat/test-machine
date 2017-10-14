@@ -1,6 +1,5 @@
-import { Plugin } from 'webpack';
 import { IConfig } from 'test-machine-core/src/interface';
-import { IWebpackConfig, ICompiler, ICompilation, IDefinePlugin, NodeCallback, OptionalParameters } from './interface';
+import { IWebpackConfig, IWebpackCompiler, IWebpackModule, IWebpackCompilation, IDefinePlugin, NodeCallback, OptionalParameters } from './interface';
 
 import * as webpack from 'webpack';
 import { TestMachine } from 'test-machine-core';
@@ -32,7 +31,7 @@ const select = (...args: Array<any>): any => {
     }
 };
 
-class TestMachineWebpack implements Plugin {
+class TestMachineWebpack implements webpack.Plugin {
 
     private config: IConfig;
 
@@ -53,14 +52,14 @@ class TestMachineWebpack implements Plugin {
 
         this.config = Object.assign({}, defaultUserConfig, userConfig) as IConfig;
 
-        this.runner = new TestMachine(this.config, webpackModuleFactory, (module) => module.resource);
+        this.runner = new TestMachine(this.config, webpackModuleFactory, (module: IWebpackModule) => module.resource);
 
         this.modulesPreprocessor = new WebpackModulesPreprocessor(this.config as IConfig);
 
         this.failOnError = select(userConfig.failOnError, defaultUserConfig.failOnError);
     }
 
-    public apply(compiler: ICompiler): void {
+    public apply(compiler: IWebpackCompiler): void {
         this.isWatching = !!compiler.options.watch;
 
         const definePlugins = (compiler.options.plugins || []).filter((plugin) => plugin instanceof webpack.DefinePlugin);
@@ -71,7 +70,7 @@ class TestMachineWebpack implements Plugin {
             });
         }
 
-        compiler.plugin('emit', (compilation: ICompilation, callback: NodeCallback) => {
+        compiler.plugin('emit', (compilation: IWebpackCompilation, callback: NodeCallback) => {
             if (this.inProgress) {
                 return callback();
             }

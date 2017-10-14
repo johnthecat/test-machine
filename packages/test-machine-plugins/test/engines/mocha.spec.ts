@@ -1,9 +1,11 @@
 /// <reference types="mocha" />
 
 import * as chai from 'chai';
-import { resolve } from '../utils/fs';
+import { fs } from 'test-machine-test-utils';
 import { excludeFromResolve } from '../utils/resolve';
 import { mochaEngine } from '../../src/engines/mocha';
+
+const fixtureResolver = fs.fileResolverFactory(__dirname, './fixtures');
 
 describe('Mocha engine', () => {
     it('should fail, if mocha isn\'t installed', () => {
@@ -21,15 +23,13 @@ describe('Mocha engine', () => {
     it('should pass without tests', (done) => {
         const runner = mochaEngine();
 
-        runner([])
-            .then(() => done());
+        runner([]).then(() => done());
     });
 
     it('should reject, when mocha can\'t run tests', (done) => {
         const runner = mochaEngine();
 
-        runner(['fake-test.js'])
-            .catch((e) => done());
+        runner(['fake-test.js']).catch((e) => done());
     });
 
     it('should complete, when mocha test passed', (done) => {
@@ -40,7 +40,7 @@ describe('Mocha engine', () => {
         });
 
         runner([
-            resolve('./engines/fixtures/correct-test-set.js')
+            fixtureResolver('./correct-test-set.js')
         ])
             .then(() => done());
     });
@@ -53,7 +53,7 @@ describe('Mocha engine', () => {
         });
 
         runner([
-            resolve('./engines/fixtures/incorrect-test-set.js')
+            fixtureResolver('./incorrect-test-set.js')
         ])
             .catch(() => done());
     });

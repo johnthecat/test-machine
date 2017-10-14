@@ -3,7 +3,7 @@
 import * as path from 'path';
 import * as chai from 'chai';
 import * as webpack from 'webpack';
-import { configFactory, getTestRoots } from './utils/webpack.config';
+import { configFactory, getRoot, getTestRoots } from './utils/webpack.config';
 import { mochaEngine } from '../../test-machine-plugins/src/engines/mocha';
 import { babelCompiler } from '../../test-machine-plugins/src/compilers/babel';
 import { TestMachineWebpack } from '../src';
@@ -189,7 +189,7 @@ describe('Webpack plugin', () => {
         });
     });
 
-    it('should handle other non-typical extensions', (done) => {
+    it('should handle css with ExtractTextPlugin', (done) => {
         const extractCSS = new ExtractTextPlugin('stylesheets/css-modules.css');
         const config = configFactory('css-modules', new TestMachineWebpack({
             failOnError: true,
@@ -222,5 +222,47 @@ describe('Webpack plugin', () => {
         });
     });
 
-    // TODO add tests for custom loaders resolve
+    it('should handle typescript with ts-loader', (done) => {
+        const config = configFactory('typescript-module', new TestMachineWebpack({
+            failOnError: true,
+            testRoots: getTestRoots('typescript-module'),
+            router: (resource) => {
+                return `${resource.name}.spec.js`;
+            },
+            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+        }), {
+
+            resolve: {
+                alias: {
+                    src: getRoot('typescript-module', 'src')
+                }
+            },
+
+            module: {
+                rules: [
+                    {
+                        test: /\.ts/,
+                        use: [
+                            {
+                                loader: 'babel-loader',
+                                options: {
+                                    presets: ['es2015']
+                                }
+                            },
+                            {
+                                loader: 'ts-loader',
+                                options: {
+                                    configFile: getRoot('typescript-module', 'tsconfig.json')
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        });
+
+        webpack(config, (error) => {
+            done(error);
+        });
+    });
 });

@@ -9,8 +9,7 @@ class TestExtractor {
 
     private globCache = new Collection<GlobCalculationResult>();
 
-    constructor(private roots: Array<string>, private router: Router) {
-    }
+    constructor(private roots: Array<string>, private router: Router) {}
 
     public extractTests(changedModules: Array<string>): Array<string> {
         const tests: Array<string> = [];
@@ -52,7 +51,7 @@ class TestExtractor {
         const cache = this.getFromCache(resource, root, pattern);
 
         if (Array.isArray(cache)) {
-            for (let index = 0; index < cache.length; index++) {
+            for (let index = 0, count = cache.length; index < count; index++) {
                 if (tests.includes(cache[index]) === false) {
                     tests.push(cache[index]);
                 }
@@ -63,9 +62,8 @@ class TestExtractor {
 
             let normalizedPath;
 
-            for (let index = 0; index < globResult.length; index++) {
+            for (let index = 0, count = globResult.length; index < count; index++) {
                 normalizedPath = path.resolve(root, globResult[index]);
-
                 newCache[index] = normalizedPath;
 
                 if (tests.includes(normalizedPath) === false) {
@@ -92,6 +90,11 @@ class TestExtractor {
         const source = path.parse(resource);
         const userGlob = this.router(source);
 
+        // fast path: if glob is undefined or empty string - exit from function
+        if (!userGlob) {
+            return;
+        }
+
         let patternIndex;
         let root;
 
@@ -102,7 +105,7 @@ class TestExtractor {
                 for (patternIndex = 0; patternIndex < userGlob.length; patternIndex++) {
                     this.processPattern(resource, root, userGlob[patternIndex], tests);
                 }
-            } else {
+            } else if (typeof userGlob === 'string') {
                 this.processPattern(resource, root, userGlob, tests);
             }
         }

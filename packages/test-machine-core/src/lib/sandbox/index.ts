@@ -6,7 +6,7 @@ import { isNull } from '../utils';
 import { Collection } from '../collection';
 import { Script } from './script';
 
-const DEFAULT_COMPILER = (source: string): CompilerSource => ({source, sourcemap: null});
+const DEFAULT_COMPILER = (source: string): CompilerSource => ({ source });
 const DEFAULT_DEPENDENCIES = {};
 const DEFAULT_MOCKS = null;
 
@@ -231,7 +231,7 @@ class Sandbox {
         return require(filename);
     }
 
-    private static getResolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent: IModuleParent): void {
+    private static getResolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent: IModuleParent): Function {
         return Sandbox.resolver.bind(null, dependencies, mocks, parent);
     }
 }

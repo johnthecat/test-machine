@@ -27,7 +27,6 @@ class SandboxController {
 
     public getModule(module: ITestModule, mocks: IMocks): any {
         const resource = module.getResource();
-
         const cachedModule = this.resolvedModules.get(resource);
 
         if (cachedModule) {

@@ -9,8 +9,11 @@
     "test-machine-core": "^0.3.4",
     "test-machine-plugins": "^0.3.4"
   },
+  "devDependencies": {
+    "test-machine-test-utils": "^0.3.4"
+  },
   "peerDependencies": {
-    "webpack": "2 | 3"
+    "webpack": "2 || 3"
   },
   "engineStrict": true,
   "engines": {

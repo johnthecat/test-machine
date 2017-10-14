@@ -2,4 +2,6 @@
 .DS_Store
 test
 
+package-lock.json
+
 node_modules

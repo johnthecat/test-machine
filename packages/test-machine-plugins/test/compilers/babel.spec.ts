@@ -1,9 +1,11 @@
 /// <reference types="mocha" />
 
 import * as chai from 'chai';
-import { readFile } from '../utils/fs';
+import { fs } from 'test-machine-test-utils';
 import { excludeFromResolve } from '../utils/resolve';
 import { babelCompiler } from '../../src/compilers/babel';
+
+const readFile = fs.fileReaderFactory('./test');
 
 describe('Babel compiler', () => {
     it('should fail, if babel-core isn\'t installed', () => {

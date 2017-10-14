@@ -4,18 +4,21 @@ import { Router } from '../src/interface';
 
 import * as chai from 'chai';
 import * as path from 'path';
+import { fs } from 'test-machine-test-utils';
 import { TestExtractor } from '../src/lib/test-extractor';
 
-const ROOT = path.join(__dirname, 'fixtures', 'test-extractor');
-const ROOT1 = path.join(ROOT, 'root1');
-const ROOT2 = path.join(ROOT, 'root2');
+const root1FileResolver = fs.fileResolverFactory(__dirname, 'fixtures', 'test-extractor', 'root1');
+const root2FileResolver = fs.fileResolverFactory(__dirname, 'fixtures', 'test-extractor', 'root2');
+
+const ROOT1 = root1FileResolver('');
+const ROOT2 = root2FileResolver('');
 
 const TESTS = {
-    'module-1': path.join(ROOT1, 'module-1.js'),
-    'module-2': path.join(ROOT1, 'module-2.js'),
-    'module-3': path.join(ROOT1, 'module-3.js'),
-    'module-3.more': path.join(ROOT1, 'module-3.more.js'),
-    'module-4': path.join(ROOT2, 'module-4.js')
+    'module-1': root1FileResolver('module-1.js'),
+    'module-2': root1FileResolver('module-2.js'),
+    'module-3': root1FileResolver('module-3.js'),
+    'module-3.more': root1FileResolver('module-3.more.js'),
+    'module-4': root2FileResolver('module-4.js')
 };
 
 // TODO add contexts
@@ -167,7 +170,7 @@ describe('TestExtractor', () => {
         const router = () => '';
 
         const testExtractor = new TestExtractor([ROOT1], router);
-        const tests = testExtractor.extractTests([ ({} as string)  ]);
+        const tests = testExtractor.extractTests([({} as string)]);
 
         chai.expect(tests.length).to.be.equal(0);
     });

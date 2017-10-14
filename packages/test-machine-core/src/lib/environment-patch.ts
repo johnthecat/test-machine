@@ -2,15 +2,15 @@ import { IMocks, IModulesMap, ITestModule } from '../interface';
 import { Collection } from './collection';
 import { SandboxController } from './sandbox-controller';
 
-type TLoadFunction = (request: string, parent: NodeModule, isMain: boolean) => any;
+type LoadFunction = (request: string, parent: NodeModule, isMain: boolean) => any;
 
 const Module: any = module.constructor;
 
 class EnvironmentPatch {
 
-    private originLoad: TLoadFunction;
+    private originLoad: LoadFunction;
 
-    private fakeLoad: TLoadFunction;
+    private fakeLoad: LoadFunction;
 
     private modulesDefinition: Collection<ITestModule> = new Collection();
 

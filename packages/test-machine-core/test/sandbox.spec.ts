@@ -2,9 +2,12 @@
 
 import * as path from 'path';
 import * as chai from 'chai';
-import { readFile } from './utils/fs';
+import { fs } from 'test-machine-test-utils';
 import { babelCompiler } from '../../test-machine-plugins/src/compilers/babel';
 import { Sandbox } from '../src/lib/sandbox';
+
+const fixturesFileResolver = fs.fileResolverFactory(__dirname, 'fixtures', 'sandbox');
+const fixturesFileReader = fs.fileReaderFactory(__dirname, 'fixtures', 'sandbox');
 
 const createExport = (data) => {
     return `module.exports = ${JSON.stringify(data)}`;
@@ -19,7 +22,7 @@ describe('Sandbox', () => {
 
     context('Compilation', () => {
         it('should compile module', async () => {
-            const source = await readFile('./fixtures/sandbox/simple-module.js');
+            const source = await fixturesFileReader('simple-module.js');
 
             const sandbox = new Sandbox(source, 'simple-module.js');
             const module = sandbox.getExports();
@@ -28,7 +31,7 @@ describe('Sandbox', () => {
         });
 
         it('should throw exception, if code have some inner exceptions', async () => {
-            const source = await readFile('./fixtures/sandbox/eval-error.js');
+            const source = await fixturesFileReader('eval-error.js');
 
             const sandbox = new Sandbox(source, 'eval-error.js');
 
@@ -42,7 +45,7 @@ describe('Sandbox', () => {
 
         it('should give correct filename', async () => {
             const filename = 'root/test-file.js';
-            const source = await readFile('./fixtures/sandbox/simple-module.js');
+            const source = await fixturesFileReader('simple-module.js');
 
             const sandbox = new Sandbox(source, filename);
 
@@ -51,7 +54,7 @@ describe('Sandbox', () => {
         });
 
         it('should apply compiler to source', async () => {
-            const source = await readFile('./fixtures/sandbox/es6-export.js');
+            const source = await fixturesFileReader('es6-export.js');
 
             const compiler = babelCompiler({
                 plugins: ['transform-es2015-modules-commonjs']
@@ -66,7 +69,7 @@ describe('Sandbox', () => {
         });
 
         it('should give correct compiled source', async () => {
-            const source = await readFile('./fixtures/sandbox/simple-module.js');
+            const source = await fixturesFileReader('simple-module.js');
 
             const sandbox = new Sandbox(source, 'simple-module.js');
 
@@ -78,7 +81,7 @@ describe('Sandbox', () => {
         it('should give correct compiled source after applying compilation pipeline', async () => {
             const compilerPostfix = '\n const value = 1';
 
-            const source = await readFile('./fixtures/sandbox/simple-module.js');
+            const source = await fixturesFileReader('simple-module.js');
 
             const sandbox = new Sandbox(source, 'simple-module.js', {
                 compiler: (source) => {
@@ -94,7 +97,7 @@ describe('Sandbox', () => {
         });
 
         it('should throw SyntaxError, when can\'t compile code', async () => {
-            const source = await readFile('./fixtures/sandbox/es6-export.js');
+            const source = await fixturesFileReader('es6-export.js');
 
             const sandbox = new Sandbox(source, 'es6-export.js');
 
@@ -111,7 +114,7 @@ describe('Sandbox', () => {
             const firstDep = 'test-1';
             const secondDep = 'test-2';
 
-            const source = await readFile('./fixtures/sandbox/pass-dependency.js');
+            const source = await fixturesFileReader('pass-dependency.js');
 
             const firstSandbox = new Sandbox(source, 'pass-dependency.js', {
                 dependencies: {
@@ -130,7 +133,7 @@ describe('Sandbox', () => {
         });
 
         it('should wrap string exception into EvalError', async () => {
-            const source = await readFile('./fixtures/sandbox/string-exception.js');
+            const source = await fixturesFileReader('string-exception.js');
             const sandbox = new Sandbox(source, 'string-exception.js');
 
             try {
@@ -145,7 +148,7 @@ describe('Sandbox', () => {
 
     context('Environment', () => {
         it('should have all primitives provided', async () => {
-            const source = await readFile('./fixtures/sandbox/primitives.js');
+            const source = await fixturesFileReader('primitives.js');
 
             const sandbox = new Sandbox(source, 'primitives.js');
 
@@ -153,7 +156,7 @@ describe('Sandbox', () => {
         });
 
         it('should correctly pass "instanceof" check for all primitives', async () => {
-            const source = await readFile('./fixtures/sandbox/primitives.js');
+            const source = await fixturesFileReader('primitives.js');
             const sandbox = new Sandbox(source, 'primitives.js');
             const {
                 array,
@@ -175,7 +178,7 @@ describe('Sandbox', () => {
         });
 
         it('should set global variables into own context', async () => {
-            const source = await readFile('./fixtures/sandbox/global-variable.js');
+            const source = await fixturesFileReader('global-variable.js');
             const sandbox = new Sandbox(source, 'global-variable.js');
 
             const module = sandbox.getExports();
@@ -187,7 +190,7 @@ describe('Sandbox', () => {
         });
 
         it('should correctly handle function declarations', async () => {
-            const source = await readFile('./fixtures/sandbox/function-declaration.js');
+            const source = await fixturesFileReader('function-declaration.js');
             const sandbox = new Sandbox(source, 'function-declaration.js');
 
             sandbox.getExports();
@@ -213,7 +216,7 @@ describe('Sandbox', () => {
 
     context('Resolve', () => {
         it('should import from "node_modules"', async () => {
-            const source = await readFile('./fixtures/sandbox/external-dependency.js');
+            const source = await fixturesFileReader('external-dependency.js');
             const sandbox = new Sandbox(source, 'external-dependency.js');
 
             chai.expect(sandbox.getExports()).to.be.equal(true);
@@ -221,14 +224,14 @@ describe('Sandbox', () => {
         });
 
         it('should import native module', async () => {
-            const source = await readFile('./fixtures/sandbox/native-dependency.js');
+            const source = await fixturesFileReader('native-dependency.js');
             const sandbox = new Sandbox(source, 'native-dependency.js');
 
             chai.expect(sandbox.getExports()).to.be.equal(true);
         });
 
         it('should throw ReferenceError, when can\'t resolve dependency', async () => {
-            const source = await readFile('./fixtures/sandbox/pass-dependency.js');
+            const source = await fixturesFileReader('pass-dependency.js');
             const sandbox = new Sandbox(source, 'pass-dependency.js');
 
             try {
@@ -245,7 +248,7 @@ describe('Sandbox', () => {
         it('should handle sandbox dependencies (as static)', async () => {
             const moduleExport = 'ama come from module!';
 
-            const source = await readFile('./fixtures/sandbox/pass-dependency.js');
+            const source = await fixturesFileReader('pass-dependency.js');
 
             const sandbox = new Sandbox(source, 'pass-dependency.js', {
                 dependencies: {
@@ -260,7 +263,7 @@ describe('Sandbox', () => {
             const moduleExport = 'ama come from module!';
             const moduleContent = createExport(moduleExport);
 
-            const source = await readFile('./fixtures/sandbox/pass-dependency.js');
+            const source = await fixturesFileReader('pass-dependency.js');
 
             const dependencySandbox = new Sandbox(moduleContent, '');
 
@@ -274,9 +277,9 @@ describe('Sandbox', () => {
         });
 
         it('should handle mock dependencies', async () => {
-            const source = await readFile('./fixtures/sandbox/pass-dependency.js');
+            const source = await fixturesFileReader('pass-dependency.js');
 
-            const pathToMock = require.resolve('./fixtures/sandbox/mock.js');
+            const pathToMock = fixturesFileResolver('mock.js');
             const mock = require(pathToMock);
 
             const sandbox = new Sandbox(source, path.resolve('./test/fixtures/sandbox/pass-dependency.js'), {
@@ -289,7 +292,7 @@ describe('Sandbox', () => {
         });
 
         it('should throw ReferenceError, if can\'t resolve mock', async () => {
-            const source = await readFile('./fixtures/sandbox/pass-dependency.js');
+            const source = await fixturesFileReader('pass-dependency.js');
             const sandbox = new Sandbox(source, path.resolve('./test/fixtures/sandbox/pass-dependency.js'), {
                 mocks: {}
             });
@@ -306,14 +309,14 @@ describe('Sandbox', () => {
 
     context('Exports', () => {
         it('should correctly handle exports reference', async () => {
-            const source = await readFile('./fixtures/sandbox/exports-reference.js');
+            const source = await fixturesFileReader('exports-reference.js');
             const sandbox = new Sandbox(source, 'exports-reference.js');
 
             chai.expect(sandbox.getExports().data).to.be.equal(true);
         });
 
         it('should add fields to "module" object', async () => {
-            const source = await readFile('./fixtures/sandbox/module-mutation.js');
+            const source = await fixturesFileReader('module-mutation.js');
             const sandbox = new Sandbox(source, 'module-mutation.js');
 
             const module = sandbox.getExports();
@@ -324,14 +327,14 @@ describe('Sandbox', () => {
         });
 
         it('should correctly provide commonjs module.exports object', async () => {
-            const source = await readFile('./fixtures/sandbox/commonjs-module-exports.js');
+            const source = await fixturesFileReader('commonjs-module-exports.js');
             const sandbox = new Sandbox(source, 'commonjs-module-exports.js');
 
             chai.expect(sandbox.getExports().equals).to.be.equal(true);
         });
 
         it('should correctly provide commonjs exports object', async () => {
-            const source = await readFile('./fixtures/sandbox/commonjs-exports.js');
+            const source = await fixturesFileReader('commonjs-exports.js');
             const sandbox = new Sandbox(source, 'commonjs-exports.js');
 
             chai.expect(sandbox.getExports().equals).to.be.equal(true);

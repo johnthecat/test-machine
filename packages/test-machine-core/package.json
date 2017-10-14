@@ -10,6 +10,9 @@
     "error-stack-parser": "^2.0.1",
     "glob": "^7.1.2"
   },
+  "devDependencies": {
+    "test-machine-test-utils": "^0.3.4"
+  },
   "engineStrict": true,
   "engines": {
     "node": ">= 7.9.0"

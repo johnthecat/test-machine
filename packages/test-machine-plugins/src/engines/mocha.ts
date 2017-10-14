@@ -28,7 +28,7 @@ export function mochaEngine(config?: any): Engine {
         return new Promise((resolve, reject) => {
             mocha.run((errors: number) => {
                 if (errors) {
-                    reject();
+                    reject(errors);
                 } else {
                     resolve();
                 }
