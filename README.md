@@ -1,5 +1,7 @@
 <p align="center">
-<img width="400px" src="https://cloud.githubusercontent.com/assets/5618341/25568246/4fcfed3e-2e07-11e7-992b-e9a61abfd6e2.png"/>
+  <a href="https://github.com/johnthecat/test-machine">
+    <img width="400px" src="https://cloud.githubusercontent.com/assets/5618341/25568246/4fcfed3e-2e07-11e7-992b-e9a61abfd6e2.png"/>
+  </a>
 </p>
 <hr/>
 
