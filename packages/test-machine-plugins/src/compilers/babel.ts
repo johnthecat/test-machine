@@ -1,7 +1,7 @@
 import { CompilerPlugin, CompilerSource } from 'test-machine-core/src/interface';
 import { noModuleException } from '../utils';
 
-const DEFAULT_FILENAME = 'webpack-module';
+const DEFAULT_FILENAME = 'module';
 
 export function babelCompiler(config = {}): CompilerPlugin {
     let babel: any;

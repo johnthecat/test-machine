@@ -32,8 +32,8 @@ describe('Babel compiler', () => {
         chai.expect(result.source).to.be.equal('');
     });
 
-    it('should handle source code', (done) => {
-        readFile('./compilers/fixtures/import-export.js').then((source: string) => {
+    it('should handle source code', () => {
+        return readFile('./compilers/fixtures/import-export.js').then((source: string) => {
             const compiler = babelCompiler({
                 presets: ['es2015']
             });
@@ -42,8 +42,6 @@ describe('Babel compiler', () => {
 
             chai.expect(result.source).to.be.not.equal('');
             chai.expect(result.source).to.be.not.equal(source);
-
-            done();
         });
     });
 });

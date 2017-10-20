@@ -20,10 +20,10 @@ describe('Mocha engine', () => {
         restore();
     });
 
-    it('should pass without tests', (done) => {
+    it('should pass without tests', () => {
         const runner = mochaEngine();
 
-        runner([]).then(() => done());
+        return runner([]);
     });
 
     it('should reject, when mocha can\'t run tests', (done) => {
@@ -32,17 +32,16 @@ describe('Mocha engine', () => {
         runner(['fake-test.js']).catch((e) => done());
     });
 
-    it('should complete, when mocha test passed', (done) => {
+    it('should complete, when mocha test passed', () => {
         const runner = mochaEngine({
             reporter(): void {
                 // avoid logs
             }
         });
 
-        runner([
+        return runner([
             fixtureResolver('./correct-test-set.js')
-        ])
-            .then(() => done());
+        ]);
     });
 
     it('should fail, when mocha test not passed', (done) => {
