@@ -1,4 +1,3 @@
-const babel = require('babel-core');
-
+const Mocha = require('mocha');
 
 module.exports = true;

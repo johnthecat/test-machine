@@ -9,6 +9,7 @@
     "test-machine-core": "^0.3.4"
   },
   "devDependencies": {
-    "test-machine-test-utils": "^0.3.4"
+    "test-machine-test-utils": "^0.3.4",
+    "jasmine": "2.8.0"
   }
 }

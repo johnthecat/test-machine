@@ -10,7 +10,14 @@
     "test-machine-plugins": "^0.3.4"
   },
   "devDependencies": {
-    "test-machine-test-utils": "^0.3.4"
+    "@types/webpack": "3.0.13",
+    "babel-loader": "7.1.2",
+    "css-loader": "0.28.7",
+    "extract-text-webpack-plugin": "3.0.1",
+    "test-machine-test-utils": "^0.3.4",
+    "ts-loader": "2.3.7",
+    "webpack": "3.7.1",
+    "webpack-merge": "4.1.0"
   },
   "peerDependencies": {
     "webpack": "2 || 3"

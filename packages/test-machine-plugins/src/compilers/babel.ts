@@ -19,10 +19,10 @@ export function babelCompiler(config = {}): CompilerPlugin {
 
         const result = babel.transform(
             input.source,
-            Object.assign({
+            Object.assign({}, config, {
                 filename,
                 inputSourceMap: input.sourcemap
-            }, config)
+            })
         );
 
         return {

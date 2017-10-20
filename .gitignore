@@ -11,5 +11,6 @@ package-lock.json
 
 packages/*/tsconfig.*
 packages/*/.npmignore
+packages/*/package-lock.json
 packages/*/dist
 packages/*/test/.tmp
