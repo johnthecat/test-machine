@@ -1,11 +1,20 @@
 import { IPlugin, IModulesMap } from '../interface';
+import { isFunction } from './utils';
 import { Compiler } from './compiler';
 import { Sandbox } from './sandbox';
 
 class PluginController {
     constructor(private plugins: Array<IPlugin>) {
-        if (!Array.isArray(plugins)) {
-            throw new Error(`Plugins must be array, got ${JSON.stringify(this.plugins)}`);
+        if (Array.isArray(plugins) === false) {
+            let actualInput;
+
+            try {
+                actualInput = JSON.stringify(this.plugins);
+            } catch {
+                actualInput = this.plugins;
+            }
+
+            throw new Error(`Plugins must be array, got ${actualInput}`);
         }
     }
 
@@ -17,13 +26,14 @@ class PluginController {
         this.applyPluginsPipeline<IModulesMap<Sandbox>>('afterRun', modules);
     }
 
-    private applyPluginsPipeline<T>(method: string, data: T): void {
+    private applyPluginsPipeline<T>(method: keyof IPlugin, data: T): void {
+        const count = this.plugins.length;
         let plugin: IPlugin;
 
-        for (let index = 0, count = this.plugins.length; index < count; index++) {
+        for (let index = 0; index < count; index++) {
             plugin = this.plugins[index];
 
-            if (typeof plugin[method] === 'function') {
+            if (isFunction(plugin[method])) {
                 plugin[method](data);
             }
         }

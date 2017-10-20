@@ -17,7 +17,7 @@ export type PathResolver = (module: any) => string;
 
 export type ModuleResolver = (...args: Array<any>) => ITestModule;
 
-export type ModulesFactory<T> = (module: T, resolver: ModuleResolver) => ITestModule;
+export type ModulesFactory<T = {}> = (module: T, resolver: ModuleResolver) => ITestModule;
 
 export interface IPlugin {
     compilerPipeline: (compiler: any) => void,

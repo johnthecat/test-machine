@@ -25,7 +25,7 @@ class TestMachine {
 
     private modulesGenerator: ModulesGenerator;
 
-    constructor(private config: IConfig, modulesFactory: ModulesFactory<any>, resolver: PathResolver) {
+    constructor(private config: IConfig, modulesFactory: ModulesFactory, resolver: PathResolver) {
 
         this.engine = config.engine;
 
