@@ -3,13 +3,11 @@
 import * as path from 'path';
 import * as chai from 'chai';
 import * as webpack from 'webpack';
+import { compiler, engine } from 'test-machine-plugins';
 import { configFactory, getRoot, getTestRoots } from './utils/webpack.config';
-import { mochaEngine } from '../../test-machine-plugins/src/engines/mocha';
-import { babelCompiler } from '../../test-machine-plugins/src/compilers/babel';
 import { TestMachineWebpack } from '../src';
 
 import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
-import { compiler } from '../../test-machine-plugins/src/index';
 
 const DEFAULT_ENGINE_CONFIG = {
     reporter(): void {
@@ -89,11 +87,11 @@ describe('Webpack plugin', () => {
                 return `${resource.name}.spec.js`;
             },
             compilers: [
-                babelCompiler({
+                compiler.babel({
                     plugins: ['transform-es2015-modules-commonjs']
                 })
             ],
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }), {
             plugins: [
                 new webpack.optimize.ModuleConcatenationPlugin()
@@ -115,11 +113,11 @@ describe('Webpack plugin', () => {
                 return `${resource.name}.spec.js`;
             },
             compilers: [
-                babelCompiler({
+                compiler.babel({
                     plugins: ['transform-es2015-modules-commonjs']
                 })
             ],
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }));
 
         webpack(config, (error) => {
@@ -134,7 +132,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }), {
             module: {
                 rules: [
@@ -163,7 +161,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }));
 
         webpack(config, (error) => {
@@ -182,7 +180,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }));
 
         webpack(config, (error) => {
@@ -198,7 +196,7 @@ describe('Webpack plugin', () => {
             router: (resource) => {
                 return `${resource.name}.spec.js`;
             },
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }), {
             module: {
                 rules: [
@@ -224,12 +222,6 @@ describe('Webpack plugin', () => {
     });
 
     it('should handle typescript with ts-loader', (done) => {
-        // const tsResolver = require.extensions['.ts'];
-        // const tsxResolver = require.extensions['.tsx'];
-        //
-        // require.extensions['.ts'] = void 0 as any;
-        // require.extensions['.tsx'] = void 0 as any;
-
         const config = configFactory('typescript', new TestMachineWebpack({
             failOnError: true,
             testRoots: getTestRoots('typescript'),
@@ -239,7 +231,7 @@ describe('Webpack plugin', () => {
             compilers: [
                 compiler.typescript()
             ],
-            engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }), {
             module: {
                 rules: [
@@ -255,7 +247,8 @@ describe('Webpack plugin', () => {
                             {
                                 loader: 'ts-loader',
                                 options: {
-                                    configFile: getRoot('typescript', 'tsconfig.json')
+                                    configFile: getRoot('typescript', 'tsconfig.json'),
+                                    silent: true
                                 }
                             }
                         ]
@@ -265,9 +258,6 @@ describe('Webpack plugin', () => {
         });
 
         webpack(config, (error) => {
-            // require.extensions['.ts'] = tsResolver;
-            // require.extensions['.tsx'] = tsxResolver;
-
             done(error);
         });
     });

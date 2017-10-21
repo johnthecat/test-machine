@@ -28,8 +28,6 @@ class EnvironmentPatch {
             }
 
             if (this.tests.has(filename)) {
-                console.log('test', filename);
-
                 return this.sandboxes.getTest(filename, this.tests.get(filename) as string);
             }
 

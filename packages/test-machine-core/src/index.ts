@@ -53,9 +53,9 @@ class TestMachine {
     }
 
     public runTests(modules: IModulesMap<any>, changedModules?: Array<string>): Promise<void> {
-        const preparedModues = this.modulesGenerator.convertModules(modules);
+        const preparedModules = this.modulesGenerator.convertModules(modules);
 
-        if (isNullOrUndefined(changedModules) || changedModules.length === 0) {
+        if (isNullOrUndefined(changedModules)) {
             changedModules = Object.keys(modules);
         }
 
@@ -65,7 +65,7 @@ class TestMachine {
             return Promise.resolve();
         }
 
-        this.environmentPatch.setup(tests.content, preparedModues);
+        this.environmentPatch.setup(tests.content, preparedModules);
 
         return this.engine(tests.resources)
             .then(() => {
