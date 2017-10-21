@@ -68,5 +68,9 @@ export interface ITestDependency {
     module: ITestModule
 }
 
-export interface ITestModulesMap extends IModulesMap<ITestModule> {
+export interface ITestModulesMap extends IModulesMap<ITestModule> {}
+
+export interface IExtractedTests {
+    resources: Array<string>,
+    content: IModulesMap<string>
 }

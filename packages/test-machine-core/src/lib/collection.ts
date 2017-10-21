@@ -6,8 +6,7 @@ class Collection<V = any> {
 
     private _size = 0;
 
-    constructor(private useHashing = false) {
-    }
+    constructor(private useHashing = false) {}
 
     public has(key: string): boolean {
         const normalizedKey = this._normalizeKey(key);

@@ -1,4 +1,5 @@
-import { Router } from '../interface';
+import { IModulesMap, IExtractedTests, Router } from '../interface';
+import * as fs from 'fs';
 import * as path from 'path';
 import * as glob from 'glob';
 import { Collection } from './collection';
@@ -11,24 +12,40 @@ class TestExtractor {
 
     constructor(private roots: Array<string>, private router: Router) {}
 
-    public extractTests(changedModules: Array<string>): Array<string> {
-        const tests: Array<string> = [];
+    public extractTests(changedModules: Array<string>): IExtractedTests | null {
+        const testPaths: Array<string> = [];
+        const testMap: IModulesMap<string> = {};
 
         if (Array.isArray(changedModules) === false) {
-            return tests;
+            return null;
         }
 
         const count = changedModules.length;
 
         for (let index = 0; index < count; index++) {
-            this.extractTest(changedModules[index], tests);
+            this.extractTest(changedModules[index], testPaths);
         }
 
-        return tests;
+        if (testPaths.length === 0) {
+            return null;
+        }
+
+        for (let index = 0; index < testPaths.length; index++) {
+            testMap[testPaths[index]] = this.getTestContent(testPaths[index]);
+        }
+
+        return {
+            resources: testPaths,
+            content: testMap
+        };
     }
 
     public clearCache(): void {
         this.globCache.clear();
+    }
+
+    private getTestContent(resource: string): string {
+        return fs.readFileSync(resource, 'utf8');
     }
 
     private getCacheKey(resource: string, root: string, pattern: string): string {

@@ -107,6 +107,9 @@ class WebpackModulesPreprocessor {
             case 'ExtractedModule':
                 return module.getOriginalModule();
 
+            case 'MultiModule':
+                return module.dependencies;
+
             default:
                 return module;
         }

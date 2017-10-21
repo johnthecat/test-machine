@@ -18,11 +18,11 @@ interface IModuleParent {
     paths: Array<string>,
 }
 
-export type TSandboxDependencies = IModulesMap<any>;
+export type SandboxDependencies = IModulesMap<any>;
 
 export interface ISandboxConfig {
     compiler?: CompilerFunction,
-    dependencies?: TSandboxDependencies,
+    dependencies?: SandboxDependencies,
     mocks?: IMocks
 }
 
@@ -45,7 +45,7 @@ class Sandbox {
     }
 
     public getFilename(): string {
-        return this.context.module.filename;
+        return this.filename;
     }
 
     public getCompiledSource(): string {
@@ -65,14 +65,14 @@ class Sandbox {
         if (Sandbox.scriptCache.has(this.source)) {
             script = Sandbox.scriptCache.get(this.source);
         } else {
-            this.compiledSource = compiler(this.source, this.context.module.filename).source;
+            this.compiledSource = compiler(this.source, this.filename).source;
 
             script = new Script(this.compiledSource, this.filename);
 
             Sandbox.scriptCache.set(this.source, script);
         }
 
-        this.runInContext(script as Script, context);
+        this.runInContext(script, context);
         this.isCompiled = true;
 
         return this.exports;
@@ -186,9 +186,9 @@ class Sandbox {
         Sandbox.scriptCache.clear();
     }
 
-    private static scriptCache: Collection<Script> = new Collection<Script>(true);
+    private static scriptCache: Collection<Script> = new Collection(true);
 
-    private static resolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent: IModuleParent, request: string): any {
+    private static resolver(dependencies: SandboxDependencies, mocks: IMocks | null, parent: IModuleParent, request: string): any {
         let catchedError;
         let filename;
 
@@ -231,7 +231,7 @@ class Sandbox {
         return require(filename);
     }
 
-    private static getResolver(dependencies: TSandboxDependencies, mocks: IMocks | null, parent: IModuleParent): Function {
+    private static getResolver(dependencies: SandboxDependencies, mocks: IMocks | null, parent: IModuleParent): Function {
         return Sandbox.resolver.bind(null, dependencies, mocks, parent);
     }
 }

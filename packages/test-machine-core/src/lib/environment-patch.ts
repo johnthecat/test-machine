@@ -12,6 +12,8 @@ class EnvironmentPatch {
 
     private fakeLoad: LoadFunction;
 
+    private tests: Collection<string> = new Collection();
+
     private modulesDefinition: Collection<ITestModule> = new Collection();
 
     constructor(private sandboxes: SandboxController, private dependencies: Array<string>, private mocks: IMocks) {
@@ -25,12 +27,19 @@ class EnvironmentPatch {
                 return this.sandboxes.getModule(this.modulesDefinition.get(filename) as ITestModule, this.mocks);
             }
 
+            if (this.tests.has(filename)) {
+                console.log('test', filename);
+
+                return this.sandboxes.getTest(filename, this.tests.get(filename) as string);
+            }
+
             return this.originLoad(request, parent, isMain);
         };
     }
 
-    public setup(modulesDefinition: IModulesMap<ITestModule>): void {
+    public setup(tests: IModulesMap<string>, modulesDefinition: IModulesMap<ITestModule>): void {
         this.modulesDefinition.fill(modulesDefinition);
+        this.tests.fill(tests);
 
         this.patch();
 

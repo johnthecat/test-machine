@@ -25,6 +25,20 @@ class SandboxController {
         this.resolvedModules.clear();
     }
 
+    public getTest(resource: string, content: string): any {
+        const cachedModule = this.resolvedModules.get(resource);
+
+        if (cachedModule) {
+            return cachedModule.getExports();
+        }
+
+        const sandbox = this.createTest(content, resource);
+
+        this.resolvedModules.set(resource, sandbox);
+
+        return sandbox.getExports();
+    }
+
     public getModule(module: ITestModule, mocks: IMocks): any {
         const resource = module.getResource();
         const cachedModule = this.resolvedModules.get(resource);
@@ -50,19 +64,35 @@ class SandboxController {
         return sandbox.getExports();
     }
 
-    private createModule(module: ITestModule, resource: string, dependencies: ITestDependencies, mocks: IMocks): Sandbox {
+    private createSandbox(source: string, resource: string, dependencies?: ITestDependencies, mocks?: IMocks): Sandbox {
+        const sandbox = new Sandbox(source, resource, {
+            compiler: this.compiler,
+            dependencies,
+            mocks
+        });
+
+        return sandbox;
+    }
+
+    private createTest(source: string, resource: string): Sandbox {
         let sandbox;
 
         try {
-            sandbox = new Sandbox(module.getSource(), resource, {
-                compiler: this.compiler,
-                dependencies,
-                mocks
-            });
-
-            sandbox.getExports();
+            sandbox = this.createSandbox(source, resource);
         } catch (e) {
-            throw ExceptionProvider.compilationException(e, module, sandbox);
+            throw ExceptionProvider.testCompilationException(e, source, resource);
+        }
+
+        return sandbox;
+    }
+
+    private createModule(module: ITestModule, resource: string, dependencies?: ITestDependencies, mocks?: IMocks): Sandbox {
+        let sandbox;
+
+        try {
+            sandbox = this.createSandbox(module.getSource(), resource, dependencies, mocks);
+        } catch (e) {
+            throw ExceptionProvider.moduleCompilationException(e, module, sandbox);
         }
 
         return sandbox;

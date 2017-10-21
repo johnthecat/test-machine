@@ -7,7 +7,7 @@ import { TestExtractor } from './lib/test-extractor';
 import { PluginController } from './lib/plugin-controller';
 import { SandboxController } from './lib/sandbox-controller';
 
-import { isNullOrUndefined } from './lib/utils';
+import { isNull, isNullOrUndefined } from './lib/utils';
 
 class TestMachine {
 
@@ -53,26 +53,26 @@ class TestMachine {
     }
 
     public runTests(modules: IModulesMap<any>, changedModules?: Array<string>): Promise<void> {
-        const modulesMap = this.modulesGenerator.convertModules(modules);
+        const preparedModues = this.modulesGenerator.convertModules(modules);
 
-        if (isNullOrUndefined(changedModules)) {
+        if (isNullOrUndefined(changedModules) || changedModules.length === 0) {
             changedModules = Object.keys(modules);
         }
 
         const tests = this.testExtractor.extractTests(changedModules);
 
-        if (tests.length === 0) {
+        if (isNull(tests)) {
             return Promise.resolve();
         }
 
-        this.environmentPatch.setup(modulesMap);
+        this.environmentPatch.setup(tests.content, preparedModues);
 
-        return this.engine(tests)
+        return this.engine(tests.resources)
             .then(() => {
-                this.afterRun(tests);
+                this.afterRun(tests.resources);
             })
             .catch((exception) => {
-                this.afterRun(tests);
+                this.afterRun(tests.resources);
                 throw exception;
             });
     }

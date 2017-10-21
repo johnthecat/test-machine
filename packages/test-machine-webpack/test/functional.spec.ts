@@ -9,6 +9,7 @@ import { babelCompiler } from '../../test-machine-plugins/src/compilers/babel';
 import { TestMachineWebpack } from '../src';
 
 import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
+import { compiler } from '../../test-machine-plugins/src/index';
 
 const DEFAULT_ENGINE_CONFIG = {
     reporter(): void {
@@ -223,21 +224,23 @@ describe('Webpack plugin', () => {
     });
 
     it('should handle typescript with ts-loader', (done) => {
-        const config = configFactory('typescript-module', new TestMachineWebpack({
+        // const tsResolver = require.extensions['.ts'];
+        // const tsxResolver = require.extensions['.tsx'];
+        //
+        // require.extensions['.ts'] = void 0 as any;
+        // require.extensions['.tsx'] = void 0 as any;
+
+        const config = configFactory('typescript', new TestMachineWebpack({
             failOnError: true,
-            testRoots: getTestRoots('typescript-module'),
+            testRoots: getTestRoots('typescript'),
             router: (resource) => {
-                return `${resource.name}.spec.js`;
+                return `${resource.name}.spec.ts`;
             },
+            compilers: [
+                compiler.typescript()
+            ],
             engine: mochaEngine(DEFAULT_ENGINE_CONFIG)
         }), {
-
-            resolve: {
-                alias: {
-                    src: getRoot('typescript-module', 'src')
-                }
-            },
-
             module: {
                 rules: [
                     {
@@ -252,7 +255,7 @@ describe('Webpack plugin', () => {
                             {
                                 loader: 'ts-loader',
                                 options: {
-                                    configFile: getRoot('typescript-module', 'tsconfig.json')
+                                    configFile: getRoot('typescript', 'tsconfig.json')
                                 }
                             }
                         ]
@@ -262,6 +265,9 @@ describe('Webpack plugin', () => {
         });
 
         webpack(config, (error) => {
+            // require.extensions['.ts'] = tsResolver;
+            // require.extensions['.tsx'] = tsxResolver;
+
             done(error);
         });
     });

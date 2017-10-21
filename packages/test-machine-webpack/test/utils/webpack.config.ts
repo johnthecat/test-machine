@@ -23,6 +23,8 @@ export const configFactory = (fixture: string, plugin: TestMachineWebpack | null
     return webpackMerge({
         entry: path.join(src, 'index.js'),
 
+        bail: true,
+
         output: {
             path: OUTPUT,
             filename: `${fixture}.js`

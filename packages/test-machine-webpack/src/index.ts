@@ -79,11 +79,6 @@ class TestMachineWebpack implements webpack.Plugin {
 
             const modules = this.modulesPreprocessor.filterModules(compilation.modules);
             const changedModules = this.modulesPreprocessor.getChangedModules(modules);
-
-            if (changedModules.length === 0) {
-                return callback();
-            }
-
             const modulesMap = this.modulesPreprocessor.getModulesMap(modules);
 
             this.runner.runTests(modulesMap, changedModules)
