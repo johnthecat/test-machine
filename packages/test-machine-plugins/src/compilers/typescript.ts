@@ -1,4 +1,4 @@
-import { CompilerPlugin, CompilerSource } from 'test-machine-core/src/interface';
+import { CompilerPlugin, CompilerSource } from 'test-machine-interfaces';
 import { noModuleException } from '../utils';
 
 const DEFAULT_FILENAME = 'module';

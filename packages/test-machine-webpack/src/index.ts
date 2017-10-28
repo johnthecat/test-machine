@@ -1,8 +1,17 @@
-import { IConfig } from 'test-machine-core/src/interface';
-import { IWebpackConfig, IWebpackCompiler, IWebpackModule, IWebpackCompilation, IDefinePlugin, NodeCallback, OptionalParameters } from './interface';
+import { IConfig } from 'test-machine-interfaces';
+import {
+    IWebpackConfig,
+    IWebpackCompiler,
+    IWebpackModule,
+    IWebpackCompilation,
+    IDefinePlugin,
+    NodeCallback,
+    OptionalParameters
+} from './interface';
 
 import * as webpack from 'webpack';
 import { TestMachine } from 'test-machine-core';
+import { optionSelector } from './lib/option-selector';
 import { webpackModuleFactory } from './lib/test-module-factory';
 import { WebpackModulesPreprocessor } from './lib/webpack-modules-preprocessor';
 import { definePluginCompilerFactory } from './lib/define-plugin-compiler';
@@ -21,14 +30,6 @@ const defaultUserConfig: IWebpackConfig = {
     mocks: {},
     watch: false,
     failOnError: false
-};
-
-const select = (...args: Array<any>): any => {
-    for (let index = 0; index < args.length; index++) {
-        if (args[index] !== void 0 && args[index] !== null) {
-            return args[index];
-        }
-    }
 };
 
 class TestMachineWebpack implements webpack.Plugin {
@@ -56,11 +57,11 @@ class TestMachineWebpack implements webpack.Plugin {
 
         this.modulesPreprocessor = new WebpackModulesPreprocessor(this.config as IConfig);
 
-        this.failOnError = select(userConfig.failOnError, defaultUserConfig.failOnError);
+        this.failOnError = optionSelector(userConfig.failOnError, defaultUserConfig.failOnError);
     }
 
     public apply(compiler: IWebpackCompiler): void {
-        this.isWatching = !!compiler.options.watch;
+        this.isWatching = optionSelector(compiler.options.watch, false);
 
         const definePlugins = (compiler.options.plugins || []).filter((plugin) => plugin instanceof webpack.DefinePlugin);
 
@@ -98,7 +99,13 @@ class TestMachineWebpack implements webpack.Plugin {
         });
     }
 
-    private static _generateInternalError(error: Error | void, compilation: any, isWatching: boolean, failOnError: boolean, callback: NodeCallback): void {
+    private static _generateInternalError(
+        error: NodeJS.ErrnoException,
+        compilation: IWebpackCompilation,
+        isWatching: boolean,
+        failOnError: boolean,
+        callback: NodeCallback
+    ): void {
         if (!error) {
             error = new Error('Test running failed');
         }

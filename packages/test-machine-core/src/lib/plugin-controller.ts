@@ -1,4 +1,4 @@
-import { IPlugin, IModulesMap } from '../interface';
+import { IPlugin, IModulesMap } from 'test-machine-interfaces';
 import { isFunction } from './utils';
 import { Compiler } from './compiler';
 import { Sandbox } from './sandbox';

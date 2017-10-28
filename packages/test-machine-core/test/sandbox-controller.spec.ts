@@ -4,6 +4,8 @@ import * as chai from 'chai';
 import { Compiler } from '../src/lib/compiler';
 import { SandboxController } from '../src/lib/sandbox-controller';
 
+// TODO write tests
+
 describe('SandboxController', () => {
     it('should correct resolve map of modules', () => {
         const compiler = new Compiler([]);

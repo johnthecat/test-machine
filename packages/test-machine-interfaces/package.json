@@ -1,0 +1,7 @@
+{
+  "name": "test-machine-interfaces",
+  "version": "0.3.4",
+  "description": "",
+  "license": "MIT",
+  "typings": "index.d.ts"
+}

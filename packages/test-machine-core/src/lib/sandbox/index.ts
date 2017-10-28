@@ -1,4 +1,4 @@
-import { IMocks, IModulesMap, CompilerFunction, CompilerSource } from '../../interface';
+import { IMocks, IModulesMap, CompilerFunction, CompilerSource } from 'test-machine-interfaces';
 
 import * as vm from 'vm';
 import * as path from 'path';

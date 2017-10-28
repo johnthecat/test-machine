@@ -1,4 +1,4 @@
-import { IMocks, IModulesMap, ITestModule } from '../interface';
+import { IMocks, IModulesMap, ITestModule } from 'test-machine-interfaces';
 import { Collection } from './collection';
 import { SandboxController } from './sandbox-controller';
 

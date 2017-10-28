@@ -1,4 +1,4 @@
-import { ITestModule } from '../interface';
+import { ITestModule } from 'test-machine-interfaces';
 
 import codeFrame = require('babel-code-frame');
 import ErrorStackParser = require('error-stack-parser');

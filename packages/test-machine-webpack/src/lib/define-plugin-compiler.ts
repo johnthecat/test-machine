@@ -1,4 +1,4 @@
-import { CompilerPlugin, CompilerSource } from 'test-machine-core/src/interface';
+import { CompilerPlugin, CompilerSource } from 'test-machine-interfaces';
 import { compiler } from 'test-machine-plugins';
 
 const defaultCompiler = ({ source }: CompilerSource): CompilerSource => ({ source });

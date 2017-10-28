@@ -1,4 +1,4 @@
-import { IModulesMap, ITestModule, IMocks, ITestDependency, CompilerFunction } from '../interface';
+import { IModulesMap, ITestModule, IMocks, ITestDependency, CompilerFunction } from 'test-machine-interfaces';
 
 import { Collection } from './collection';
 import { Sandbox } from './sandbox';

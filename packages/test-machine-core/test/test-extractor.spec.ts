@@ -1,6 +1,6 @@
 /// <reference types="mocha" />
 
-import { Router } from '../src/interface';
+import { Router } from 'test-machine-interfaces';
 
 import * as chai from 'chai';
 import * as path from 'path';

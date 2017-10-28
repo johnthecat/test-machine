@@ -1,4 +1,4 @@
-import { CompilerSource } from 'test-machine-core/src/interface';
+import { CompilerSource } from 'test-machine-interfaces';
 import { jasmineEngine } from './engines/jasmine';
 import { mochaEngine } from './engines/mocha';
 

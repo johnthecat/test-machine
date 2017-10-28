@@ -1,4 +1,4 @@
-import { Engine } from 'test-machine-core/src/interface';
+import { Engine } from 'test-machine-interfaces';
 import { noModuleException } from '../utils';
 
 export function mochaEngine(config?: any): Engine {

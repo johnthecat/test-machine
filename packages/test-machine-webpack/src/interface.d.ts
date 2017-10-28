@@ -1,11 +1,11 @@
 import * as webpack from 'webpack';
-import { IUserConfig } from 'test-machine-core/src/interface';
+import { IConfig } from 'test-machine-interfaces';
 
 export type OptionalParameters<T> = {
     [P in keyof T]?: T[P];
 };
 
-export type NodeCallback = (error?: string | Error | null, result?: any) => void;
+export type NodeCallback = (error?: NodeJS.ErrnoException, result?: any) => void;
 
 interface IWebpackDependency {
     module: IWebpackModule
@@ -21,7 +21,7 @@ export interface IWebpackModule {
     }
 }
 
-export interface IWebpackConfig extends IUserConfig {
+export interface IWebpackConfig extends OptionalParameters<IConfig> {
     watch?: boolean
     failOnError?: boolean
 }

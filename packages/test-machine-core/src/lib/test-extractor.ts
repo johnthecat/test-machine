@@ -1,4 +1,4 @@
-import { IModulesMap, IExtractedTests, Router } from '../interface';
+import { IModulesMap, IExtractedTests, Router } from 'test-machine-interfaces';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as glob from 'glob';

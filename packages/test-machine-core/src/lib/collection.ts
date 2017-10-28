@@ -2,7 +2,7 @@ import { getHash } from './utils';
 
 class Collection<V = any> {
 
-    private _store: any = Collection.createStore();
+    private _store = Collection.createStore<V>();
 
     private _size = 0;
 
@@ -79,7 +79,7 @@ class Collection<V = any> {
         return (key in this._store);
     }
 
-    private static createStore(): any {
+    private static createStore<V>(): { [key: string]: V } {
         return Object.create(null);
     }
 }

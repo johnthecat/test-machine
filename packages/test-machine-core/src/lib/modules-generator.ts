@@ -5,15 +5,15 @@ import {
     ITestModule,
     ITestModulesMap,
     IModulesMap
-} from '../interface';
+} from 'test-machine-interfaces';
 
 class ModulesGenerator {
 
     private currentProcessor: ModuleResolver | null;
 
-    constructor(private modulesFactory: ModulesFactory<any>, private resolver: PathResolver) {}
+    constructor(private modulesFactory: ModulesFactory, private resolver: PathResolver) {}
 
-    public convertModules(modulesMap: IModulesMap<any>): ITestModulesMap {
+    public convertModules(modulesMap: IModulesMap): ITestModulesMap {
         const testModulesMap: ITestModulesMap = Object.create(null);
 
         this.currentProcessor = this.processModule.bind(this, modulesMap, testModulesMap);
@@ -29,7 +29,7 @@ class ModulesGenerator {
         return testModulesMap;
     }
 
-    private processModule(original: IModulesMap<any>, converted: ITestModulesMap, resource: string): ITestModule | null {
+    private processModule(original: IModulesMap, converted: ITestModulesMap, resource: string): ITestModule | null {
         if (resource in converted) {
             return converted[resource];
         }

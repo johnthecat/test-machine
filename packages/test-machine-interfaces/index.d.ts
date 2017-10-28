@@ -41,19 +41,7 @@ export interface IConfig {
     mocks: IMocks
 }
 
-export interface IUserConfig {
-    testRoots: Array<string>,
-    exclude?: Array<RegExp>,
-    include?: Array<RegExp>,
-    plugins?: Array<IPlugin>,
-    router?: Router,
-    compilers?: Array<CompilerPlugin>,
-    engine?: Engine,
-    dependencies?: Array<string>,
-    mocks?: IMocks
-}
-
-export interface IModulesMap<T> {
+export interface IModulesMap<T = {}> {
     [key: string]: T
 }
 

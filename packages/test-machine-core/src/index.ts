@@ -1,4 +1,4 @@
-import { IConfig, IModulesMap, Engine, CompilerPlugin, PathResolver, ModulesFactory } from './interface';
+import { IConfig, IModulesMap, Engine, CompilerPlugin, PathResolver, ModulesFactory } from 'test-machine-interfaces';
 
 import { Compiler } from './lib/compiler';
 import { EnvironmentPatch } from './lib/environment-patch';
@@ -52,7 +52,7 @@ class TestMachine {
         this.compiler.push(compiler);
     }
 
-    public runTests(modules: IModulesMap<any>, changedModules?: Array<string>): Promise<void> {
+    public runTests(modules: IModulesMap, changedModules?: Array<string>): Promise<void> {
         const preparedModules = this.modulesGenerator.convertModules(modules);
 
         if (isNullOrUndefined(changedModules)) {

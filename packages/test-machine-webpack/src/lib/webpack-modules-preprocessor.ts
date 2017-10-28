@@ -1,4 +1,4 @@
-import { IConfig, IModulesMap } from 'test-machine-core/src/interface';
+import { IConfig, IModulesMap } from 'test-machine-interfaces';
 import { IWebpackModule } from '../interface';
 
 class WebpackModulesPreprocessor {
@@ -21,14 +21,13 @@ class WebpackModulesPreprocessor {
     }
 
     public filterModules(modules: Array<IWebpackModule>): Array<IWebpackModule> {
-        let normalizedModules: IWebpackModule | Array<IWebpackModule>;
-        let module: IWebpackModule;
-
         const testResource = (regExp: RegExp) => regExp.test(module.resource);
         const filteredModules: Array<IWebpackModule> = [];
 
-        let index: number;
+        let normalizedModules: IWebpackModule | Array<IWebpackModule>;
+        let module: IWebpackModule;
         let moduleIndex: number;
+        let index: number;
 
         for (index = 0; index < modules.length; index++) {
             normalizedModules = WebpackModulesPreprocessor.normalizeModules(modules[index]);

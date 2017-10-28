@@ -1,4 +1,4 @@
-import { CompilerSource, CompilerPlugin } from '../interface';
+import { CompilerSource, CompilerPlugin } from 'test-machine-interfaces';
 import { Collection } from './collection';
 
 const DEFAULT_FILENAME = 'unknown';
@@ -21,7 +21,7 @@ class Compiler {
         const pipeline = this.pipeline;
 
         let compiler: CompilerPlugin;
-        let compilationResult: any;
+        let compilationResult: CompilerSource;
         let result: CompilerSource = {
             source,
             sourcemap: null
@@ -35,7 +35,7 @@ class Compiler {
                 compilationResult &&
                 typeof compilationResult.source === 'string'
             ) {
-                Object.assign(result, compiler(result, filename));
+                Object.assign(result, compilationResult);
             }
         }
 

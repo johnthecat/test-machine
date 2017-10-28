@@ -1,4 +1,4 @@
-import { ModulesFactory, ITestModule, ITestDependency, ModuleResolver } from 'test-machine-core/src/interface';
+import { ModulesFactory, ITestModule, ITestDependency, ModuleResolver } from 'test-machine-interfaces';
 import { IWebpackModule, IWebpackDependency } from '../interface';
 
 // for cases, when dependency hasn't typical interface to extract it's own module
