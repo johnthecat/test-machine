@@ -8,17 +8,15 @@ const Module: any = module.constructor;
 
 class EnvironmentPatch {
 
-    private originLoad: LoadFunction;
-
     private fakeLoad: LoadFunction;
+
+    private originLoad: LoadFunction = Module._load;
 
     private tests: Collection<string> = new Collection();
 
     private modulesDefinition: Collection<ITestModule> = new Collection();
 
     constructor(private sandboxes: SandboxController, private dependencies: Array<string>, private mocks: IMocks) {
-
-        this.originLoad = Module._load;
 
         this.fakeLoad = (request: string, parent: NodeModule, isMain: boolean) => {
             const filename = Module._resolveFilename(request, parent, isMain);
@@ -48,7 +46,7 @@ class EnvironmentPatch {
 
     public clean(tests: Array<string>, mocks: IMocks): void {
         this.modulesDefinition.clear();
-
+        this.tests.clear();
         this.restore();
 
         for (let index = 0; index < tests.length; index++) {
