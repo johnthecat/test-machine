@@ -2,7 +2,8 @@ import { IMocks, IModulesMap, CompilerFunction, CompilerSource } from 'test-mach
 
 import * as vm from 'vm';
 import * as path from 'path';
-import { isNull } from '../utils';
+import { isNull } from 'test-machine-utils';
+
 import { Collection } from '../collection';
 import { Script } from './script';
 

@@ -1,3 +1,4 @@
+/// <reference types="node" />
 /// <reference types="mocha" />
 
 import * as chai from 'chai';
@@ -140,7 +141,7 @@ describe('Collection', () => {
         chai.expect(collection.size()).to.be.equal(2);
     });
 
-    it('should fill collection with values from object (without prototype)', () => {
+    it('should fill collection with values from object without prototype', () => {
         const collection = new Collection();
 
         const object = Object.create(null);

@@ -1,5 +1,5 @@
 import { IPlugin, IModulesMap } from 'test-machine-interfaces';
-import { isFunction } from './utils';
+import { isFunction } from 'test-machine-utils';
 import { Compiler } from './compiler';
 import { Sandbox } from './sandbox';
 

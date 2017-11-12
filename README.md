@@ -38,7 +38,11 @@ Features:
 
 #### Install
 
-`npm install test-machine-webpack test-machine-plugins --save-dev`
+```
+npm i test-machine-webpack test-machine-plugins --save-dev
+// or
+yarn add test-machine-webpack test-machine-plugins --dev
+```
 
 #### Usage
 
@@ -98,15 +102,9 @@ module.exports = {
 ### Supporting multiple test runners
 Now Test machine supports mocha and jasmine test runners, you can find them in `test-machine-plugins` package.
 
-testRoots: Array<string>,
-exclude: Array<RegExp>,
-include: Array<RegExp>,
-router: Router,
-engine: Engine,
-compilers: Array<CompilerPlugin>,
-plugins: Array<IPlugin>,
-dependencies: Array<string>,
-mocks: IMocks
+// plugins: Array<IPlugin>,
+//dependencies: Array<string>,
+//mocks: IMocks
 
 ### API
 
@@ -144,7 +142,7 @@ router: (resource) => `**/${resource.name}.spec.js`
 router: (resource) => `**/*.spec.js`
 ```
 
-#### `engine` - `CompilerPlugin`
+#### `engine` - `Engine`
 Your test runner. Currently supported:
 * [Mocha](https://mochajs.org/)
 * [Jasmine](https://jasmine.github.io/)
@@ -156,9 +154,23 @@ engine: engine.mocha({
 })
 ```
 
+#### `compilers` - `Array<CompilerPlugin>`
+Array of compilers, that will transform your modules and tests. 
+Currently supported:
+* [Babel](https://github.com/johnthecat/test-machine/blob/master/packages/test-machine-plugins/src/compilers/babel.ts)
+* [Typescript](https://github.com/johnthecat/test-machine/blob/master/packages/test-machine-plugins/src/compilers/typescript.ts)
+
+```javascript
+compilers: [
+    compiler.babel({
+        presets: ['env']
+    })
+]
+```
 
 #### `include` - `Array<RegExp>`
 Includes only modules, that passes regExp testing.
+**Warning**: incorrect configuration can broke your test running.
 
 ```javascript
 include: [

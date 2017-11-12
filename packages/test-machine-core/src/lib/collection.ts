@@ -1,4 +1,4 @@
-import { getHash } from './utils';
+import { createHash } from 'crypto';
 
 class Collection<V = any> {
 
@@ -43,13 +43,13 @@ class Collection<V = any> {
         }
     }
 
-    public fill(map: { [key: string]: V }): void {
-        for (let key in map) {
+    public fill(dictionary: { [key: string]: V }): void {
+        for (let key in dictionary) {
             if (
-                typeof map.hasOwnProperty !== 'function' ||
-                map.hasOwnProperty(key)
+                typeof dictionary.hasOwnProperty !== 'function' ||
+                dictionary.hasOwnProperty(key)
             ) {
-                this.set(key, map[key]);
+                this.set(key, dictionary[key]);
             }
         }
     }
@@ -72,7 +72,7 @@ class Collection<V = any> {
             return key;
         }
 
-        return getHash(key);
+        return Collection.getHash(key);
     }
 
     private _has(key: string): boolean {
@@ -82,6 +82,11 @@ class Collection<V = any> {
     private static createStore<V>(): { [key: string]: V } {
         return Object.create(null);
     }
+
+    private static getHash(source: string): string {
+        return createHash('md5').update(source).digest('hex');
+    }
+
 }
 
 export { Collection };

@@ -7,7 +7,7 @@ import { TestExtractor } from './lib/test-extractor';
 import { PluginController } from './lib/plugin-controller';
 import { SandboxController } from './lib/sandbox-controller';
 
-import { isNull, isNullOrUndefined } from './lib/utils';
+import { isNull, isNullOrUndefined } from 'test-machine-utils';
 
 class TestMachine {
 
