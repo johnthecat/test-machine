@@ -61,6 +61,7 @@ describe('Collection', () => {
         collection.set(key, data);
 
         chai.expect(collection.get(key)).to.be.equal(data);
+        chai.expect(collection.size()).to.be.equal(1);
     });
 
     it('should override collection item (with hashing)', () => {
@@ -73,6 +74,7 @@ describe('Collection', () => {
         collection.set(key, data);
 
         chai.expect(collection.get(key)).to.be.equal(data);
+        chai.expect(collection.size()).to.be.equal(1);
     });
 
     it('should delete by key', () => {
