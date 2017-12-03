@@ -5,14 +5,10 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 
-[*.js]
+[*.{js,ts,d.ts}]
 indent_style = space
 indent_size = 4
 
-[*.json]
-indent_style = space
-indent_size = 2
-
-[*.md]
+[*.{json,md}]
 indent_style = space
 indent_size = 2
