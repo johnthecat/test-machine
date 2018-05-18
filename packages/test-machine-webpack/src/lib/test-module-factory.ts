@@ -1,14 +1,6 @@
 import { ModulesFactory, ITestModule, ITestDependency, ModuleResolver } from 'test-machine-interfaces';
 import { IWebpackModule, IWebpackDependency } from '../interface';
 
-// for cases, when dependency hasn't typical interface to extract it's own module
-const normalizeDependency = (dependency: any): IWebpackModule => {
-    switch (dependency.constructor.name) {
-        default:
-            return dependency.module;
-    }
-};
-
 export class WebpackModule implements ITestModule {
 
     private dependencyCache: Array<ITestDependency> | null = null;
@@ -35,7 +27,7 @@ export class WebpackModule implements ITestModule {
         let module: ITestModule;
 
         for (let index = 0, count = webpackDependencies.length; index < count; index++) {
-            dependency = normalizeDependency(webpackDependencies[index]);
+            dependency = webpackDependencies[index].module;
 
             if (!dependency) {
                 continue;

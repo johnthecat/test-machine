@@ -7,7 +7,7 @@ import { compiler, engine } from 'test-machine-plugins';
 import { configFactory, getRoot, getTestRoots } from './utils/webpack.config';
 import { TestMachineWebpack } from '../src';
 
-import * as ExtractTextPlugin from 'extract-text-webpack-plugin';
+import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const DEFAULT_ENGINE_CONFIG = {
     reporter(): void {
@@ -53,14 +53,12 @@ describe('Webpack plugin', () => {
         const config = configFactory('simple-js', new TestMachineWebpack({
             failOnError: true,
             testRoots: roots,
-            router: (resource) => {
-                return `${resource.name}.spec.js`;
-            },
+            router: (resource) => `${resource.name}.spec.js`,
             engine: (tests) => {
                 try {
                     chai.expect(tests).to.be.deep.equal([
-                        path.join(root, 'module-a.spec.js'),
-                        path.join(root, 'module-b.spec.js')
+                        path.join(root, 'module-b.spec.js'),
+                        path.join(root, 'module-a.spec.js')
                     ]);
                 } catch (exception) {
                     testsException = exception;
@@ -188,32 +186,38 @@ describe('Webpack plugin', () => {
         });
     });
 
-    it('should handle css with ExtractTextPlugin', (done) => {
-        const extractCSS = new ExtractTextPlugin('stylesheets/css-modules.css');
-        const config = configFactory('css-modules', new TestMachineWebpack({
+    it('should handle css with MiniCssExtractPlugin', (done) => {
+        const extractCSS = new MiniCssExtractPlugin({
+            filename: 'stylesheets/[name].css'
+        });
+
+        const plugin = new TestMachineWebpack({
             failOnError: true,
             testRoots: getTestRoots('css-modules'),
-            router: (resource) => {
-                return `${resource.name}.spec.js`;
-            },
-            engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
-        }), {
+            engine: engine.mocha(DEFAULT_ENGINE_CONFIG),
+            router: (resource) => `${resource.name}.spec.js`
+        });
+
+        const config = configFactory('css-modules', plugin, {
+            plugins: [
+                extractCSS
+            ],
             module: {
                 rules: [
                     {
                         test: /\.css$/,
-                        use: extractCSS.extract([{
-                            loader: 'css-loader',
-                            options: {
-                                modules: true
+                        use: [
+                            MiniCssExtractPlugin.loader,
+                            {
+                                loader: 'css-loader',
+                                options: {
+                                    modules: true
+                                }
                             }
-                        }])
+                        ]
                     }
                 ]
-            },
-            plugins: [
-                extractCSS
-            ]
+            }
         });
 
         webpack(config, (error) => {

@@ -1,5 +1,5 @@
 import * as webpack from 'webpack';
-import { IConfig } from 'test-machine-interfaces';
+import {IConfig} from 'test-machine-interfaces';
 
 export type OptionalParameters<T> = {
     [P in keyof T]?: T[P];

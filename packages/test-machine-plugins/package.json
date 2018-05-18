@@ -11,6 +11,6 @@
   "devDependencies": {
     "test-machine-test-utils": "^0.3.4",
     "test-machine-interfaces": "^0.3.4",
-    "jasmine": "2.8.0"
+    "jasmine": "3.1.0"
   }
 }

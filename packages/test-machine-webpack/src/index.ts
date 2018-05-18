@@ -5,7 +5,6 @@ import {
     IWebpackModule,
     IWebpackCompilation,
     IDefinePlugin,
-    NodeCallback,
     OptionalParameters
 } from './interface';
 
@@ -71,9 +70,9 @@ class TestMachineWebpack implements webpack.Plugin {
             });
         }
 
-        compiler.plugin('emit', (compilation: IWebpackCompilation, callback: NodeCallback) => {
+        compiler.hooks.emit.tapPromise('TestMachine', (compilation) => {
             if (this.inProgress) {
-                return callback();
+                return Promise.resolve();
             }
 
             this.inProgress = true;
@@ -82,19 +81,19 @@ class TestMachineWebpack implements webpack.Plugin {
             const changedModules = this.modulesPreprocessor.getChangedModules(modules);
             const modulesMap = this.modulesPreprocessor.getModulesMap(modules);
 
-            this.runner.runTests(modulesMap, changedModules)
-                .then(() => {
-                    callback();
-                })
-                .catch((error) => TestMachineWebpack._generateInternalError(
-                    error,
-                    compilation,
-                    this.isWatching,
-                    this.failOnError,
-                    callback
-                ))
+            return this.runner.runTests(modulesMap, changedModules)
                 .then(() => {
                     this.inProgress = false;
+                })
+                .catch((error) => {
+                    this.inProgress = false;
+
+                    return TestMachineWebpack._generateInternalError(
+                        error,
+                        compilation,
+                        this.isWatching,
+                        this.failOnError
+                    );
                 });
         });
     }
@@ -103,19 +102,20 @@ class TestMachineWebpack implements webpack.Plugin {
         error: NodeJS.ErrnoException,
         compilation: IWebpackCompilation,
         isWatching: boolean,
-        failOnError: boolean,
-        callback: NodeCallback
-    ): void {
+        failOnError: boolean
+    ): Promise<void> {
         if (!error) {
             error = new Error('Test running failed');
         }
 
         if (isWatching || !failOnError) {
             compilation.warnings.push(error);
-            callback();
+
+            return Promise.resolve();
         } else {
             compilation.errors.push(error);
-            callback(error);
+
+            return Promise.reject(error);
         }
     }
 }
