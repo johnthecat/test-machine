@@ -1,4 +1,5 @@
 import { IConfig, IModulesMap, Engine, CompilerPlugin, PathResolver, ModulesFactory } from 'test-machine-interfaces';
+import { isNull, isNullOrUndefined } from 'test-machine-utils';
 
 import { Compiler } from './lib/compiler';
 import { EnvironmentPatch } from './lib/environment-patch';
@@ -6,8 +7,6 @@ import { ModulesGenerator } from './lib/modules-generator';
 import { TestExtractor } from './lib/test-extractor';
 import { PluginController } from './lib/plugin-controller';
 import { SandboxController } from './lib/sandbox-controller';
-
-import { isNull, isNullOrUndefined } from 'test-machine-utils';
 
 class TestMachine {
 
@@ -44,15 +43,11 @@ class TestMachine {
         this.init();
     }
 
-    public clearTestsFSCache(): void {
-        this.testExtractor.clearCache();
-    }
-
     public pushCompiler(compiler: CompilerPlugin): void {
         this.compiler.push(compiler);
     }
 
-    public runTests(modules: IModulesMap, changedModules?: Array<string>): Promise<void> {
+    public async runTests(modules: IModulesMap, changedModules?: Array<string>): Promise<void> {
         const preparedModules = this.modulesGenerator.convertModules(modules);
 
         if (isNullOrUndefined(changedModules)) {
@@ -67,14 +62,15 @@ class TestMachine {
 
         this.environmentPatch.setup(tests.content, preparedModules);
 
-        return this.engine(tests.resources)
-            .then(() => {
-                this.afterRun(tests.resources);
-            })
-            .catch((exception) => {
-                this.afterRun(tests.resources);
-                throw exception;
-            });
+        try {
+            await this.engine(tests.resources);
+
+            this.afterRun(tests.resources);
+        } catch (exception) {
+            this.afterRun(tests.resources);
+
+            throw exception;
+        }
     }
 
     private init(): void {
@@ -83,7 +79,6 @@ class TestMachine {
 
     private afterRun(tests: Array<string>): void {
         this.plugins.applyAfterRun(this.sandboxes.getResolvedModules());
-
         this.sandboxes.clear();
         this.environmentPatch.clean(tests, this.config.mocks);
     }

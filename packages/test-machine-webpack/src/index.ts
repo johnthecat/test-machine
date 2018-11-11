@@ -39,8 +39,6 @@ class TestMachineWebpack implements webpack.Plugin {
 
     private modulesPreprocessor: WebpackModulesPreprocessor;
 
-    private inProgress = false;
-
     private isWatching = false;
 
     private failOnError: boolean;
@@ -70,31 +68,21 @@ class TestMachineWebpack implements webpack.Plugin {
             });
         }
 
-        compiler.hooks.emit.tapPromise('TestMachine', (compilation) => {
-            if (this.inProgress) {
-                return Promise.resolve();
-            }
-
-            this.inProgress = true;
-
+        compiler.hooks.emit.tapPromise('TestMachine', async (compilation) => {
             const modules = this.modulesPreprocessor.filterModules(compilation.modules);
             const changedModules = this.modulesPreprocessor.getChangedModules(modules);
             const modulesMap = this.modulesPreprocessor.getModulesMap(modules);
 
-            return this.runner.runTests(modulesMap, changedModules)
-                .then(() => {
-                    this.inProgress = false;
-                })
-                .catch((error) => {
-                    this.inProgress = false;
-
-                    return TestMachineWebpack._generateInternalError(
-                        error,
-                        compilation,
-                        this.isWatching,
-                        this.failOnError
-                    );
-                });
+            try {
+                await this.runner.runTests(modulesMap, changedModules);
+            } catch (error) {
+                return TestMachineWebpack._generateInternalError(
+                    error,
+                    compilation,
+                    this.isWatching,
+                    this.failOnError
+                );
+            }
         });
     }
 
