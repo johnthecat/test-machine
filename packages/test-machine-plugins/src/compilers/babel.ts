@@ -7,9 +7,9 @@ export function babelCompiler(config = {}): CompilerPlugin {
     let babel: any;
 
     try {
-        babel = require('babel-core');
+        babel = require('@babel/core');
     } catch (e) {
-        throw noModuleException('babel-core');
+        throw noModuleException('@babel/core');
     }
 
     return (input: CompilerSource, filename: string = DEFAULT_FILENAME): CompilerSource => {
@@ -20,8 +20,7 @@ export function babelCompiler(config = {}): CompilerPlugin {
         const result = babel.transform(
             input.source,
             Object.assign({}, config, {
-                filename,
-                inputSourceMap: input.sourcemap
+                filename
             })
         );
 

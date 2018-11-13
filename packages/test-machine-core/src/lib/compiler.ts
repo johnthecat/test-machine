@@ -29,8 +29,7 @@ class Compiler {
         let compiler: CompilerPlugin;
         let compilationResult: CompilerSource;
         let result: CompilerSource = {
-            source,
-            sourcemap: null
+            source
         };
 
         for (let index = 0; index < pipeline.length; index++) {

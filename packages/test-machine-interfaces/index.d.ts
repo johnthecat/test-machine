@@ -2,7 +2,7 @@ import * as path from 'path';
 
 export type CompilerSource = {
     source: string,
-    sourcemap?: string | null
+    sourcemap?: string
 };
 
 export type Router = (resource: path.ParsedPath) => string | Array<string>;

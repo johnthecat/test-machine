@@ -3,8 +3,5 @@
   "version": "0.3.4",
   "license": "MIT",
   "main": "dist/index.js",
-  "typings": "src/index.ts",
-  "dependencies": {
-
-  }
+  "typings": "src/index.ts"
 }

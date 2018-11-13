@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
-    "target": "es3",
+    "target": "es6",
     "module": "commonjs",
     "allowJs": false,
     "moduleResolution": "node",
     "preserveConstEnums": true,
     "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "outDir": "dist",
     "sourceMap": false,

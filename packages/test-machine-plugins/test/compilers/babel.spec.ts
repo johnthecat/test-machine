@@ -9,7 +9,7 @@ const readFile = fs.fileReaderFactory('./test');
 
 describe('Babel compiler', () => {
     it('should fail, if babel-core isn\'t installed', () => {
-        const restore = excludeFromResolve('babel-core');
+        const restore = excludeFromResolve('@babel/core');
 
         try {
             babelCompiler();
@@ -22,7 +22,7 @@ describe('Babel compiler', () => {
 
     it('should handle empty string', () => {
         const compiler = babelCompiler({
-            presets: ['es2015']
+            presets: ['@babel/preset-env']
         });
 
         const result = compiler({
@@ -35,7 +35,7 @@ describe('Babel compiler', () => {
     it('should handle source code', async () => {
         const source = await readFile('./compilers/fixtures/import-export.js');
         const compiler = babelCompiler({
-            presets: ['es2015']
+            presets: ['@babel/preset-env']
         });
 
         const result = compiler({ source }, '');
