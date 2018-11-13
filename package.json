@@ -21,7 +21,7 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "postinstall": "lerna bootstrap && lerna exec --no-sort --parallel -- node \"../../bin/link\"",
+    "postinstall": "lerna bootstrap --no-ci && lerna exec --no-sort --parallel -- node \"../../bin/link\"",
     "test": "lerna exec --concurrency 6 --parallel -- mocha --opts \"../../mocha.opts\"",
     "test:watch": "lerna exec --no-sort -- mocha --opts \"../mocha.opts\" --watch",
     "test:coverage": "nyc npm test",
