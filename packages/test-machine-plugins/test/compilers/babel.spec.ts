@@ -8,7 +8,7 @@ import { babelCompiler } from '../../src/compilers/babel';
 const readFile = fs.fileReaderFactory('./test');
 
 describe('Babel compiler', () => {
-    it('should fail, if babel-core isn\'t installed', () => {
+    it('should fail, if @babel/core isn\'t installed', () => {
         const restore = excludeFromResolve('@babel/core');
 
         try {

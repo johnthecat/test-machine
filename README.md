@@ -79,7 +79,7 @@ module.exports = {
             
             compilers: [
               compiler.babel({
-                presets: ['es2015']
+                presets: ['@babel/preset-env']
               })
             ],
             
@@ -163,7 +163,7 @@ Currently supported:
 ```javascript
 compilers: [
     compiler.babel({
-        presets: ['env']
+        presets: ['@babel/preset-env']
     })
 ]
 ```

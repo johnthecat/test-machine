@@ -66,6 +66,7 @@
     "@types/node": "10.12.5",
     "@babel/core": "7.1.5",
     "@babel/preset-env": "7.1.5",
+    "@babel/plugin-transform-modules-commonjs": "7.1.0",
     "babel-loader": "8.0.4",
     "chai": "4.2.0",
     "coveralls": "3.0.2",

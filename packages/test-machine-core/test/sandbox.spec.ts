@@ -57,7 +57,7 @@ describe('Sandbox', () => {
             const source = await readFixtures('es6-export.js');
 
             const compiler = babelCompiler({
-                plugins: ['transform-es2015-modules-commonjs']
+                plugins: ['@babel/plugin-transform-modules-commonjs']
             });
 
             const sandbox = new Sandbox(source, 'es6-export.js', {

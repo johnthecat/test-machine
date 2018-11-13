@@ -80,7 +80,7 @@ describe('Webpack plugin', () => {
             router: (resource) => `${resource.name}.spec.js`,
             compilers: [
                 compiler.babel({
-                    plugins: ['transform-es2015-modules-commonjs']
+                    plugins: ['@babel/plugin-transform-modules-commonjs']
                 })
             ],
             engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
@@ -102,11 +102,7 @@ describe('Webpack plugin', () => {
             router: (resource) => `${resource.name}.spec.js`,
             compilers: [
                 compiler.babel({
-                    presets: [
-                        ['@babel/preset-env', {
-                            targets: 'ie 9-11'
-                        }]
-                    ]
+                    plugins: ['@babel/plugin-transform-modules-commonjs']
                 })
             ],
             engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
@@ -131,11 +127,7 @@ describe('Webpack plugin', () => {
                         use: {
                             loader: 'babel-loader',
                             options: {
-                                presets: [
-                                    ['@babel/preset-env', {
-                                        targets: 'ie 9-11'
-                                    }]
-                                ]
+                                plugins: ['@babel/plugin-transform-modules-commonjs']
                             }
                         }
                     }

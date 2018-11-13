@@ -9,7 +9,7 @@ export function typescriptCompiler(config = {}): CompilerPlugin {
     try {
         typescript = require('typescript');
     } catch (e) {
-        throw noModuleException('babel-core');
+        throw noModuleException('typescript');
     }
 
     return (input: CompilerSource, filename: string = DEFAULT_FILENAME): CompilerSource => {

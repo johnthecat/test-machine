@@ -20,7 +20,8 @@ export function babelCompiler(config = {}): CompilerPlugin {
         const result = babel.transform(
             input.source,
             Object.assign({}, config, {
-                filename
+                filename,
+                inputSourceMap: input.sourcemap || false
             })
         );
 
