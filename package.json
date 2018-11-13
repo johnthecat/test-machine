@@ -22,17 +22,17 @@
   "main": "dist/index.js",
   "scripts": {
     "postinstall": "lerna bootstrap && lerna exec --no-sort --parallel -- node \"../../bin/link\"",
-    "lint:src": "lerna exec --no-sort --concurrency 6 --parallel -- tslint -c \"../../tslint.json\" \"./src/**/*\"",
-    "lint:test": "lerna exec --no-sort --concurrency 6 --parallel -- tslint -c \"../../tslint.json\" \"./test/**/*\"",
     "test": "lerna exec --concurrency 6 --parallel -- mocha --opts \"../../mocha.opts\"",
     "test:watch": "lerna exec --no-sort -- mocha --opts \"../mocha.opts\" --watch",
     "test:coverage": "nyc npm test",
     "test:publish": "coveralls < ./coverage/lcov.info && rimraf ./coverage -G",
-    "cleanup": "lerna clean --y && lerna exec --concurrency 6 --parallel -- rimraf ./dist -G",
-    "build": "lerna exec --concurrency 6 --parallel -- tsc",
-    "build:watch": "npm run clean && npm run lint && lerna exec -- tsc --watch",
-    "build:precommit": "npm run lint:src && npm run lint:test && npm run build && npm run test",
-    "build:ci": "npm run lint:src && npm run lint:test && npm run cleanup && npm run build && npm run test:coverage"
+    "clean": "npm run clean:dist && npm run clean:deps",
+    "clean:deps": "lerna clean --y",
+    "clean:dist": "lerna exec --concurrency 6 --parallel -- rimraf ./dist -G",
+    "build": "lerna exec -- tsc",
+    "build:watch": "npm run clean && lerna exec -- tsc --watch",
+    "build:precommit": "npm run build && npm run test",
+    "build:ci": "npm run clean:dist && npm run build && npm run test:coverage"
   },
   "precommit": [
     "build:precommit"
@@ -78,7 +78,6 @@
     "rimraf": "2.6.2",
     "ts-loader": "5.3.0",
     "ts-node": "7.0.1",
-    "tslint": "5.11.0",
     "typescript": "3.1.6"
   }
 }
