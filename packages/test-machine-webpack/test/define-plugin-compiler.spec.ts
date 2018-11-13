@@ -29,7 +29,7 @@ describe('Define plugin compiler', () => {
 
         chai.expect(result).to.be.equal(normalizeString(`
             if (true) {
-                console.log('object');
+                console.log("object");
             }
         `));
     });

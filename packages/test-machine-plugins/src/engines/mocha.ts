@@ -1,7 +1,8 @@
 import { Engine } from 'test-machine-interfaces';
+import { MochaOptions } from 'mocha';
 import { noModuleException } from '../utils';
 
-export function mochaEngine(config?: any): Engine {
+export function mochaEngine(config?: MochaOptions): Engine {
     let Mocha: any;
 
     try {

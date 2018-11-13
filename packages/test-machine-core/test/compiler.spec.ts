@@ -59,7 +59,7 @@ describe('CompilerFunction', () => {
         chai.expect(result2.source).to.be.equal('0 1 2');
     });
 
-    it('shouldn\'t fail, when compilation plugin has wrong output', () => {
+    it('shouldn\'t fail, when compilation plugin has wrong input', () => {
         const compiler = new Compiler([
             () => (null as any)
         ]);

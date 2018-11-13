@@ -1,6 +1,12 @@
 import { CompilerSource, CompilerPlugin } from 'test-machine-interfaces';
 import { Collection } from './collection';
 
+/**
+ * Compiler is a simple module for passing source code through pipeline of compiler plugins.
+ * Compiler plugin works alike loader in webpack - in gets source and sourcemap
+ * and returns new source and sourcemap, and so on.
+ */
+
 const DEFAULT_FILENAME = 'unknown';
 
 class Compiler {
@@ -23,11 +29,10 @@ class Compiler {
         let compiler: CompilerPlugin;
         let compilationResult: CompilerSource;
         let result: CompilerSource = {
-            source,
-            sourcemap: null
+            source
         };
 
-        for (let index = 0, count = pipeline.length; index < count; index++) {
+        for (let index = 0; index < pipeline.length; index++) {
             compiler = pipeline[index];
             compilationResult = compiler(result, filename);
 

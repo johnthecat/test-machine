@@ -33,11 +33,7 @@ describe('Mocha engine', () => {
     });
 
     it('should complete, when mocha test passed', () => {
-        const runner = mochaEngine({
-            reporter(): void {
-                // avoid logs
-            }
-        });
+        const runner = mochaEngine();
 
         return runner([
             fixtureResolver('./correct-test-set.js')
@@ -45,11 +41,7 @@ describe('Mocha engine', () => {
     });
 
     it('should fail, when mocha test not passed', (done) => {
-        const runner = mochaEngine({
-            reporter(): void {
-                // avoid logs
-            }
-        });
+        const runner = mochaEngine();
 
         runner([
             fixtureResolver('./incorrect-test-set.js')

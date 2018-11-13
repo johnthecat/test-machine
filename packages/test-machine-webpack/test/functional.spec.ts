@@ -9,11 +9,7 @@ import { TestMachineWebpack } from '../src';
 
 import * as MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-const DEFAULT_ENGINE_CONFIG = {
-    reporter(): void {
-
-    }
-};
+const DEFAULT_ENGINE_CONFIG = {};
 
 describe('Webpack plugin', () => {
     it('should fail, if engine not passed', (done) => {
@@ -56,7 +52,7 @@ describe('Webpack plugin', () => {
             router: (resource) => `${resource.name}.spec.js`,
             engine: (tests) => {
                 try {
-                    chai.expect(tests).to.be.deep.equal([
+                    chai.expect(tests).to.have.members([
                         path.join(root, 'module-b.spec.js'),
                         path.join(root, 'module-a.spec.js')
                     ]);
@@ -77,23 +73,19 @@ describe('Webpack plugin', () => {
         });
     });
 
-    it('should correctly work with webpack.optimize.ModuleConcatenationPlugin', (done) => {
+    it('should correctly work production mode', (done) => {
         const config = configFactory('module-concatenation-plugin', new TestMachineWebpack({
             failOnError: true,
             testRoots: getTestRoots('module-concatenation-plugin'),
-            router: (resource) => {
-                return `${resource.name}.spec.js`;
-            },
+            router: (resource) => `${resource.name}.spec.js`,
             compilers: [
                 compiler.babel({
-                    plugins: ['transform-es2015-modules-commonjs']
+                    plugins: ['@babel/plugin-transform-modules-commonjs']
                 })
             ],
             engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }), {
-            plugins: [
-                new webpack.optimize.ModuleConcatenationPlugin()
-            ]
+            mode: 'production'
         });
 
         const runner = webpack(config);
@@ -107,12 +99,10 @@ describe('Webpack plugin', () => {
         const config = configFactory('es6-export', new TestMachineWebpack({
             failOnError: true,
             testRoots: getTestRoots('es6-export'),
-            router: (resource) => {
-                return `${resource.name}.spec.js`;
-            },
+            router: (resource) => `${resource.name}.spec.js`,
             compilers: [
                 compiler.babel({
-                    plugins: ['transform-es2015-modules-commonjs']
+                    plugins: ['@babel/plugin-transform-modules-commonjs']
                 })
             ],
             engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
@@ -127,9 +117,7 @@ describe('Webpack plugin', () => {
         const config = configFactory('es6-export', new TestMachineWebpack({
             failOnError: true,
             testRoots: getTestRoots('es6-export'),
-            router: (resource) => {
-                return `${resource.name}.spec.js`;
-            },
+            router: (resource) => `${resource.name}.spec.js`,
             engine: engine.mocha(DEFAULT_ENGINE_CONFIG)
         }), {
             module: {
@@ -139,7 +127,7 @@ describe('Webpack plugin', () => {
                         use: {
                             loader: 'babel-loader',
                             options: {
-                                plugins: ['transform-es2015-modules-commonjs']
+                                plugins: ['@babel/plugin-transform-modules-commonjs']
                             }
                         }
                     }

@@ -19,11 +19,11 @@ class PluginController {
     }
 
     public applyCompilerPipeline(compiler: Compiler): void {
-        this.applyPluginsPipeline<Compiler>('compilerPipeline', compiler);
+        this.applyPluginsPipeline('compilerPipeline', compiler);
     }
 
     public applyAfterRun(modules: IModulesMap<Sandbox>): void {
-        this.applyPluginsPipeline<IModulesMap<Sandbox>>('afterRun', modules);
+        this.applyPluginsPipeline('afterRun', modules);
     }
 
     private applyPluginsPipeline<T>(method: keyof IPlugin, data: T): void {
