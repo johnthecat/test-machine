@@ -1,16 +1,16 @@
 {
   "name": "test-machine-plugins",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "src/index.ts",
   "dependencies": {
-    "test-machine-core": "^0.3.4"
+    "test-machine-core": "^0.3.5"
   },
   "devDependencies": {
-    "test-machine-test-utils": "^0.3.4",
-    "test-machine-interfaces": "^0.3.4",
-    "jasmine": "3.1.0"
+    "jasmine": "3.1.0",
+    "test-machine-interfaces": "^0.3.5",
+    "test-machine-test-utils": "^0.3.5"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "test-machine-core",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "",
   "license": "MIT",
   "main": "dist/index.js",
@@ -11,9 +11,9 @@
     "glob": "^7.1.3"
   },
   "devDependencies": {
-    "test-machine-test-utils": "^0.3.4",
-    "test-machine-utils": "^0.3.4",
-    "test-machine-interfaces": "^0.3.4"
+    "test-machine-interfaces": "^0.3.5",
+    "test-machine-test-utils": "^0.3.5",
+    "test-machine-utils": "^0.3.5"
   },
   "engineStrict": true,
   "engines": {
